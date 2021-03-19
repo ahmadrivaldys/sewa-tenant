@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 19, 2021 at 05:02 AM
+-- Generation Time: Mar 19, 2021 at 07:11 AM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -65,6 +65,13 @@ CREATE TABLE `tbl_admins` (
   `modified_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `tbl_admins`
+--
+
+INSERT INTO `tbl_admins` (`admin_id`, `admin_employee_no`, `admin_username`, `admin_fullname`, `admin_email`, `admin_password`, `admin_photo`, `admin_type_id`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
+(1, '1', 'admin', 'Administrator', 'admin@sewa-tenant.dev', '215e95f88936b204603dfcff01e9f614', '', 1, 'system', '2021-03-19 12:48:27', 'system', '2021-03-19 12:48:27');
+
 -- --------------------------------------------------------
 
 --
@@ -105,6 +112,13 @@ CREATE TABLE `tbl_tenants` (
   `modified_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `tbl_tenants`
+--
+
+INSERT INTO `tbl_tenants` (`tenant_id`, `tenant_name`, `tenant_size`, `tenant_image`, `tenant_location`, `tenant_price`, `tenant_info`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
+(1, 'Main Tenant', '8 m x 15 m', '', 'Lantai LG', 12000000, '<i>Exclude</i> listrik dan air', 'admin', '2021-03-19 13:01:58', 'admin', '2021-03-19 13:01:58');
+
 -- --------------------------------------------------------
 
 --
@@ -120,6 +134,13 @@ CREATE TABLE `tbl_transactions` (
   `modified_by` varchar(20) NOT NULL,
   `modified_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_transactions`
+--
+
+INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_number`, `transaction_tenant_id`, `transaction_customer`, `transaction_date`, `modified_by`, `modified_date`) VALUES
+(1, 'TRX001-19032021', 1, 'kanna', '2021-03-19 12:59:01', 'kanna', '2021-03-19 12:59:01');
 
 -- --------------------------------------------------------
 
@@ -141,6 +162,13 @@ CREATE TABLE `tbl_users` (
   `modified_by` varchar(20) NOT NULL,
   `modified_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_users`
+--
+
+INSERT INTO `tbl_users` (`user_id`, `user_identity_no`, `user_taxpayer_id_no`, `user_username`, `user_fullname`, `user_email`, `user_password`, `user_photo`, `user_type_id`, `user_registration_date`, `modified_by`, `modified_date`) VALUES
+(1, '03021999', '03021999', 'kanna', 'Kanna Hashimoto', 'kanna@customer.sewa-tenant.dev', 'ae671ecd4ebee177c57dfbfbbf28cd83', '', 5, '2021-03-19 12:53:50', 'kanna', '2021-03-19 12:53:50');
 
 --
 -- Indexes for dumped tables
@@ -198,7 +226,7 @@ ALTER TABLE `tbl_account_types`
 -- AUTO_INCREMENT for table `tbl_admins`
 --
 ALTER TABLE `tbl_admins`
-  MODIFY `admin_id` int(3) NOT NULL AUTO_INCREMENT;
+  MODIFY `admin_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tbl_status`
@@ -210,19 +238,19 @@ ALTER TABLE `tbl_status`
 -- AUTO_INCREMENT for table `tbl_tenants`
 --
 ALTER TABLE `tbl_tenants`
-  MODIFY `tenant_id` int(3) NOT NULL AUTO_INCREMENT;
+  MODIFY `tenant_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tbl_transactions`
 --
 ALTER TABLE `tbl_transactions`
-  MODIFY `transaction_id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `transaction_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-  MODIFY `user_id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
