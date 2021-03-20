@@ -1,0 +1,11 @@
+.sidebar-logo
+{
+    height: unset !important;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.main-logo
+{
+    width: 100px;
+}

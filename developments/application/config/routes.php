@@ -52,3 +52,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'Controller_Admin';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+$route['dashboard/kelola-transaksi'] = 'Controller_Admin/index';
+$route['dashboard/kelola-tenant']    = 'Controller_Admin/get_tenants_list';
+$route['dashboard/kelola-admin']     = 'Controller_Admin/get_admins_list';
+$route['dashboard/kelola-pelanggan'] = 'Controller_Admin/get_customers_list';

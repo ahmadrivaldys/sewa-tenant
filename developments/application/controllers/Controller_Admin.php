@@ -8,16 +8,49 @@ class Controller_Admin extends CI_Controller
 	{
         parent::__construct();
 
+		$this->load->library('template');
+
 		// Load the model
         $this->load->model('model_admin');
     }
 
 	public function index()
 	{
-		$data['get_trx_list']  = $this->model_admin->get_transaction_list();
+		$data['get_trx_list']  = $this->model_admin->get_transactions_list();
         $data['page_title']    = 'Kelola Transaksi';
 		$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola data-data transaksi yang masuk.';
+		$data['content_title'] = 'Daftar Transaksi';
 
-		$this->load->view('tpl-admin/index', $data);
+		$this->template->main('tpl-admin/pages/transactions', $data);
+	}
+
+	public function get_tenants_list()
+	{
+		$data['get_tnt_list']  = $this->model_admin->get_tenants_list();
+        $data['page_title']    = 'Kelola Tenant';
+		$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola data-data tenant.';
+		$data['content_title'] = 'Daftar Tenant';
+
+		$this->template->main('tpl-admin/pages/tenants', $data);
+	}
+
+	public function get_admins_list()
+	{
+		$data['get_adm_list']  = $this->model_admin->get_admins_list();
+        $data['page_title']    = 'Kelola Akun Admin';
+		$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola akun admin.';
+		$data['content_title'] = 'Daftar Akun Admin';
+
+		$this->template->main('tpl-admin/pages/admins', $data);
+	}
+
+	public function get_customers_list()
+	{
+		$data['get_cus_list']  = $this->model_admin->get_customers_list();
+        $data['page_title']    = 'Kelola Akun Pelanggan';
+		$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola akun pelanggan.';
+		$data['content_title'] = 'Daftar Akun Pelanggan';
+
+		$this->template->main('tpl-admin/pages/customers', $data);
 	}
 }

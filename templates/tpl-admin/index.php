@@ -12,6 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?php echo base_url('assets/plugins/fontawesome/all.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/style.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/components.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/custom.css'); ?>">
 </head>
 <body>
     <div id="app">
@@ -21,83 +22,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <form class="form-inline mr-auto">
                     <ul class="navbar-nav mr-3">
                         <li><a href="#" data-toggle="sidebar" class="nav-link nav-link-lg"><i class="fas fa-bars"></i></a></li>
-                        <li><a href="#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
                     </ul>
-                    <div class="search-element">
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn" type="submit"><i class="fas fa-search"></i></button>
-                    </div>
                 </form>
 
                 <ul class="navbar-nav navbar-right">
-                    <li class="dropdown dropdown-list-toggle"><a href="#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg beep"><i class="far fa-bell"></i></a>
-                        <div class="dropdown-menu dropdown-list dropdown-menu-right">
-                            <div class="dropdown-header">Notifications
-                                <div class="float-right">
-                                    <a href="#">Mark All As Read</a>
-                                </div>
-                            </div>
-
-                            <div class="dropdown-list-content">
-                                <a href="#" class="dropdown-item dropdown-item-unread">
-                                    <img alt="image" src="../dist/img/avatar/avatar-1.png" class="rounded-circle dropdown-item-img">
-                                    <div class="dropdown-item-desc">
-                                    <b>Kusnaedi</b> has moved task <b>Fix bug header</b> to <b>Done</b>
-                                    <div class="time">10 Hours Ago</div>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item dropdown-item-unread">
-                                    <img alt="image" src="../dist/img/avatar/avatar-2.png" class="rounded-circle dropdown-item-img">
-                                    <div class="dropdown-item-desc">
-                                    <b>Ujang Maman</b> has moved task <b>Fix bug footer</b> to <b>Progress</b>
-                                    <div class="time">12 Hours Ago</div>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item dropdown-item-unread">
-                                    <img alt="image" src="../dist/img/avatar/avatar-3.png" class="rounded-circle dropdown-item-img">
-                                    <div class="dropdown-item-desc">
-                                    <b>Agung Ardiansyah</b> has moved task <b>Fix bug sidebar</b> to <b>Done</b>
-                                    <div class="time">12 Hours Ago</div>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <img alt="image" src="../dist/img/avatar/avatar-4.png" class="rounded-circle dropdown-item-img">
-                                    <div class="dropdown-item-desc">
-                                    <b>Ardian Rahardiansyah</b> has moved task <b>Fix bug navbar</b> to <b>Done</b>
-                                    <div class="time">16 Hours Ago</div>
-                                    </div>
-                                </a>
-                                <a href="#" class="dropdown-item">
-                                    <img alt="image" src="../dist/img/avatar/avatar-5.png" class="rounded-circle dropdown-item-img">
-                                    <div class="dropdown-item-desc">
-                                    <b>Alfa Zulkarnain</b> has moved task <b>Add logo</b> to <b>Done</b>
-                                    <div class="time">Yesterday</div>
-                                    </div>
-                                </a>
-                            </div>
-
-                            <div class="dropdown-footer text-center">
-                                <a href="#">View All <i class="fas fa-chevron-right"></i></a>
-                            </div>
-                        </div>
-                    </li>
                     <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                         <img alt="image" src="<?php echo base_url('assets/images/admin/avatar.png'); ?>" width="30" class="rounded-circle mr-1">
-                        <div class="d-sm-none d-lg-inline-block">Hi, Ujang Maman</div></a>
+                        <div class="d-sm-none d-lg-inline-block">Halo, Ujang Maman</div></a>
                         
                         <div class="dropdown-menu dropdown-menu-right">
                             <a href="features-profile.html" class="dropdown-item has-icon">
-                                <i class="far fa-user"></i> Profile
-                            </a>
-                            <a href="features-activities.html" class="dropdown-item has-icon">
-                                <i class="fas fa-bolt"></i> Activities
-                            </a>
-                            <a href="features-settings.html" class="dropdown-item has-icon">
-                                <i class="fas fa-cog"></i> Settings
+                                <i class="far fa-user"></i> Profil Saya
                             </a>
                             <div class="dropdown-divider"></div>
                             <a href="#" class="dropdown-item has-icon text-danger">
-                                <i class="fas fa-sign-out-alt"></i> Logout
+                                <i class="fas fa-sign-out-alt"></i> Keluar
                             </a>
                         </div>
                     </li>
@@ -107,8 +46,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <!-- Sidebar -->
             <div class="main-sidebar">
                 <aside id="sidebar-wrapper">
-                    <div class="sidebar-brand">
-                        <a href="index.html">Sewa Tenant</a>
+                    <div class="sidebar-brand sidebar-logo">
+                        <a href="index.html">
+                            <img src="<?php echo base_url('assets/images/admin/logo.svg'); ?>" class="main-logo" alt="Logo Gandaria City">
+                        </a>
                     </div>
 
                     <div class="sidebar-brand sidebar-brand-sm">
@@ -116,10 +57,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
 
                     <ul class="sidebar-menu">
-                        <li class="menu-header">Pages</li>
-                        <li><a href="index.html" class="nav-link"><i class="far fa-file-alt"></i> <span>Transaksi</span></a></li>
-                        <li><a href="index.html" class="nav-link"><i class="fas fa-store"></i> <span>Tenant</span></a></li>
-                        <li><a href="index.html" class="nav-link"><i class="far fa-user"></i> <span>Pengguna</span></a></li>
+                        <li class="menu-header">Panel Utama</li>
+                        <li><a href="index.html" class="nav-link"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
+                        <li class="menu-header">Menu</li>
+                        <li><a href="<?php echo base_url('dashboard/kelola-transaksi'); ?>" class="nav-link"><i class="far fa-file-alt"></i> <span>Transaksi</span></a></li>
+                        <li><a href="<?php echo base_url('dashboard/kelola-tenant'); ?>" class="nav-link"><i class="fas fa-store"></i> <span>Tenant</span></a></li>
+                        <li>
+                            <a href="#" class="nav-link has-dropdown"><i class="far fa-user"></i> <span>Akun Pengguna</span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="<?php echo base_url('dashboard/kelola-admin'); ?>">Admin</a></li> 
+                                <li><a href="<?php echo base_url('dashboard/kelola-pelanggan'); ?>">Pelanggan</a></li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <div class="p-3 mt-4 mb-4 hide-sidebar-mini">
@@ -135,12 +84,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="main-content">
                 <section class="section">
                     <div class="section-header">
-                        <h1>PT Artisan Wahyu</h1>
+                        <h1>Sewa Tenant</h1>
 
                         <div class="section-header-breadcrumb">
                             <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
-                            <div class="breadcrumb-item"><a href="#">Layout</a></div>
-                            <div class="breadcrumb-item">Default Layout</div>
+                            <div class="breadcrumb-item"><?php echo $page_title; ?></div>
                         </div>
                     </div>
 
@@ -150,35 +98,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         
                         <div class="card">
                             <div class="card-header">
-                                <h4><?php echo $page_title; ?></h4>
+                                <h4><?php echo $content_title; ?></h4>
                             </div>
-
+                            
                             <div class="card-body p-0">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-md">
-                                        <tr>
-                                            <th>#</th>
-                                            <th>No. Transaksi</th>
-                                            <th>Nama Pemesan</th>
-                                            <th>Tenant</th>
-                                            <th>Aksi</th>
-                                        </tr>
-
-                                        <?php foreach($get_trx_list as $transaction_list): ?>
-                                            <tr>
-                                                <td>1</td>
-                                                <td><?php echo $transaction_list->transaction_number; ?></td>
-                                                <td><?php echo $transaction_list->user_fullname; ?></td>
-                                                <td><?php echo $transaction_list->tenant_name; ?></td>
-                                                <td><a href="#" class="btn btn-secondary">Detail</a></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </table>
-                                </div>
+                                <?php echo $content; ?>
                             </div>
 
                             <div class="card-footer bg-whitesmoke">
-                                This is card footer
+                                &nbsp;
                             </div>
                         </div>
                     </div>
