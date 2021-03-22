@@ -28,14 +28,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <ul class="navbar-nav navbar-right">
                     <li class="dropdown"><a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
                         <img alt="image" src="<?php echo base_url('assets/images/admin/avatar.png'); ?>" width="30" class="rounded-circle mr-1">
-                        <div class="d-sm-none d-lg-inline-block">Halo, Ujang Maman</div></a>
+                        <div class="d-sm-none d-lg-inline-block">Halo, <?php echo $this->session->userdata('fullname'); ?></div></a>
                         
                         <div class="dropdown-menu dropdown-menu-right">
                             <a href="features-profile.html" class="dropdown-item has-icon">
                                 <i class="far fa-user"></i> Profil Saya
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item has-icon text-danger">
+                            <a href="<?php echo base_url('dashboard/logout'); ?>" class="dropdown-item has-icon text-danger">
                                 <i class="fas fa-sign-out-alt"></i> Keluar
                             </a>
                         </div>
@@ -58,15 +58,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                     <ul class="sidebar-menu">
                         <li class="menu-header">Panel Utama</li>
-                        <li><a href="index.html" class="nav-link"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
+                        <li <?php if($page_title == 'Dashboard') echo "class='active'"; ?>><a href="<?php echo base_url('dashboard'); ?>" class="nav-link"><i class="fas fa-fire"></i> <span>Dashboard</span></a></li>
                         <li class="menu-header">Menu</li>
-                        <li><a href="<?php echo base_url('dashboard/kelola-transaksi'); ?>" class="nav-link"><i class="far fa-file-alt"></i> <span>Transaksi</span></a></li>
-                        <li><a href="<?php echo base_url('dashboard/kelola-tenant'); ?>" class="nav-link"><i class="fas fa-store"></i> <span>Tenant</span></a></li>
-                        <li>
+                        <li <?php if($page_title == 'Kelola Transaksi') echo "class='active'"; ?>><a href="<?php echo base_url('dashboard/kelola-transaksi'); ?>" class="nav-link"><i class="far fa-file-alt"></i> <span>Transaksi</span></a></li>
+                        <li <?php if($page_title == 'Kelola Tenant') echo "class='active'"; ?>><a href="<?php echo base_url('dashboard/kelola-tenant'); ?>" class="nav-link"><i class="fas fa-store"></i> <span>Tenant</span></a></li>
+                        <li <?php if($page_title == 'Kelola Akun Admin' OR $page_title == 'Kelola Akun Pelanggan') echo "class='active'"; ?>>
                             <a href="#" class="nav-link has-dropdown"><i class="far fa-user"></i> <span>Akun Pengguna</span></a>
                             <ul class="dropdown-menu">
-                                <li><a href="<?php echo base_url('dashboard/kelola-admin'); ?>">Admin</a></li> 
-                                <li><a href="<?php echo base_url('dashboard/kelola-pelanggan'); ?>">Pelanggan</a></li>
+                                <li <?php if($page_title == 'Kelola Akun Admin') echo "class='active'"; ?>><a href="<?php echo base_url('dashboard/kelola-admin'); ?>">Admin</a></li> 
+                                <li <?php if($page_title == 'Kelola Akun Pelanggan') echo "class='active'"; ?>><a href="<?php echo base_url('dashboard/kelola-pelanggan'); ?>">Pelanggan</a></li>
                             </ul>
                         </li>
                     </ul>

@@ -8,13 +8,30 @@ class Controller_Admin extends CI_Controller
 	{
         parent::__construct();
 
+		// Load library for dashboard/admin panel templating
 		$this->load->library('template');
 
 		// Load the model
         $this->load->model('model_admin');
+
+		// Check login status
+        if($this->session->userdata('logged-in') != TRUE)
+        {
+            redirect('auth');
+        }
     }
 
 	public function index()
+	{
+		$data['get_trx_list']  = $this->model_admin->get_transactions_list();
+        $data['page_title']    = 'Dashboard';
+		$data['page_subtitle'] = 'Di menu ini Anda dapat memantau keseluruhan ringkasan data.';
+		$data['content_title'] = 'Ringkasan Data';
+
+		$this->template->main('tpl-admin/pages/dashboard', $data);
+	}
+
+	public function get_transactions_list()
 	{
 		$data['get_trx_list']  = $this->model_admin->get_transactions_list();
         $data['page_title']    = 'Kelola Transaksi';

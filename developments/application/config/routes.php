@@ -49,11 +49,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'Controller_Admin';
+$route['default_controller'] = 'Controller_Auth';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['dashboard/kelola-transaksi'] = 'Controller_Admin/index';
+// Routes for Dashboard
+$route['dashboard']                  = 'Controller_Admin';
+$route['dashboard/kelola-transaksi'] = 'Controller_Admin/get_transactions_list';
 $route['dashboard/kelola-tenant']    = 'Controller_Admin/get_tenants_list';
 $route['dashboard/kelola-admin']     = 'Controller_Admin/get_admins_list';
 $route['dashboard/kelola-pelanggan'] = 'Controller_Admin/get_customers_list';
+
+// Routes for Auth
+$route['auth']              = 'Controller_Auth';
+$route['auth/auth-process'] = 'Controller_Auth/auth_process';
+$route['dashboard/logout']  = 'Controller_Auth/logout';
