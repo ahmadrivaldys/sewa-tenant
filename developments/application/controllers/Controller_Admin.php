@@ -17,7 +17,7 @@ class Controller_Admin extends CI_Controller
 		// Check login status
         if($this->session->userdata('logged-in') != TRUE)
         {
-            redirect('auth');
+            redirect('auth/login');
         }
     }
 

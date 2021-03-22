@@ -61,6 +61,9 @@ $route['dashboard/kelola-admin']     = 'Controller_Admin/get_admins_list';
 $route['dashboard/kelola-pelanggan'] = 'Controller_Admin/get_customers_list';
 
 // Routes for Auth
-$route['auth']              = 'Controller_Auth';
-$route['auth/auth-process'] = 'Controller_Auth/auth_process';
-$route['dashboard/logout']  = 'Controller_Auth/logout';
+$route['auth']                       = 'Controller_Auth';
+$route['auth/login']                 = 'Controller_Auth/login';
+$route['auth/register']              = 'Controller_Auth/register';
+$route['auth/login/auth-process']    = 'Controller_Auth/auth_process';
+$route['auth/register/auth-process'] = 'Controller_Auth/auth_process_register';
+$route['dashboard/logout']           = 'Controller_Auth/logout';

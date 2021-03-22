@@ -35,7 +35,7 @@
                             <div class="card-header"><h4>Login</h4></div>
 
                             <div class="card-body">
-                                <form method="POST" action="<?php echo base_url('auth/auth-process'); ?>" class="needs-validation" novalidate="">
+                                <form method="POST" action="<?php echo base_url('auth/login/auth-process'); ?>" class="needs-validation" novalidate="">
                                     <div class="form-group">
                                         <label for="email">E-mail</label>
                                         <input id="email" type="email" class="form-control" name="email" tabindex="1" required autofocus>
@@ -58,7 +58,7 @@
                         </div>
 
                         <div class="mt-5 text-muted text-center">
-                            Belum punya akun? <a href="auth-register.html">Daftar</a>
+                            Belum punya akun? <a href="<?php echo base_url('auth/register'); ?>">Daftar</a>
                         </div>
 
                         <div class="simple-footer">

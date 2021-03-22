@@ -13,7 +13,12 @@ class Controller_Auth extends CI_Controller
     
     public function index()
     {
-        $this->load->view('tpl-auth/index');
+        redirect('auth/login');
+    }
+
+    public function login()
+    {
+        $this->load->view('tpl-auth/login');
     }
 
     public function auth_process()
@@ -56,6 +61,11 @@ class Controller_Auth extends CI_Controller
         }
     }
 
+    public function register()
+    {
+        $this->load->view('tpl-auth/register');
+    }
+
     public function logout()
     {
         // Clear the user session
@@ -68,6 +78,6 @@ class Controller_Auth extends CI_Controller
 
         $this->session->unset_userdata($user_session);
         
-        redirect('auth');
+        redirect('auth/login');
     }
 }
