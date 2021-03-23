@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2021 at 07:44 AM
+-- Generation Time: Mar 23, 2021 at 11:33 AM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -70,7 +70,7 @@ CREATE TABLE `tbl_admins` (
 --
 
 INSERT INTO `tbl_admins` (`admin_id`, `admin_employee_no`, `admin_username`, `admin_fullname`, `admin_email`, `admin_password`, `admin_photo`, `admin_type_id`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
-(1, '1', 'admin', 'Administrator', 'admin@sewa-tenant.dev', '215e95f88936b204603dfcff01e9f614', '', 1, 'system', '2021-03-19 12:48:27', 'system', '2021-03-19 12:48:27');
+(1, '1', 'admin', 'Administrator', 'admin@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 1, 'system', '2021-03-19 12:48:27', 'system', '2021-03-19 12:48:27');
 
 -- --------------------------------------------------------
 
@@ -170,7 +170,8 @@ CREATE TABLE `tbl_users` (
 --
 
 INSERT INTO `tbl_users` (`user_id`, `user_identity_no`, `user_taxpayer_id_no`, `user_business_license_no`, `user_fullname`, `user_email`, `user_phone_no`, `user_password`, `user_address`, `user_photo`, `user_type_id`, `user_registration_date`, `modified_by`, `modified_date`) VALUES
-(1, '03021999', '03021999', '', 'Kanna Hashimoto', 'kanna@customer.dev', '', 'ae671ecd4ebee177c57dfbfbbf28cd83', '', '', 5, '2021-03-19 12:53:50', 'Kanna Hashimoto', '2021-03-19 12:53:50');
+(1, '03021999', '03021999', '', 'Kanna Hashimoto', 'kanna@customer.dev', '', 'ae671ecd4ebee177c57dfbfbbf28cd83', '', '', 5, '2021-03-19 12:53:50', 'Kanna Hashimoto', '2021-03-19 12:53:50'),
+(2, '123456789', '123.456.789', 'AB.123456789', 'Edi Setiawan', 'edi@customer.dev', '0812 3456 789', 'ae671ecd4ebee177c57dfbfbbf28cd83', 'Jl. Maju Pantang Mundur No. 125, Kel. Maju, Kec. Pantang Mundur', '', 5, '2021-03-23 16:49:03', 'Edi Setiawan', '2021-03-23 16:49:03');
 
 --
 -- Indexes for dumped tables
@@ -252,7 +253,7 @@ ALTER TABLE `tbl_transactions`
 -- AUTO_INCREMENT for table `tbl_users`
 --
 ALTER TABLE `tbl_users`
-  MODIFY `user_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

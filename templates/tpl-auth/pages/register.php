@@ -6,10 +6,10 @@
         <div class="card-header"><h4>Pendaftaran</h4></div>
 
         <div class="card-body">
-            <form method="POST">
+            <form method="POST" action="<?php echo base_url('auth/register/auth-process'); ?>">
                 <div class="form-group">
-                    <label for="first_name">Nama Lengkap</label>
-                    <input id="first_name" type="text" class="form-control" name="fullname" autofocus>
+                    <label>Nama Lengkap</label>
+                    <input type="text" class="form-control" name="user_fullname" autofocus>
                 </div>
 
                 <div class="form-group">
@@ -20,7 +20,7 @@
                                 <i class="far fa-address-card"></i>
                             </div>
                         </div>
-                        <input id="nik" type="text" class="form-control" name="nik">
+                        <input type="text" class="form-control" name="user_nik">
                     </div>
                 </div>
 
@@ -32,13 +32,13 @@
                                 <i class="fas fa-phone"></i>
                             </div>
                         </div>
-                        <input type="text" name="phone-number" class="form-control phone-number">
+                        <input type="text" class="form-control phone-number" name="user_phone">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label>Alamat</label>
-                    <textarea class="form-control custom-textarea" required=""></textarea>
+                    <textarea class="form-control custom-textarea" name="user_address" required></textarea>
                 </div>
 
                 <div class="form-group">
@@ -49,7 +49,7 @@
                                 <i class="far fa-id-card"></i>
                             </div>
                         </div>
-                        <input id="npwp" type="text" class="form-control" name="npwp">
+                        <input type="text" class="form-control" name="user_npwp">
                     </div>
                 </div>
 
@@ -61,7 +61,7 @@
                                 <i class="far fa-list-alt"></i>
                             </div>
                         </div>
-                        <input id="siup" type="text" class="form-control" name="siup">
+                        <input type="text" class="form-control" name="user_siup">
                     </div>
                 </div>
 
@@ -77,7 +77,7 @@
                                 <i class="far fa-envelope"></i>
                             </div>
                         </div>
-                        <input id="email" type="email" class="form-control" name="email">
+                        <input type="email" class="form-control" name="user_email">
                     </div>
                 </div>
 
@@ -89,7 +89,7 @@
                                 <i class="fas fa-lock"></i>
                             </div>
                         </div>
-                        <input type="password" class="form-control pwstrength" data-indicator="pwindicator">
+                        <input type="password" class="form-control pwstrength" data-indicator="pwindicator" name="user_password">
                     </div>
                     <div id="pwindicator" class="pwindicator">
                         <div class="bar"></div>

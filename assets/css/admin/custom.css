@@ -19,3 +19,10 @@ textarea.custom-textarea
 {
     margin-bottom: 50px;
 }
+
+.usertype-label
+{
+    font-size: 10px;
+    margin-left: 5px;
+    padding: 5px 10px;
+}
