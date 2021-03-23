@@ -9,3 +9,13 @@
 {
     width: 100px;
 }
+
+textarea.custom-textarea
+{
+    height: 100px !important;
+}
+
+.reg-form-group
+{
+    margin-bottom: 50px;
+}

@@ -6,6 +6,9 @@ class Controller_Auth extends CI_Controller
     public function __construct()
 	{
         parent::__construct();
+
+        // Load library for templating
+		$this->load->library('template');
         
         // Load the model
         $this->load->model('model_auth');
@@ -18,7 +21,9 @@ class Controller_Auth extends CI_Controller
 
     public function login()
     {
-        $this->load->view('tpl-auth/login');
+        $data['page_title'] = 'Login';
+
+        $this->template->auth('tpl-auth/pages/login', $data);
     }
 
     public function auth_process()
@@ -63,7 +68,9 @@ class Controller_Auth extends CI_Controller
 
     public function register()
     {
-        $this->load->view('tpl-auth/register');
+        $data['page_title'] = 'Pendaftaran';
+
+        $this->template->auth('tpl-auth/pages/register', $data);
     }
 
     public function logout()

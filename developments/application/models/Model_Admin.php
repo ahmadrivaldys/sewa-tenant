@@ -8,7 +8,7 @@ class Model_Admin extends CI_Model
         $this->db->select('trx.transaction_number, trx.transaction_date, tnt.tenant_name, usr.user_fullname');
         $this->db->from('tbl_transactions trx');
         $this->db->join('tbl_tenants tnt', 'tnt.tenant_id = trx.transaction_tenant_id');
-        $this->db->join('tbl_users usr', 'usr.user_username = trx.transaction_customer');
+        $this->db->join('tbl_users usr', 'usr.user_id = trx.transaction_customer_id');
 
         return $this->db->get()->result();
     }
@@ -32,7 +32,7 @@ class Model_Admin extends CI_Model
 
     public function get_customers_list()
     {
-        $this->db->select('user_identity_no, user_taxpayer_id_no, user_username, user_fullname, user_email, user_photo');
+        $this->db->select('user_identity_no, user_taxpayer_id_no, user_fullname, user_email, user_photo');
         $this->db->from('tbl_users');
 
         return $this->db->get()->result();

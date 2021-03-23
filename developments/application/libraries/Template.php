@@ -9,11 +9,18 @@ class Template
     {
         $this->_ci = &get_instance();
     }
+
+    function auth($content, $data = NULL)
+  	{
+        $data['header_logo'] = $this->_ci->load->view('tpl-auth/_partials/header-logo', $data, TRUE);
+        $data['footer']      = $this->_ci->load->view('tpl-auth/_partials/footer', $data, TRUE);
+        $data['content']     = $this->_ci->load->view($content, $data, TRUE);
+        
+        $this->_ci->load->view('tpl-auth/index', $data);
+    }
     
   	function main($content, $data = NULL)
   	{
-        // $data['menubar']  = $this->_ci->load->view('components/menubar', $data, TRUE);
-        // $data['dropdown'] = $this->_ci->load->view('components/dropdown', $data, TRUE);
         $data['content']  = $this->_ci->load->view($content, $data, TRUE);
         
         $this->_ci->load->view('tpl-admin/index', $data);
