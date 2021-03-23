@@ -66,7 +66,7 @@ class Controller_Auth extends CI_Controller
 
             $this->session->set_userdata($user_session);
 
-            redirect('dashboard');
+            redirect('dashboard/kelola-transaksi');
         }
         else
         {

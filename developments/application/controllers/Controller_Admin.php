@@ -23,12 +23,22 @@ class Controller_Admin extends CI_Controller
 
 	public function index()
 	{
-		$data['get_trx_list']  = $this->model_admin->get_transactions_list();
-        $data['page_title']    = 'Dashboard';
-		$data['page_subtitle'] = 'Di menu ini Anda dapat memantau keseluruhan ringkasan data.';
-		$data['content_title'] = 'Ringkasan Data';
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
 
-		$this->template->main('tpl-admin/pages/dashboard', $data);
+		if($usertype == "Administrator" OR $usertype == "Leasing")
+		{
+			$data['get_trx_list']  = $this->model_admin->get_transactions_list();
+			$data['page_title']    = 'Dashboard';
+			$data['page_subtitle'] = 'Di menu ini Anda dapat memantau keseluruhan ringkasan data.';
+			$data['content_title'] = 'Ringkasan Data';
+
+			$this->template->main('tpl-admin/pages/dashboard', $data);
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
 	}
 
 	public function get_transactions_list()
@@ -43,31 +53,68 @@ class Controller_Admin extends CI_Controller
 
 	public function get_tenants_list()
 	{
-		$data['get_tnt_list']  = $this->model_admin->get_tenants_list();
-        $data['page_title']    = 'Kelola Tenant';
-		$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola data-data tenant.';
-		$data['content_title'] = 'Daftar Tenant';
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
 
-		$this->template->main('tpl-admin/pages/tenants', $data);
+		if($usertype == "Administrator" OR $usertype == "Leasing")
+		{
+			$data['get_tnt_list']  = $this->model_admin->get_tenants_list();
+			$data['page_title']    = 'Kelola Tenant';
+			$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola data-data tenant.';
+			$data['content_title'] = 'Daftar Tenant';
+
+			$this->template->main('tpl-admin/pages/tenants', $data);
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
 	}
 
 	public function get_admins_list()
 	{
-		$data['get_adm_list']  = $this->model_admin->get_admins_list();
-        $data['page_title']    = 'Kelola Akun Admin';
-		$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola akun admin.';
-		$data['content_title'] = 'Daftar Akun Admin';
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
 
-		$this->template->main('tpl-admin/pages/admins', $data);
+		if($usertype == "Administrator" OR $usertype == "Leasing")
+		{
+			$data['get_adm_list']  = $this->model_admin->get_admins_list();
+			$data['page_title']    = 'Kelola Akun Admin';
+			$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola akun admin.';
+			$data['content_title'] = 'Daftar Akun Admin';
+
+			$this->template->main('tpl-admin/pages/admins', $data);
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
 	}
 
 	public function get_customers_list()
 	{
-		$data['get_cus_list']  = $this->model_admin->get_customers_list();
-        $data['page_title']    = 'Kelola Akun Pelanggan';
-		$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola akun pelanggan.';
-		$data['content_title'] = 'Daftar Akun Pelanggan';
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
 
-		$this->template->main('tpl-admin/pages/customers', $data);
+		if($usertype == "Administrator")
+		{
+			$data['get_cus_list']  = $this->model_admin->get_customers_list();
+			$data['page_title']    = 'Kelola Akun Pelanggan';
+			$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola akun pelanggan.';
+			$data['content_title'] = 'Daftar Akun Pelanggan';
+
+			$this->template->main('tpl-admin/pages/customers', $data);
+		}
+		else
+		{
+			if($usertype == "Leasing")
+			{
+				redirect('dashboard');
+			}
+			else
+			{
+				redirect('dashboard/kelola-transaksi');
+			}
+		}
 	}
 }

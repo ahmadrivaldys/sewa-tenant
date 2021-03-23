@@ -1,2 +1,0 @@
-<li class="menu-header">Menu</li>
-<li <?php if($page_title == 'Kelola Transaksi') echo "class='active'"; ?>><a href="<?php echo base_url('dashboard/kelola-transaksi'); ?>" class="nav-link"><i class="far fa-file-alt"></i> <span>Transaksi</span></a></li>
