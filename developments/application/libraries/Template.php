@@ -21,6 +21,7 @@ class Template
     
   	function main($content, $data = NULL)
   	{
+        $data['sidebar']  = $this->_ci->load->view('tpl-admin/_partials/sidebar', $data, TRUE);
         $data['content']  = $this->_ci->load->view($content, $data, TRUE);
         
         $this->_ci->load->view('tpl-admin/index', $data);
