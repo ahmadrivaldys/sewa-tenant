@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 19, 2021 at 07:11 AM
+-- Generation Time: Mar 23, 2021 at 07:44 AM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -129,7 +129,7 @@ CREATE TABLE `tbl_transactions` (
   `transaction_id` int(5) NOT NULL,
   `transaction_number` varchar(20) NOT NULL,
   `transaction_tenant_id` int(3) NOT NULL,
-  `transaction_customer` varchar(20) NOT NULL,
+  `transaction_customer_id` int(5) NOT NULL,
   `transaction_date` datetime NOT NULL,
   `modified_by` varchar(20) NOT NULL,
   `modified_date` datetime NOT NULL
@@ -139,8 +139,8 @@ CREATE TABLE `tbl_transactions` (
 -- Dumping data for table `tbl_transactions`
 --
 
-INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_number`, `transaction_tenant_id`, `transaction_customer`, `transaction_date`, `modified_by`, `modified_date`) VALUES
-(1, 'TRX001-19032021', 1, 'kanna', '2021-03-19 12:59:01', 'kanna', '2021-03-19 12:59:01');
+INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_number`, `transaction_tenant_id`, `transaction_customer_id`, `transaction_date`, `modified_by`, `modified_date`) VALUES
+(1, 'TRX001-19032021', 1, 1, '2021-03-19 12:59:01', 'Kanna Hashimoto', '2021-03-19 12:59:01');
 
 -- --------------------------------------------------------
 
@@ -152,10 +152,12 @@ CREATE TABLE `tbl_users` (
   `user_id` int(5) NOT NULL,
   `user_identity_no` varchar(25) NOT NULL,
   `user_taxpayer_id_no` varchar(25) NOT NULL,
-  `user_username` varchar(20) NOT NULL,
+  `user_business_license_no` varchar(25) NOT NULL,
   `user_fullname` varchar(50) NOT NULL,
   `user_email` varchar(50) NOT NULL,
+  `user_phone_no` varchar(15) NOT NULL,
   `user_password` varchar(75) NOT NULL,
+  `user_address` varchar(100) NOT NULL,
   `user_photo` varchar(50) NOT NULL,
   `user_type_id` int(2) NOT NULL,
   `user_registration_date` datetime NOT NULL,
@@ -167,8 +169,8 @@ CREATE TABLE `tbl_users` (
 -- Dumping data for table `tbl_users`
 --
 
-INSERT INTO `tbl_users` (`user_id`, `user_identity_no`, `user_taxpayer_id_no`, `user_username`, `user_fullname`, `user_email`, `user_password`, `user_photo`, `user_type_id`, `user_registration_date`, `modified_by`, `modified_date`) VALUES
-(1, '03021999', '03021999', 'kanna', 'Kanna Hashimoto', 'kanna@customer.sewa-tenant.dev', 'ae671ecd4ebee177c57dfbfbbf28cd83', '', 5, '2021-03-19 12:53:50', 'kanna', '2021-03-19 12:53:50');
+INSERT INTO `tbl_users` (`user_id`, `user_identity_no`, `user_taxpayer_id_no`, `user_business_license_no`, `user_fullname`, `user_email`, `user_phone_no`, `user_password`, `user_address`, `user_photo`, `user_type_id`, `user_registration_date`, `modified_by`, `modified_date`) VALUES
+(1, '03021999', '03021999', '', 'Kanna Hashimoto', 'kanna@customer.dev', '', 'ae671ecd4ebee177c57dfbfbbf28cd83', '', '', 5, '2021-03-19 12:53:50', 'Kanna Hashimoto', '2021-03-19 12:53:50');
 
 --
 -- Indexes for dumped tables
