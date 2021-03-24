@@ -11,9 +11,15 @@
             <th>Aksi</th>
         </tr>
 
-        <?php foreach($get_tnt_list as $tenant_list): ?>
+        <?php if(empty($get_tnt_list)): ?>
             <tr>
-                <td>1</td>
+                <td colspan="8" class="text-center">Data tidak tersedia.</td>
+            </tr>
+        <?php endif; ?>
+
+        <?php $no = 1; foreach($get_tnt_list as $tenant_list): ?>
+            <tr>
+                <td><?php echo $no; ?></td>
                 <td><?php echo $tenant_list->tenant_name; ?></td>
                 <td><?php echo $tenant_list->tenant_size; ?></td>
                 <td><?php echo $tenant_list->tenant_location; ?></td>
@@ -22,6 +28,6 @@
                 <td><?php echo $tenant_list->tenant_image; ?></td>
                 <td><a href="#" class="btn btn-secondary">Detail</a></td>
             </tr>
-        <?php endforeach; ?>
+        <?php $no++; endforeach; ?>
     </table>
 </div>

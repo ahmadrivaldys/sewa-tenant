@@ -46,7 +46,8 @@ class Controller_Auth extends CI_Controller
             (
                 'logged-in' => TRUE,
                 'fullname'  => $auth_res->admin_fullname,
-                'usertype'  => $auth_res->account_type
+                'usertype'  => $auth_res->account_type,
+                'user_id'   => $auth_res->admin_id
             );
 
             $this->session->set_userdata($user_session);
@@ -61,7 +62,8 @@ class Controller_Auth extends CI_Controller
             (
                 'logged-in' => TRUE,
                 'fullname'  => $auth_res->user_fullname,
-                'usertype'  => $auth_res->account_type
+                'usertype'  => $auth_res->account_type,
+                'user_id'   => $auth_res->user_id
             );
 
             $this->session->set_userdata($user_session);
