@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 23, 2021 at 04:16 PM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.11
+-- Generation Time: Mar 24, 2021 at 04:45 AM
+-- Server version: 10.4.16-MariaDB
+-- PHP Version: 7.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -71,7 +71,8 @@ CREATE TABLE `tbl_admins` (
 
 INSERT INTO `tbl_admins` (`admin_id`, `admin_employee_no`, `admin_fullname`, `admin_email`, `admin_password`, `admin_photo`, `admin_type_id`, `active_status`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
 (1, '1', 'Administrator', 'admin@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 1, 1, 'system', '2021-03-19 12:48:27', 'system', '2021-03-19 12:48:27'),
-(2, 'LS-20210323', 'Minami Hamabe', 'minami@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 2, 1, 'Administrator', '2021-03-23 20:20:03', 'Minami Hamabe', '2021-03-23 20:20:03');
+(2, 'LS-20210323', 'Minami Hamabe', 'minami@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 2, 1, 'Administrator', '2021-03-23 20:20:03', 'Minami Hamabe', '2021-03-23 20:20:03'),
+(3, 'LS-20210324', 'Cindy Yuvia', 'cindy@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 2, 1, 'Administrator', '2021-03-24 09:46:40', 'Administrator', '2021-03-24 09:46:40');
 
 -- --------------------------------------------------------
 
@@ -238,7 +239,7 @@ ALTER TABLE `tbl_account_types`
 -- AUTO_INCREMENT for table `tbl_admins`
 --
 ALTER TABLE `tbl_admins`
-  MODIFY `admin_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `admin_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tbl_status`

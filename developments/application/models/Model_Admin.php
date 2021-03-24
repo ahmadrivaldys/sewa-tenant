@@ -21,13 +21,17 @@ class Model_Admin extends CI_Model
         return $this->db->get()->result();
     }
 
-    public function get_admins_list($user_id)
+    public function get_admins_list($user_id, $usertype)
     {
         $this->db->select('adm.admin_employee_no, adm.admin_fullname, adm.admin_email, adm.admin_photo, act.account_type');
         $this->db->from('tbl_admins adm');
         $this->db->join('tbl_account_types act', 'act.account_type_id = adm.admin_type_id');
         $this->db->where('adm.admin_type_id !=', 1);
-        $this->db->where('adm.admin_id !=', $user_id);
+
+        if($usertype == 'Leasing')
+        {
+            $this->db->where('adm.admin_type_id !=', 2);
+        }
 
         return $this->db->get()->result();
     }

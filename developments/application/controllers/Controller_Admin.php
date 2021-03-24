@@ -78,8 +78,8 @@ class Controller_Admin extends CI_Controller
 		$user_id  = $this->session->userdata('user_id');
 
 		if($usertype == "Administrator" OR $usertype == "Leasing")
-		{
-			$data['get_adm_list']  = $this->model_admin->get_admins_list($user_id);
+		{	
+			$data['get_adm_list']  = $this->model_admin->get_admins_list($user_id, $usertype);
 			$data['page_title']    = 'Kelola Akun Admin';
 			$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola akun admin.';
 			$data['content_title'] = 'Daftar Akun Admin';
