@@ -21,7 +21,7 @@ class Model_Admin extends CI_Model
         return $this->db->get()->result();
     }
 
-    public function get_admins_list($user_id, $usertype)
+    public function get_admins_list($usertype)
     {
         $this->db->select('adm.admin_employee_no, adm.admin_fullname, adm.admin_email, adm.admin_photo, act.account_type');
         $this->db->from('tbl_admins adm');
