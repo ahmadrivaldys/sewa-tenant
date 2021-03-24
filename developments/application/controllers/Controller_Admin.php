@@ -71,6 +71,68 @@ class Controller_Admin extends CI_Controller
 		}
 	}
 
+	public function view_add_tenant()
+	{
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		if($usertype == "Administrator" OR $usertype == "Leasing")
+		{	
+			$data['page_title']    = 'Tambah Tenant';
+			$data['page_subtitle'] = 'Di menu ini Anda menambah data tenant baru.';
+			$data['content_title'] = 'Tambah Tenant Baru';
+
+			$this->template->main('tpl-admin/pages/add-tenant', $data);
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
+	}
+
+	public function add_tenant_process()
+	{
+		// Get user_id
+		$user_id = $this->session->userdata('user_id');
+
+		// Getting all input
+        $tenant_name     = $this->input->post('tenant_name');
+        $tenant_size     = $this->input->post('tenant_size');
+        $tenant_location = $this->input->post('tenant_location');
+        $tenant_price    = $this->input->post('tenant_price');
+        $tenant_info     = $this->input->post('tenant_info');
+
+		// Date of tenant data was added
+        $tenant_date     = date_create('now')->format('Y-m-d H:i:s');
+
+		// Gathering all data that already available to be stored into the database
+        $data['tenant_name']     = $tenant_name;
+        $data['tenant_size']     = $tenant_size;
+        $data['tenant_location'] = $tenant_location;
+        $data['tenant_price']    = $tenant_price;
+        $data['tenant_info']     = $tenant_info;
+        $data['created_by']      = $user_id;
+        $data['created_date']    = $tenant_date;
+        $data['modified_by']     = $user_id;
+        $data['modified_date']   = $tenant_date;
+
+		// Storing the data into the database
+        $tenant_create = $this->model_admin->add_tenant($data);
+
+        // Show the message if the storing process was succeeded or failed
+        if($tenant_create)
+        {
+            $this->session->set_flashdata('add-tenant-succeeded', 'Penambahan data tenant berhasil.');
+        }
+        else
+        {
+            $this->session->set_flashdata('add-tenant-failed', 'Penambahan data tenant gagal.');
+        }
+
+        // After finish, user (admin) will be redirected to 'Kelola Tenant' page
+        redirect('dashboard/kelola-tenant');
+	}
+
 	public function get_admins_list()
 	{
 		// Get usertype session

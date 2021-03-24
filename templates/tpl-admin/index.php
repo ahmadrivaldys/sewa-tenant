@@ -76,7 +76,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="main-content">
                 <section class="section">
                     <div class="section-header">
+
+                        <?php if($page_title == 'Tambah Tenant'
+                              OR $page_title == 'Sunting Tenant'
+                              OR $page_title == 'Tambah Admin'
+                              OR $page_title == 'Sunting Admin'): ?>
+
+                            <div class="section-header-back">
+                                <a href="<?php echo $_SERVER['HTTP_REFERER']; ?>" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+                            </div>
+                        <?php endif; ?>
+
                         <h1>Sewa Tenant</h1>
+
+                        <?php if($page_title == 'Kelola Tenant' OR $page_title == 'Kelola Akun Admin'): ?>
+                            <?php
+                                if($page_title == 'Kelola Tenant')
+                                {
+                                    $url_add_new = base_url('dashboard/tambah-tenant');
+                                }
+                                else
+                                {
+                                    $url_add_new = base_url('dashboard/tambah-admin');
+                                }
+                            ?>
+
+                            <div class="section-header-button">
+                                <a href="<?php echo $url_add_new; ?>" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Tambah</a>
+                            </div>
+                        <?php endif; ?>
+
+                        
+                        <?php if($page_title == 'Kelola Transaksi' AND $usertype = $this->session->userdata('usertype') == 'Customer'): ?>
+                            <?php $url_add_leasing = base_url('dashboard/ajukan-sewa'); ?>
+
+                            <div class="section-header-button">
+                                <a href="<?php echo $url_add_leasing; ?>" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Ajukan Sewa</a>
+                            </div>
+                        <?php endif; ?>
 
                         <div class="section-header-breadcrumb">
                             <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
@@ -84,23 +121,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </div>
                     </div>
 
+                    <!-- Flash Alert -->
+                    <?php if($this->session->flashdata('add-tenant-succeeded')): ?>
+                        <div class="alert alert-success alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>×</span>
+                                </button>
+                                <?php echo $this->session->flashdata('add-tenant-succeeded'); ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if($this->session->flashdata('add-tenant-failed')): ?>
+                        <div class="alert alert-danger alert-dismissible show fade">
+                            <div class="alert-body">
+                                <button class="close" data-dismiss="alert">
+                                    <span>×</span>
+                                </button>
+                                <?php echo $this->session->flashdata('add-tenant-failed'); ?>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Content -->
                     <div class="section-body">
                         <h2 class="section-title"><?php echo $page_title; ?></h2>
                         <p class="section-lead"><?php echo $page_subtitle; ?></p>
                         
-                        <div class="card">
-                            <div class="card-header">
-                                <h4><?php echo $content_title; ?></h4>
-                            </div>
-                            
-                            <div class="card-body p-0">
-                                <?php echo $content; ?>
-                            </div>
-
-                            <div class="card-footer bg-whitesmoke">
-                                &nbsp;
-                            </div>
-                        </div>
+                        <?php echo $content; ?>
                     </div>
                 </section>
             </div>

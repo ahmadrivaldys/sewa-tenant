@@ -13,6 +13,11 @@ class Model_Admin extends CI_Model
         return $this->db->get()->result();
     }
 
+    public function add_tenant($data)
+    {
+        return $this->db->insert('tbl_tenants', $data);
+    }
+
     public function get_tenants_list()
     {
         $this->db->select('tenant_name, tenant_size, tenant_location, tenant_price, tenant_info, tenant_image');

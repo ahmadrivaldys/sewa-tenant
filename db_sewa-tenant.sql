@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2021 at 04:45 AM
+-- Generation Time: Mar 24, 2021 at 12:02 PM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -59,9 +59,9 @@ CREATE TABLE `tbl_admins` (
   `admin_photo` varchar(50) NOT NULL,
   `admin_type_id` int(2) NOT NULL,
   `active_status` int(2) NOT NULL,
-  `created_by` varchar(20) NOT NULL,
+  `created_by` int(3) NOT NULL,
   `created_date` datetime NOT NULL,
-  `modified_by` varchar(20) NOT NULL,
+  `modified_by` int(3) NOT NULL,
   `modified_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -70,9 +70,9 @@ CREATE TABLE `tbl_admins` (
 --
 
 INSERT INTO `tbl_admins` (`admin_id`, `admin_employee_no`, `admin_fullname`, `admin_email`, `admin_password`, `admin_photo`, `admin_type_id`, `active_status`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
-(1, '1', 'Administrator', 'admin@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 1, 1, 'system', '2021-03-19 12:48:27', 'system', '2021-03-19 12:48:27'),
-(2, 'LS-20210323', 'Minami Hamabe', 'minami@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 2, 1, 'Administrator', '2021-03-23 20:20:03', 'Minami Hamabe', '2021-03-23 20:20:03'),
-(3, 'LS-20210324', 'Cindy Yuvia', 'cindy@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 2, 1, 'Administrator', '2021-03-24 09:46:40', 'Administrator', '2021-03-24 09:46:40');
+(1, '1', 'Administrator', 'admin@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 1, 1, 1, '2021-03-19 12:48:27', 1, '2021-03-19 12:48:27'),
+(2, 'LS-20210323', 'Minami Hamabe', 'minami@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 2, 1, 1, '2021-03-23 20:20:03', 1, '2021-03-23 20:20:03'),
+(3, 'LS-20210324', 'Cindy Yuvia', 'cindy@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 2, 1, 1, '2021-03-24 09:46:40', 1, '2021-03-24 09:46:40');
 
 -- --------------------------------------------------------
 
@@ -115,9 +115,9 @@ CREATE TABLE `tbl_tenants` (
   `tenant_location` varchar(25) NOT NULL,
   `tenant_price` int(11) NOT NULL,
   `tenant_info` varchar(250) NOT NULL,
-  `created_by` varchar(20) NOT NULL,
+  `created_by` int(3) NOT NULL,
   `created_date` datetime NOT NULL,
-  `modified_by` varchar(20) NOT NULL,
+  `modified_by` int(3) NOT NULL,
   `modified_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -126,7 +126,11 @@ CREATE TABLE `tbl_tenants` (
 --
 
 INSERT INTO `tbl_tenants` (`tenant_id`, `tenant_name`, `tenant_size`, `tenant_image`, `tenant_location`, `tenant_price`, `tenant_info`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
-(1, 'Main Tenant', '8 m x 15 m', '', 'Lantai LG', 12000000, '<i>Exclude</i> listrik dan air', 'admin', '2021-03-19 13:01:58', 'admin', '2021-03-19 13:01:58');
+(1, 'Main Tenant', '8 m x 15 m', '', 'Lantai LG', 12000000, '<i>Exclude</i> listrik dan air', 1, '2021-03-19 13:01:58', 1, '2021-03-19 13:01:58'),
+(2, 'Tenant Kecil', '5 m x 8 m', '', 'Lantai 1', 15000000, 'Belum termasuk listrik dan air', 1, '2021-03-24 17:41:42', 1, '2021-03-24 17:41:42'),
+(3, 'Tenant Lebih Besar', '8 m x 10 m', '', 'Lantai 1', 20000000, 'Belum termasuk listrik dan air', 1, '2021-03-24 17:42:25', 1, '2021-03-24 17:42:25'),
+(4, 'Tenant Bebas', '5 m x 5 m', '', 'Lantai 2', 10000000, 'Belum termasuk listrik dan air', 1, '2021-03-24 17:44:31', 1, '2021-03-24 17:44:31'),
+(5, 'Tenant Bebas Lagi', '5 m x 5 m', '', 'Lantai 5', 10000000, 'Belum termasuk listrik dan air', 1, '2021-03-24 17:45:11', 1, '2021-03-24 17:45:11');
 
 -- --------------------------------------------------------
 
@@ -140,7 +144,7 @@ CREATE TABLE `tbl_transactions` (
   `transaction_tenant_id` int(3) NOT NULL,
   `transaction_customer_id` int(5) NOT NULL,
   `transaction_date` datetime NOT NULL,
-  `modified_by` varchar(20) NOT NULL,
+  `modified_by` int(5) NOT NULL,
   `modified_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -149,7 +153,7 @@ CREATE TABLE `tbl_transactions` (
 --
 
 INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_number`, `transaction_tenant_id`, `transaction_customer_id`, `transaction_date`, `modified_by`, `modified_date`) VALUES
-(1, 'TRX001-19032021', 1, 1, '2021-03-19 12:59:01', 'Kanna Hashimoto', '2021-03-19 12:59:01');
+(1, 'TRX001-19032021', 1, 1, '2021-03-19 12:59:01', 1, '2021-03-19 12:59:01');
 
 -- --------------------------------------------------------
 
@@ -251,7 +255,7 @@ ALTER TABLE `tbl_status`
 -- AUTO_INCREMENT for table `tbl_tenants`
 --
 ALTER TABLE `tbl_tenants`
-  MODIFY `tenant_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `tenant_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_transactions`
