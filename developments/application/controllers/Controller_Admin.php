@@ -90,12 +90,34 @@ class Controller_Admin extends CI_Controller
 		}
 	}
 
-	public function add_tenant_process()
+	public function view_edit_tenant($tenant_id)
+    {
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		if($usertype == "Administrator" OR $usertype == "Leasing")
+		{
+			$where['tenant_id']    = $tenant_id;
+			$data['get_tenant']    = $this->model_admin->get_tenant($where);
+			$data['page_title']    = 'Sunting Tenant';
+			$data['page_subtitle'] = 'Di menu ini Anda memperbarui data tenant yang ada.';
+			$data['content_title'] = 'Sunting Data Tenant';
+
+			$this->template->main('tpl-admin/pages/edit-tenant', $data);
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
+    }
+
+	public function save_tenant_process()
 	{
 		// Get user_id
 		$user_id = $this->session->userdata('user_id');
 
 		// Getting all input
+		$submit_type     = $this->input->post('submit_type');
         $tenant_name     = $this->input->post('tenant_name');
         $tenant_size     = $this->input->post('tenant_size');
         $tenant_location = $this->input->post('tenant_location');
@@ -111,22 +133,44 @@ class Controller_Admin extends CI_Controller
         $data['tenant_location'] = $tenant_location;
         $data['tenant_price']    = $tenant_price;
         $data['tenant_info']     = $tenant_info;
-        $data['created_by']      = $user_id;
-        $data['created_date']    = $tenant_date;
         $data['modified_by']     = $user_id;
         $data['modified_date']   = $tenant_date;
 
-		// Storing the data into the database
-        $tenant_create = $this->model_admin->add_tenant($data);
-
-        // Show the message if the storing process was succeeded or failed
-        if($tenant_create)
+		// Before storing the data, check the submit type first, is this new data or update
+        if($submit_type == 'new')
         {
-            $this->session->set_flashdata('add-tenant-succeeded', 'Penambahan data tenant berhasil.');
+            $data['created_by']      = $user_id;
+			$data['created_date']    = $tenant_date;
+
+            // Storing the data into the database
+			$save_tenant = $this->model_admin->add_tenant($data);
+
+			// Show the message if the storing process was succeeded or failed
+			if($save_tenant)
+			{
+				$this->session->set_flashdata('add-tenant-succeeded', 'Penambahan data tenant berhasil.');
+			}
+			else
+			{
+				$this->session->set_flashdata('add-tenant-failed', 'Penambahan data tenant gagal.');
+			}
         }
         else
         {
-            $this->session->set_flashdata('add-tenant-failed', 'Penambahan data tenant gagal.');
+            $where['tenant_id'] = $this->input->post('tenant_id');
+
+            // Storing the data into the database
+            $save_tenant = $this->model_admin->update_tenant($data, $where);
+
+            // Show the message if the storing process was succeeded or failed
+			if($save_tenant)
+			{
+				$this->session->set_flashdata('update-tenant-succeeded', 'Pembaruan data tenant berhasil.');
+			}
+			else
+			{
+				$this->session->set_flashdata('update-tenant-failed', 'Pembaruan data tenant gagal.');
+			}
         }
 
         // After finish, user (admin) will be redirected to 'Kelola Tenant' page

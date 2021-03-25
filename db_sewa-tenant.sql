@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 24, 2021 at 12:02 PM
+-- Generation Time: Mar 25, 2021 at 04:44 AM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -126,7 +126,7 @@ CREATE TABLE `tbl_tenants` (
 --
 
 INSERT INTO `tbl_tenants` (`tenant_id`, `tenant_name`, `tenant_size`, `tenant_image`, `tenant_location`, `tenant_price`, `tenant_info`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
-(1, 'Main Tenant', '8 m x 15 m', '', 'Lantai LG', 12000000, '<i>Exclude</i> listrik dan air', 1, '2021-03-19 13:01:58', 1, '2021-03-19 13:01:58'),
+(1, 'Main Tenant AZ', '8 m x 15 m', '', 'Lantai LG', 11500000, 'Exclude listrik dan air', 1, '2021-03-19 13:01:58', 1, '2021-03-25 10:43:11'),
 (2, 'Tenant Kecil', '5 m x 8 m', '', 'Lantai 1', 15000000, 'Belum termasuk listrik dan air', 1, '2021-03-24 17:41:42', 1, '2021-03-24 17:41:42'),
 (3, 'Tenant Lebih Besar', '8 m x 10 m', '', 'Lantai 1', 20000000, 'Belum termasuk listrik dan air', 1, '2021-03-24 17:42:25', 1, '2021-03-24 17:42:25'),
 (4, 'Tenant Bebas', '5 m x 5 m', '', 'Lantai 2', 10000000, 'Belum termasuk listrik dan air', 1, '2021-03-24 17:44:31', 1, '2021-03-24 17:44:31'),

@@ -32,7 +32,11 @@
                         <td><?php echo $tenant_list->tenant_price; ?></td>
                         <td><?php echo $tenant_list->tenant_info; ?></td>
                         <td><?php echo $tenant_list->tenant_image; ?></td>
-                        <td><a href="#" class="btn btn-secondary">Detail</a></td>
+                        <td>
+                            <a href="<?php echo base_url('dashboard/sunting-tenant/'.$tenant_list->tenant_id); ?>" class="btn btn-icon btn-primary" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sunting Tenant">
+                                <i class="fas fa-pencil-alt"></i>
+                            </a>
+                        </td>
                     </tr>
                 <?php $no++; endforeach; ?>
             </table>

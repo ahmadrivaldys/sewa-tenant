@@ -6,37 +6,38 @@
             </div>
 
             <div class="card-body">
-                <form method="POST" action="<?php echo base_url('dashboard/tambah-tenant/process'); ?>">
-                    <input type="hidden" name="submit_type" value="new"/>
+                <form method="POST" action="<?php echo base_url('dashboard/sunting-tenant/process'); ?>">
+                    <input type="hidden" name="submit_type" value="update"/>
+                    <input type="hidden" name="tenant_id" value="<?php echo $get_tenant->tenant_id; ?>"/>
 
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nama Tenant</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="text" class="form-control" name="tenant_name">
+                            <input type="text" class="form-control" name="tenant_name" value="<?php echo $get_tenant->tenant_name; ?>">
                         </div>
                     </div>
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Ukuran</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="text" class="form-control" name="tenant_size">
+                            <input type="text" class="form-control" name="tenant_size" value="<?php echo $get_tenant->tenant_size; ?>">
                         </div>
                     </div>
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Lokasi</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="text" class="form-control" name="tenant_location">
+                            <input type="text" class="form-control" name="tenant_location" value="<?php echo $get_tenant->tenant_location; ?>">
                         </div>
                     </div>
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Harga Sewa</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="text" class="form-control" name="tenant_price">
+                            <input type="text" class="form-control" name="tenant_price" value="<?php echo $get_tenant->tenant_price; ?>">
                         </div>
                     </div>
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Keterangan</label>
                         <div class="col-sm-12 col-md-7">
-                            <input type="text" class="form-control" name="tenant_info">
+                            <input type="text" class="form-control" name="tenant_info" value="<?php echo $get_tenant->tenant_info; ?>">
                         </div>
                     </div>
                     <div class="form-group row mb-4">
@@ -51,7 +52,7 @@
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
                         <div class="col-sm-12 col-md-7">
-                            <button type="submit" class="btn btn-primary">Tambah</button>
+                            <button type="submit" class="btn btn-primary">Simpan</button>
                         </div>
                     </div>
                 </form>

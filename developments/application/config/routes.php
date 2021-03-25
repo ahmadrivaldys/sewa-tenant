@@ -61,10 +61,14 @@ $route['dashboard/kelola-tenant']    = 'Controller_Admin/get_tenants_list';
 $route['dashboard/kelola-admin']     = 'Controller_Admin/get_admins_list';
 $route['dashboard/kelola-pelanggan'] = 'Controller_Admin/get_customers_list';
 
-$route['dashboard/tambah-tenant']    = 'Controller_Admin/view_add_tenant';
-$route['dashboard/tambah-admin']     = 'Controller_Admin/view_add_admin';
-$route['dashboard/tambah-tenant/process'] = 'Controller_Admin/add_tenant_process';
-$route['dashboard/tambah-admin/process']  = 'Controller_Admin/add_admin_process';
+$route['dashboard/tambah-tenant']          = 'Controller_Admin/view_add_tenant';
+$route['dashboard/tambah-admin']           = 'Controller_Admin/view_add_admin';
+$route['dashboard/tambah-tenant/process']  = 'Controller_Admin/save_tenant_process';
+$route['dashboard/tambah-admin/process']   = 'Controller_Admin/save_admin_process';
+$route['dashboard/sunting-tenant/(:num)']  = 'Controller_Admin/view_edit_tenant/$1';
+$route['dashboard/sunting-admin/(:num)']   = 'Controller_Admin/view_edit_admin/$1';
+$route['dashboard/sunting-tenant/process'] = 'Controller_Admin/save_tenant_process';
+$route['dashboard/sunting-admin/process']  = 'Controller_Admin/save_admin_process';
 
 
 // Routes for Auth

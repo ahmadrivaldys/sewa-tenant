@@ -20,10 +20,24 @@ class Model_Admin extends CI_Model
 
     public function get_tenants_list()
     {
-        $this->db->select('tenant_name, tenant_size, tenant_location, tenant_price, tenant_info, tenant_image');
+        $this->db->select('tenant_id, tenant_name, tenant_size, tenant_location, tenant_price, tenant_info, tenant_image');
         $this->db->from('tbl_tenants');
 
         return $this->db->get()->result();
+    }
+
+    public function get_tenant($where)
+    {
+        $this->db->select('tenant_id, tenant_name, tenant_size, tenant_location, tenant_price, tenant_info, tenant_image');
+        $this->db->from('tbl_tenants');
+        $this->db->where($where);
+
+        return $this->db->get()->row();
+    }
+
+    public function update_tenant($data, $where)
+    {
+        return $this->db->update('tbl_tenants', $data, $where);
     }
 
     public function get_admins_list($usertype)

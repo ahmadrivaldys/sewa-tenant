@@ -21,8 +21,10 @@ class Template
     
   	function main($content, $data = NULL)
   	{
-        $data['sidebar']  = $this->_ci->load->view('tpl-admin/_partials/sidebar', $data, TRUE);
-        $data['content']  = $this->_ci->load->view($content, $data, TRUE);
+        $data['sidebar_menu']   = $this->_ci->load->view('tpl-admin/_partials/sidebar-menu', $data, TRUE);
+        $data['flash_alert']    = $this->_ci->load->view('tpl-admin/_partials/flash-alert', $data, TRUE);
+        $data['section_header'] = $this->_ci->load->view('tpl-admin/_partials/section-header', $data, TRUE);
+        $data['content']        = $this->_ci->load->view($content, $data, TRUE);
         
         $this->_ci->load->view('tpl-admin/index', $data);
     }
