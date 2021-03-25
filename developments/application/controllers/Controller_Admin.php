@@ -177,6 +177,26 @@ class Controller_Admin extends CI_Controller
         redirect('dashboard/kelola-tenant');
 	}
 
+	public function delete_tenant_process($tenant_id)
+    {
+        // Deleting the data from the database
+        $delete_tenant = $this->model_admin->delete_tenant($tenant_id);
+
+        // Show the message if the deleting process was succeeded or failed
+        if($delete_tenant)
+        {
+			$this->session->set_flashdata('delete-tenant-succeeded', 'Penghapusan data tenant berhasil.');
+
+        }
+        else
+        {
+			$this->session->set_flashdata('delete-tenant-failed', 'Penghapusan data tenant gagal.');
+        }
+
+        // After finish, user (admin) will be redirected to 'Kelola Tenant' page
+        redirect('dashboard/kelola-tenant');
+    }
+
 	public function get_admins_list()
 	{
 		// Get usertype session

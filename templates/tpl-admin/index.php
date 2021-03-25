@@ -101,6 +101,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </footer>
         </div>
     </div>
+
+    
     
 
     <script src="<?php echo base_url('assets/plugins/jquery/jquery.min.js'); ?>"></script>
@@ -111,5 +113,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url('assets/js/admin/stisla.js'); ?>"></script>
     <script src="<?php echo base_url('assets/js/admin/scripts.js'); ?>"></script>
     <script src="<?php echo base_url('assets/js/admin/custom.js'); ?>"></script>
+    <script>
+        <?php if(!empty($get_tnt_list)): ?>
+            <?php foreach($get_tnt_list as $tenant_list): ?>
+                $('#hapus-tenant_<?php echo $tenant_list->tenant_id; ?>').fireModal({
+                    title: 'Hapus Tenant',
+                    body: 'Apa Anda yakin ingin menghapus <?php echo $tenant_list->tenant_name; ?>?',
+                    submit: function()
+                    {
+                        <?php echo base_url('dashboard/hapus-tenant/'.$tenant_list->tenant_id); ?>
+                    },
+                    buttons: [
+                        {
+                            text: 'Ya',
+                            class: 'btn btn-danger',
+                            submit: true
+                        },
+                        {
+                            text: 'Batal',
+                            class: 'btn btn-secondary',
+                            handler: function(current_modal)
+                            {
+                                $.destroyModal(current_modal);
+                            }
+                        }
+                    ]
+                });
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </script>
 </body>
 </html>

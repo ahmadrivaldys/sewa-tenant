@@ -40,6 +40,11 @@ class Model_Admin extends CI_Model
         return $this->db->update('tbl_tenants', $data, $where);
     }
 
+    public function delete_tenant($tenant_id)
+    {
+        return $this->db->delete('tbl_tenants', array('tenant_id' => $tenant_id));
+    }
+
     public function get_admins_list($usertype)
     {
         $this->db->select('adm.admin_employee_no, adm.admin_fullname, adm.admin_email, adm.admin_photo, act.account_type');

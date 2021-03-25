@@ -33,8 +33,11 @@
                         <td><?php echo $tenant_list->tenant_info; ?></td>
                         <td><?php echo $tenant_list->tenant_image; ?></td>
                         <td>
-                            <a href="<?php echo base_url('dashboard/sunting-tenant/'.$tenant_list->tenant_id); ?>" class="btn btn-icon btn-primary" data-toggle="tooltip" data-placement="left" title="" data-original-title="Sunting Tenant">
+                            <a href="<?php echo base_url('dashboard/sunting-tenant/'.$tenant_list->tenant_id); ?>" class="btn btn-icon btn-primary">
                                 <i class="fas fa-pencil-alt"></i>
+                            </a>
+                            <a href="#" class="btn btn-icon btn-secondary" id="hapus-tenant_<?php echo $tenant_list->tenant_id; ?>">
+                                <i class="far fa-trash-alt"></i>
                             </a>
                         </td>
                     </tr>
@@ -47,3 +50,26 @@
         &nbsp;
     </div>
 </div>
+
+
+<!-- <?php foreach($get_tnt_list as $tenant_list): ?>
+    <div class="modal fade" tabindex="1" role="dialog" id="hapus-tenant_<?php echo $tenant_list->tenant_id; ?>">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php $no++; endforeach; ?> -->
