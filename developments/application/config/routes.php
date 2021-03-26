@@ -69,8 +69,8 @@ $route['dashboard/sunting-tenant/(:num)']  = 'Controller_Admin/view_edit_tenant/
 $route['dashboard/sunting-admin/(:num)']   = 'Controller_Admin/view_edit_admin/$1';
 $route['dashboard/sunting-tenant/process'] = 'Controller_Admin/save_tenant_process';
 $route['dashboard/sunting-admin/process']  = 'Controller_Admin/save_admin_process';
-$route['dashboard/hapus-tenant/(:num)']  = 'Controller_Admin/delete_tenant_process/$1';
-$route['dashboard/hapus-admin/(:num)']   = 'Controller_Admin/delete_admin_process/$1';
+$route['dashboard/hapus-tenant']  = 'Controller_Admin/delete_tenant_process';
+$route['dashboard/hapus-admin']   = 'Controller_Admin/delete_admin_process';
 
 
 // Routes for Auth

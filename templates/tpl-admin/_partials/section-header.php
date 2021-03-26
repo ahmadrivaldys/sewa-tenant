@@ -13,20 +13,15 @@
     <h1>Sewa Tenant</h1>
 
     <?php if($page_title == 'Kelola Tenant' OR $page_title == 'Kelola Akun Admin'): ?>
-        <?php
-            if($page_title == 'Kelola Tenant')
-            {
-                $url_add_new = base_url('dashboard/tambah-tenant');
-            }
-            else
-            {
-                $url_add_new = base_url('dashboard/tambah-admin');
-            }
-        ?>
 
         <div class="section-header-button">
-            <a href="<?php echo $url_add_new; ?>" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Tambah</a>
+            <?php if($page_title == 'Kelola Tenant'): ?>
+                <a href="<?php echo base_url('dashboard/tambah-tenant'); ?>" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Tambah</a>
+            <?php else: ?>
+                <a href="#" class="btn btn-primary" onclick="modal_trigger('tambah-admin')"><i class="fas fa-plus-circle"></i> Tambah</a>
+            <?php endif; ?>
         </div>
+
     <?php endif; ?>
 
     

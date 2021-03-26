@@ -177,24 +177,44 @@ class Controller_Admin extends CI_Controller
         redirect('dashboard/kelola-tenant');
 	}
 
-	public function delete_tenant_process($tenant_id)
+	public function delete_tenant_process()
     {
-        // Deleting the data from the database
-        $delete_tenant = $this->model_admin->delete_tenant($tenant_id);
+        // Get usertype session
+		$usertype = $this->session->userdata('usertype');
 
-        // Show the message if the deleting process was succeeded or failed
-        if($delete_tenant)
-        {
-			$this->session->set_flashdata('delete-tenant-succeeded', 'Penghapusan data tenant berhasil.');
+		if($usertype == "Administrator" OR $usertype == "Leasing")
+		{
+			$tenant_id = $this->input->post('tenant_id');
+			
+			$where['tenant_id'] = $tenant_id;
 
-        }
-        else
-        {
-			$this->session->set_flashdata('delete-tenant-failed', 'Penghapusan data tenant gagal.');
-        }
+			if(!empty($tenant_id))
+			{
+				// Deleting the data from the database
+				$delete_tenant = $this->model_admin->delete_tenant($where);
 
-        // After finish, user (admin) will be redirected to 'Kelola Tenant' page
-        redirect('dashboard/kelola-tenant');
+				// Show the message if the deleting process was succeeded or failed
+				if($delete_tenant)
+				{
+					$this->session->set_flashdata('delete-tenant-succeeded', 'Penghapusan data tenant berhasil.');
+				}
+				else
+				{
+					$this->session->set_flashdata('delete-tenant-failed', 'Penghapusan data tenant gagal.');
+				}
+
+				// After finish, user (admin) will be redirected to 'Kelola Tenant' page
+				redirect('dashboard/kelola-tenant');
+			}
+			else
+			{
+				echo "Akses langsung tidak diperbolehkan.";
+			}
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
     }
 
 	public function get_admins_list()
@@ -205,6 +225,7 @@ class Controller_Admin extends CI_Controller
 		if($usertype == "Administrator" OR $usertype == "Leasing")
 		{	
 			$data['get_adm_list']  = $this->model_admin->get_admins_list($usertype);
+			$data['get_adm_type']  = $this->model_admin->get_admins_type();
 			$data['page_title']    = 'Kelola Akun Admin';
 			$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola akun admin.';
 			$data['content_title'] = 'Daftar Akun Admin';
@@ -216,6 +237,92 @@ class Controller_Admin extends CI_Controller
 			redirect('dashboard/kelola-transaksi');
 		}
 	}
+
+	public function save_admin_process()
+    {
+        // Getting all input
+        $submit_type    = $this->input->post('submit_type');
+        $admin_fullname = $this->input->post('admin_fullname');
+        $admin_email    = $this->input->post('admin_email');
+        $admin_password = $this->input->post('admin_password');
+        // $user_type_id  = $this->input->post('user_type_id');
+
+        // Getting user-admin creator
+        $admin_creator  = $this->session->userdata('user_id');
+
+        // Creating date of user-admin adding
+        $admin_date     = date_create('now')->format('Y-m-d H:i:s');
+
+        // Gathering all data that already available to be stored into the database
+        $data['admin_nip']      = $admin_fullname;
+        $data['admin_fullname'] = $admin_fullname;
+        $data['admin_email']    = $admin_email;
+        // $data['admin_type_id']  = $admin_type_id;
+        $data['modified_by']    = $admin_creator;
+        $data['modified_date']  = $admin_date;
+
+        /* Set password if only its field is not empty.
+           This will be useful when admin wants to update the user's data without changing the user's password, so the password won't be changed accidentally when the field is empty.
+           At default condition, the field is still considered as a data input when it's empty 
+           and will change the existing password. So, I made an exception.
+        */
+        if(!empty($admin_password))
+        {
+            $data['admin_password'] = md5($admin_password);
+        }
+
+        // Before storing the data, check the user status type first, is this new user or update
+        if($submit_type == 'new')
+        {
+			$admin_nip      = $this->input->post('admin_nip');
+            $total_account  = $this->model_admin->total_admin_account($admin_nip);
+
+            // Check if account already exist or not
+            if($total_account > 0)
+            {
+				$this->session->set_flashdata('admin-already-exist', 'Akun dengan NIP tersebut <b>sudah ada</b>. Silakan coba dengan NIP lain.');
+			}
+            else
+            {
+                $data['admin_nip']    = $admin_nip;
+                $data['created_by']   = $admin_creator;
+                $data['created_date'] = $admin_date;
+
+                // Storing the data into the database
+                $save_user = $this->model_admin->add_admin($data);
+
+                // Show the message if the storing process was succeeded or failed
+                if($save_user)
+                {
+                    $this->native_session->flash_alert('add-user-succeeded', 'Successfully <b>added</b> new user.', 'alert-success');
+                }
+                else
+                {
+                    $this->native_session->flash_alert('add-user-failed', 'Failed to <b>add</b> new user.', 'alert-danger');
+                }
+            }
+        }
+        else
+        {
+            $where['admin_id'] = $this->input->post('admin_id');
+
+            // Storing the data into the database
+            $save_user = $this->model_admin->update_admin($data, $where);
+
+            // Show the message if the storing process was succeeded or failed
+            if($save_user)
+            {
+                $this->native_session->flash_alert('update-user-succeeded', 'Successfully <b>updated</b> the user.', 'alert-success');
+            }
+            else
+            {
+                $this->native_session->flash_alert('update-user-failed', 'Failed to <b>update</b> user.', 'alert-danger');
+            }
+        }
+
+        // After finish, user (admin) will be redirected to 'Kelola Admin' page
+        redirect('dashboard/kelola-admin');
+    }
 
 	public function get_customers_list()
 	{

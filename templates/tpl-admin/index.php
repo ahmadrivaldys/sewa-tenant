@@ -10,6 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <title><?php echo $page_title; ?></title>
     <link rel="stylesheet" href="<?php echo base_url('assets/plugins/bootstrap/bootstrap.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/plugins/fontawesome/all.min.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/plugins/jquery-selectric/selectric.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/style.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/components.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/custom.css'); ?>">
@@ -113,34 +114,35 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url('assets/js/admin/stisla.js'); ?>"></script>
     <script src="<?php echo base_url('assets/js/admin/scripts.js'); ?>"></script>
     <script src="<?php echo base_url('assets/js/admin/custom.js'); ?>"></script>
+    <script src="<?php echo base_url('assets/plugins/jquery.pwstrength/jquery.pwstrength.min.js'); ?>"></script>
+    <script src="<?php echo base_url('assets/plugins/jquery-selectric/jquery.selectric.min.js'); ?>"></script>
     <script>
-        <?php if(!empty($get_tnt_list)): ?>
-            <?php foreach($get_tnt_list as $tenant_list): ?>
-                $('#hapus-tenant_<?php echo $tenant_list->tenant_id; ?>').fireModal({
-                    title: 'Hapus Tenant',
-                    body: 'Apa Anda yakin ingin menghapus <?php echo $tenant_list->tenant_name; ?>?',
-                    submit: function()
-                    {
-                        <?php echo base_url('dashboard/hapus-tenant/'.$tenant_list->tenant_id); ?>
-                    },
-                    buttons: [
-                        {
-                            text: 'Ya',
-                            class: 'btn btn-danger',
-                            submit: true
-                        },
-                        {
-                            text: 'Batal',
-                            class: 'btn btn-secondary',
-                            handler: function(current_modal)
-                            {
-                                $.destroyModal(current_modal);
-                            }
-                        }
-                    ]
-                });
-            <?php endforeach; ?>
-        <?php endif; ?>
+        "use strict";
+
+        // PW Strength
+        $(".pwstrength").pwstrength();
+
+
+        // Modal
+        function modal_trigger(trigger)
+        {
+            var modal = document.getElementById(trigger);
+
+            modal_toggle(modal);
+        }
+
+        function windowOnClick(trigger)
+        {
+            if(window.event.target === trigger);
+            {
+                modal_toggle(window.event.target);
+            }
+        }
+
+        function modal_toggle(modal)
+        {
+            modal.classList.toggle("show");
+        }
     </script>
 </body>
 </html>

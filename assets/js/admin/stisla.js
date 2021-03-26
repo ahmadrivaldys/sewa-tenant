@@ -28,7 +28,7 @@
         trigger_class = 'trigger--' + id,
         trigger_button = $('.' + trigger_class);
 
-      $(this).addClass(trigger_class);
+      // $(this).addClass(trigger_class);
 
       // Get modal body
       let body = options.body;

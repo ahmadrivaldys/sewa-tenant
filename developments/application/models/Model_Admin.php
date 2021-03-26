@@ -40,9 +40,14 @@ class Model_Admin extends CI_Model
         return $this->db->update('tbl_tenants', $data, $where);
     }
 
-    public function delete_tenant($tenant_id)
+    public function delete_tenant($where)
     {
-        return $this->db->delete('tbl_tenants', array('tenant_id' => $tenant_id));
+        return $this->db->delete('tbl_tenants', $where);
+    }
+
+    public function add_admin($data)
+    {
+        return $this->db->insert('tbl_admins', $data);
     }
 
     public function get_admins_list($usertype)
@@ -58,6 +63,21 @@ class Model_Admin extends CI_Model
         }
 
         return $this->db->get()->result();
+    }
+
+    public function get_admins_type()
+    {
+        $this->db->select('account_type_id, account_type');
+        $this->db->from('tbl_account_types');
+        $this->db->where('account_type_id >', 1);
+        $this->db->order_by('account_type_order');
+
+        return $this->db->get()->result();
+    }
+
+    public function update_admin($data, $where)
+    {
+        return $this->db->update('tbl_admins', $data, $where);
     }
 
     public function get_customers_list()
