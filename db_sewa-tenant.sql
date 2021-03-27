@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 25, 2021 at 04:44 AM
--- Server version: 10.4.16-MariaDB
--- PHP Version: 7.4.12
+-- Generation Time: Mar 27, 2021 at 01:21 PM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -77,6 +77,36 @@ INSERT INTO `tbl_admins` (`admin_id`, `admin_employee_no`, `admin_fullname`, `ad
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_payments`
+--
+
+CREATE TABLE `tbl_payments` (
+  `payment_id` int(5) NOT NULL,
+  `payment_nominal` int(11) NOT NULL,
+  `payment_method_id` int(2) NOT NULL,
+  `payment_status_id` int(2) NOT NULL,
+  `payment_transaction_no` varchar(20) NOT NULL,
+  `payment_date` datetime NOT NULL,
+  `modified_by` int(5) NOT NULL,
+  `modified_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_payment_methods`
+--
+
+CREATE TABLE `tbl_payment_methods` (
+  `method_id` int(2) NOT NULL,
+  `method_bank_name` varchar(15) NOT NULL,
+  `method_bank_account` varchar(25) NOT NULL,
+  `method_type` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_status`
 --
 
@@ -84,22 +114,25 @@ CREATE TABLE `tbl_status` (
   `status_id` int(2) NOT NULL,
   `status_code` int(2) NOT NULL,
   `status_name` varchar(20) NOT NULL,
-  `status_category` varchar(15) NOT NULL
+  `status_category` varchar(15) NOT NULL,
+  `status_category_code` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `tbl_status`
 --
 
-INSERT INTO `tbl_status` (`status_id`, `status_code`, `status_name`, `status_category`) VALUES
-(1, 1, 'Menunggu Pembayaran', 'Pembayaran'),
-(2, 2, 'Sudah Dibayar', 'Pembayaran'),
-(3, 3, 'Dibatalkan', 'Pembayaran'),
-(4, 1, 'Baru', 'Penyewaan'),
-(5, 2, 'Perpanjangan', 'Penyewaan'),
-(6, 3, 'Berakhir', 'Penyewaan'),
-(7, 1, 'Aktif', 'Akun'),
-(8, 0, 'Ditutup', 'Akun');
+INSERT INTO `tbl_status` (`status_id`, `status_code`, `status_name`, `status_category`, `status_category_code`) VALUES
+(1, 1, 'Menunggu Pembayaran', 'Pembayaran', 'PAYMENT'),
+(2, 2, 'Sudah Dibayar', 'Pembayaran', 'PAYMENT'),
+(3, 3, 'Dibatalkan', 'Pembayaran', 'PAYMENT'),
+(4, 1, 'Belum Aktif', 'Masa Aktif Sewa', 'ACTIVE_PERIOD'),
+(5, 2, 'Aktif / Berjalan', 'Masa Aktif Sewa', 'ACTIVE_PERIOD'),
+(6, 3, 'Non-aktif / Berakhir', 'Masa Aktif Sewa', 'ACTIVE_PERIOD'),
+(7, 1, 'Baru', 'Jenis Sewa', 'RENT_TYPE'),
+(8, 2, 'Perpanjangan', 'Jenis Sewa', 'RENT_TYPE'),
+(9, 1, 'Aktif', 'Akun', 'ACCOUNT'),
+(10, 0, 'Ditutup', 'Akun', 'ACCOUNT');
 
 -- --------------------------------------------------------
 
@@ -140,8 +173,12 @@ INSERT INTO `tbl_tenants` (`tenant_id`, `tenant_name`, `tenant_size`, `tenant_im
 
 CREATE TABLE `tbl_transactions` (
   `transaction_id` int(5) NOT NULL,
-  `transaction_number` varchar(20) NOT NULL,
+  `transaction_no` varchar(20) NOT NULL,
   `transaction_tenant_id` int(3) NOT NULL,
+  `transaction_rent_from` datetime NOT NULL,
+  `transaction_rent_to` datetime NOT NULL,
+  `transaction_rent_type_id` int(2) NOT NULL,
+  `transaction_active_status_id` int(2) NOT NULL,
   `transaction_customer_id` int(5) NOT NULL,
   `transaction_date` datetime NOT NULL,
   `modified_by` int(5) NOT NULL,
@@ -152,8 +189,8 @@ CREATE TABLE `tbl_transactions` (
 -- Dumping data for table `tbl_transactions`
 --
 
-INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_number`, `transaction_tenant_id`, `transaction_customer_id`, `transaction_date`, `modified_by`, `modified_date`) VALUES
-(1, 'TRX001-19032021', 1, 1, '2021-03-19 12:59:01', 1, '2021-03-19 12:59:01');
+INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_no`, `transaction_tenant_id`, `transaction_rent_from`, `transaction_rent_to`, `transaction_rent_type_id`, `transaction_active_status_id`, `transaction_customer_id`, `transaction_date`, `modified_by`, `modified_date`) VALUES
+(1, 'TRX001-19032021', 1, '2021-03-19 12:59:01', '2021-03-27 19:05:01', 1, 1, 1, '2021-03-19 12:59:01', 1, '2021-03-19 12:59:01');
 
 -- --------------------------------------------------------
 
@@ -205,6 +242,12 @@ ALTER TABLE `tbl_admins`
   ADD UNIQUE KEY `admin_employee_no` (`admin_employee_no`);
 
 --
+-- Indexes for table `tbl_payments`
+--
+ALTER TABLE `tbl_payments`
+  ADD PRIMARY KEY (`payment_id`);
+
+--
 -- Indexes for table `tbl_status`
 --
 ALTER TABLE `tbl_status`
@@ -246,10 +289,16 @@ ALTER TABLE `tbl_admins`
   MODIFY `admin_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `tbl_payments`
+--
+ALTER TABLE `tbl_payments`
+  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `tbl_status`
 --
 ALTER TABLE `tbl_status`
-  MODIFY `status_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `status_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `tbl_tenants`

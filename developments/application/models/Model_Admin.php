@@ -6,7 +6,7 @@ class Model_Admin extends CI_Model
     // Transaction
     public function get_transactions_list()
     {
-        $this->db->select('trx.transaction_number, trx.transaction_date, tnt.tenant_name, usr.user_fullname');
+        $this->db->select('trx.transaction_no, trx.transaction_date, tnt.tenant_name, usr.user_fullname');
         $this->db->from('tbl_transactions trx');
         $this->db->join('tbl_tenants tnt', 'tnt.tenant_id = trx.transaction_tenant_id');
         $this->db->join('tbl_users usr', 'usr.user_id = trx.transaction_customer_id');
