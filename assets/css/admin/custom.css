@@ -38,7 +38,7 @@ textarea.custom-textarea
     opacity: 0;
     visibility: hidden;
     transform: scale(1.1);
-    z-index: 9999 !important;
+    z-index: 2;
     transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
 }
 
@@ -72,7 +72,7 @@ textarea.custom-textarea
 
 .modal-form-content
 {
-    top: 350px;
+    top: 50%;
 }
 
 .modal-title

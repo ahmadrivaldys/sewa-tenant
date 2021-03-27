@@ -65,7 +65,7 @@
                 </span>
             </div>
             
-            <?php echo form_open('dashboard/hapus-tenant'); ?>
+            <?php echo form_open('dashboard/hapus-tenant/process'); ?>
                 <div class="modal-body">
                     <input type="hidden" name="tenant_id" value="<?php echo $tenant_list->tenant_id; ?>"/>
 
@@ -79,4 +79,4 @@
             <?php echo form_close(); ?>
         </div>
     </div>
-<?php $no++; endforeach; ?>
+<?php endforeach; ?>

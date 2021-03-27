@@ -245,7 +245,7 @@ class Controller_Admin extends CI_Controller
         $admin_fullname = $this->input->post('admin_fullname');
         $admin_email    = $this->input->post('admin_email');
         $admin_password = $this->input->post('admin_password');
-        // $user_type_id  = $this->input->post('user_type_id');
+        $admin_type_id  = $this->input->post('admin_type_id');
 
         // Getting user-admin creator
         $admin_creator  = $this->session->userdata('user_id');
@@ -254,10 +254,9 @@ class Controller_Admin extends CI_Controller
         $admin_date     = date_create('now')->format('Y-m-d H:i:s');
 
         // Gathering all data that already available to be stored into the database
-        $data['admin_nip']      = $admin_fullname;
         $data['admin_fullname'] = $admin_fullname;
         $data['admin_email']    = $admin_email;
-        // $data['admin_type_id']  = $admin_type_id;
+        $data['admin_type_id']  = $admin_type_id;
         $data['modified_by']    = $admin_creator;
         $data['modified_date']  = $admin_date;
 
@@ -274,8 +273,8 @@ class Controller_Admin extends CI_Controller
         // Before storing the data, check the user status type first, is this new user or update
         if($submit_type == 'new')
         {
-			$admin_nip      = $this->input->post('admin_nip');
-            $total_account  = $this->model_admin->total_admin_account($admin_nip);
+			$admin_employee_no = $this->input->post('admin_employee_no');
+            $total_account     = $this->model_admin->total_admin_account($admin_employee_no);
 
             // Check if account already exist or not
             if($total_account > 0)
@@ -284,44 +283,87 @@ class Controller_Admin extends CI_Controller
 			}
             else
             {
-                $data['admin_nip']    = $admin_nip;
-                $data['created_by']   = $admin_creator;
-                $data['created_date'] = $admin_date;
+                $data['admin_employee_no'] = $admin_employee_no;
+                $data['created_by']        = $admin_creator;
+                $data['created_date']      = $admin_date;
 
                 // Storing the data into the database
-                $save_user = $this->model_admin->add_admin($data);
+                $save_admin = $this->model_admin->add_admin($data);
 
                 // Show the message if the storing process was succeeded or failed
-                if($save_user)
+                if($save_admin)
                 {
-                    $this->native_session->flash_alert('add-user-succeeded', 'Successfully <b>added</b> new user.', 'alert-success');
+					$this->session->set_flashdata('add-admin-succeeded', 'Akun admin <b>' . $admin_fullname .'</b> [' . $admin_employee_no . '] berhasil dibuat.');
                 }
                 else
                 {
-                    $this->native_session->flash_alert('add-user-failed', 'Failed to <b>add</b> new user.', 'alert-danger');
+                    $this->session->set_flashdata('add-admin-failed', 'Akun admin <b>' . $admin_fullname .'</b> [' . $admin_employee_no . '] gagal dibuat.');
                 }
             }
         }
         else
         {
+			$admin_employee_no = $this->input->post('admin_employee_no_hidden');
             $where['admin_id'] = $this->input->post('admin_id');
 
             // Storing the data into the database
-            $save_user = $this->model_admin->update_admin($data, $where);
+            $save_admin = $this->model_admin->update_admin($data, $where);
 
             // Show the message if the storing process was succeeded or failed
-            if($save_user)
+            if($save_admin)
             {
-                $this->native_session->flash_alert('update-user-succeeded', 'Successfully <b>updated</b> the user.', 'alert-success');
+				$this->session->set_flashdata('update-admin-succeeded', 'Akun admin <b>' . $admin_fullname .'</b> [' . $admin_employee_no . '] berhasil diperbarui.');
             }
             else
             {
-                $this->native_session->flash_alert('update-user-failed', 'Failed to <b>update</b> user.', 'alert-danger');
+				$this->session->set_flashdata('update-admin-failed', 'Akun admin <b>' . $admin_fullname .'</b> [' . $admin_employee_no . '] gagal diperbarui.');
             }
         }
 
         // After finish, user (admin) will be redirected to 'Kelola Admin' page
         redirect('dashboard/kelola-admin');
+    }
+
+	public function delete_admin_process()
+    {
+        // Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		if($usertype == "Administrator" OR $usertype == "Leasing")
+		{
+			$admin_id          = $this->input->post('admin_id');
+			$admin_fullname    = $this->input->post('admin_fullname');
+			$admin_employee_no = $this->input->post('admin_employee_no');
+			
+			$where['admin_id'] = $admin_id;
+
+			if(!empty($admin_id))
+			{
+				// Deleting the data from the database
+				$delete_admin = $this->model_admin->delete_admin($where);
+
+				// Show the message if the deleting process was succeeded or failed
+				if($delete_admin)
+				{
+					$this->session->set_flashdata('delete-admin-succeeded', 'Akun admin <b>' . $admin_fullname .'</b> [' . $admin_employee_no . '] berhasil <b>dihapus</b>.');
+				}
+				else
+				{
+					$this->session->set_flashdata('delete-admin-failed', 'Akun admin <b>' . $admin_fullname .'</b> [' . $admin_employee_no . '] gagal dihapus.');
+				}
+
+				// After finish, user (admin) will be redirected to 'Kelola Admin' page
+				redirect('dashboard/kelola-admin');
+			}
+			else
+			{
+				echo "Akses langsung tidak diperbolehkan.";
+			}
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
     }
 
 	public function get_customers_list()
