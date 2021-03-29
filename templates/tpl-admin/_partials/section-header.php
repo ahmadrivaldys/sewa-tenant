@@ -3,7 +3,8 @@
     <?php if($page_title == 'Tambah Tenant'
             OR $page_title == 'Sunting Tenant'
             OR $page_title == 'Tambah Admin'
-            OR $page_title == 'Sunting Admin'): ?>
+            OR $page_title == 'Sunting Admin'
+            OR $page_title == 'Ajukan Sewa'): ?>
 
         <div class="section-header-back">
             <a href="<?php echo $_SERVER['HTTP_REFERER']; ?>" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>

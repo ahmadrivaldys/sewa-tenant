@@ -45,10 +45,106 @@ class Controller_Admin extends CI_Controller
 	{
 		$data['get_trx_list']  = $this->model_admin->get_transactions_list();
         $data['page_title']    = 'Kelola Transaksi';
-		$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola data-data transaksi yang masuk.';
+		$data['page_subtitle'] = 'Di menu ini Anda dapat melihat pengajuan sewa tenant yang telah dibuat.';
 		$data['content_title'] = 'Daftar Transaksi';
-
+	
 		$this->template->main('tpl-admin/pages/transactions', $data);
+	}
+
+	public function view_add_transaction()
+	{
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		if($usertype == "Customer")
+		{	
+			$where['tenant_availability'] = 1;
+
+			$data['get_tnt_list']  = $this->model_admin->get_tenants_list($where);
+			$data['page_title']    = 'Ajukan Sewa';
+			$data['page_subtitle'] = 'Di menu ini Anda mengajukan penyewaan tenant.';
+			$data['content_title'] = 'Ajukan Sewa Tenant';
+
+			$this->template->main('tpl-admin/pages/add-transaction', $data);
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
+	}
+
+	public function save_transaction_process()
+	{
+		// Get user_id
+		$user_id = $this->session->userdata('user_id');
+
+		// Getting all input
+        $transaction_tenant    = $this->input->post('transaction_tenant');
+        $transaction_rent_from = $this->input->post('transaction_rent_from');
+        $transaction_rent_to   = $this->input->post('transaction_rent_to');
+        $transaction_tob       = $this->input->post('transaction_type_of_business');
+        $transaction_note      = $this->input->post('transaction_note');
+
+		// Date of transaction was added
+        $transaction_date      = date_create('now')->format('Y-m-d H:i:s');
+
+		// Create transaction no
+		$last_trx_id    = $this->model_admin->get_last_transactions_id()->transaction_id;
+		$next_trx_id    = $last_trx_id + 1;
+		$total_digit    = strlen($next_trx_id);
+		$transaction_no = '';
+
+		if($total_digit == 1)
+		{
+			$transaction_no = 'TRX-0000' . $next_trx_id;
+		}
+		elseif($total_digit == 2)
+		{
+			$transaction_no = 'TRX-000' . $next_trx_id;
+		}
+		elseif($total_digit == 3)
+		{
+			$transaction_no = 'TRX-00' . $next_trx_id;
+		}
+		elseif($total_digit == 4)
+		{
+			$transaction_no = 'TRX-0' . $next_trx_id;
+		}
+		elseif($total_digit == 5 OR $total_digit > 5)
+		{
+			$transaction_no = 'TRX-' . $next_trx_id;
+		}
+
+
+		// Gathering all data that already available to be stored into the database
+        $data['transaction_tenant_id']        = $transaction_tenant;
+        $data['transaction_no']               = $transaction_no;
+        $data['transaction_rent_from']        = date_create($transaction_rent_from)->format('Y-m-d H:i:s');
+        $data['transaction_rent_to']          = date_create($transaction_rent_to)->format('Y-m-d H:i:s');
+        $data['transaction_type_of_business'] = $transaction_tob;
+        $data['transaction_note']             = $transaction_note;
+        $data['transaction_rent_type_id']     = 1;
+        $data['transaction_active_status_id'] = 1;
+        $data['transaction_customer_id']      = $user_id;
+        $data['transaction_date']             = $transaction_date;
+        $data['modified_by']                  = $user_id;
+        $data['modified_date']                = $transaction_date;
+
+		// Storing the data into the database
+		$save_tenant = $this->model_admin->add_transaction($data);
+
+		// Show the message if the storing process was succeeded or failed
+		if($save_tenant)
+		{
+		$this->session->set_flashdata('add-transaction-succeeded', 'Pengajuan sewa tenant berhasil dibuat.');
+		}
+		else
+		{
+			$this->session->set_flashdata('add-transaction-failed', 'Pengajuan sewa tenant gagal dibuat.');
+		}
+
+        // After finish, user will be redirected to 'Kelola Transaksi' page
+        redirect('dashboard/kelola-transaksi');
 	}
 
 	public function get_tenants_list()
@@ -58,7 +154,9 @@ class Controller_Admin extends CI_Controller
 
 		if($usertype == "Administrator" OR $usertype == "Leasing")
 		{
-			$data['get_tnt_list']  = $this->model_admin->get_tenants_list();
+			$where[1] = 1;
+
+			$data['get_tnt_list']  = $this->model_admin->get_tenants_list($where);
 			$data['page_title']    = 'Kelola Tenant';
 			$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola data-data tenant.';
 			$data['content_title'] = 'Daftar Tenant';

@@ -9,8 +9,8 @@
                 <tr>
                     <th>#</th>
                     <th>No. Transaksi</th>
-                    <th>Nama Penyewa</th>
                     <th>Tenant</th>
+                    <th>Periode Sewa</th>
                     <th>Aksi</th>
                 </tr>
 
@@ -22,10 +22,10 @@
 
                 <?php $no = 1; foreach($get_trx_list as $transaction_list): ?>
                     <tr>
-                        <td>1</td>
+                        <td><?php echo $no; ?></td>
                         <td><?php echo $transaction_list->transaction_no; ?></td>
-                        <td><?php echo $transaction_list->user_fullname; ?></td>
                         <td><?php echo $transaction_list->tenant_name; ?></td>
+                        <td></td>
                         <td><a href="#" class="btn btn-secondary">Detail</a></td>
                     </tr>
                 <?php $no++; endforeach; ?>

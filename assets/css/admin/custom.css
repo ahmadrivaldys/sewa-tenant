@@ -134,3 +134,8 @@ textarea.custom-textarea
 {
     width: calc(100% - 50px);
 }
+
+.selectric-full-width
+{
+    width: 100%;
+}

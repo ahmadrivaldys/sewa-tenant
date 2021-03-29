@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 27, 2021 at 01:21 PM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.11
+-- Generation Time: Mar 29, 2021 at 01:14 PM
+-- Server version: 10.4.16-MariaDB
+-- PHP Version: 7.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -104,6 +104,18 @@ CREATE TABLE `tbl_payment_methods` (
   `method_type` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `tbl_payment_methods`
+--
+
+INSERT INTO `tbl_payment_methods` (`method_id`, `method_bank_name`, `method_bank_account`, `method_type`) VALUES
+(1, 'BCA', '123456789', 'Bank Transfer'),
+(2, 'Mandiri', '135792468', 'Bank Transfer'),
+(3, 'BNI', '1122334455', 'Bank Transfer'),
+(4, 'BCA', '123456789006', 'Akun Virtual'),
+(5, 'Mandiri', '135792468006', 'Akun Virtual'),
+(6, 'BNI', '1122334455006', 'Akun Virtual');
+
 -- --------------------------------------------------------
 
 --
@@ -131,8 +143,10 @@ INSERT INTO `tbl_status` (`status_id`, `status_code`, `status_name`, `status_cat
 (6, 3, 'Non-aktif / Berakhir', 'Masa Aktif Sewa', 'ACTIVE_PERIOD'),
 (7, 1, 'Baru', 'Jenis Sewa', 'RENT_TYPE'),
 (8, 2, 'Perpanjangan', 'Jenis Sewa', 'RENT_TYPE'),
-(9, 1, 'Aktif', 'Akun', 'ACCOUNT'),
-(10, 0, 'Ditutup', 'Akun', 'ACCOUNT');
+(9, 1, 'Tersedia', 'Ketersediaan', 'AVAILABILITY'),
+(10, 2, 'Tidak Tersedia', 'Ketersediaan', 'AVAILABILITY'),
+(11, 1, 'Aktif', 'Akun', 'ACCOUNT'),
+(12, 0, 'Ditutup', 'Akun', 'ACCOUNT');
 
 -- --------------------------------------------------------
 
@@ -142,12 +156,14 @@ INSERT INTO `tbl_status` (`status_id`, `status_code`, `status_name`, `status_cat
 
 CREATE TABLE `tbl_tenants` (
   `tenant_id` int(3) NOT NULL,
+  `tenant_code` varchar(15) NOT NULL,
   `tenant_name` varchar(25) NOT NULL,
   `tenant_size` varchar(25) NOT NULL,
   `tenant_image` varchar(50) NOT NULL,
   `tenant_location` varchar(25) NOT NULL,
   `tenant_price` int(11) NOT NULL,
   `tenant_info` varchar(250) NOT NULL,
+  `tenant_availability` int(2) NOT NULL,
   `created_by` int(3) NOT NULL,
   `created_date` datetime NOT NULL,
   `modified_by` int(3) NOT NULL,
@@ -158,12 +174,12 @@ CREATE TABLE `tbl_tenants` (
 -- Dumping data for table `tbl_tenants`
 --
 
-INSERT INTO `tbl_tenants` (`tenant_id`, `tenant_name`, `tenant_size`, `tenant_image`, `tenant_location`, `tenant_price`, `tenant_info`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
-(1, 'Main Tenant AZ', '8 m x 15 m', '', 'Lantai LG', 11500000, 'Exclude listrik dan air', 1, '2021-03-19 13:01:58', 1, '2021-03-25 10:43:11'),
-(2, 'Tenant Kecil', '5 m x 8 m', '', 'Lantai 1', 15000000, 'Belum termasuk listrik dan air', 1, '2021-03-24 17:41:42', 1, '2021-03-24 17:41:42'),
-(3, 'Tenant Lebih Besar', '8 m x 10 m', '', 'Lantai 1', 20000000, 'Belum termasuk listrik dan air', 1, '2021-03-24 17:42:25', 1, '2021-03-24 17:42:25'),
-(4, 'Tenant Bebas', '5 m x 5 m', '', 'Lantai 2', 10000000, 'Belum termasuk listrik dan air', 1, '2021-03-24 17:44:31', 1, '2021-03-24 17:44:31'),
-(5, 'Tenant Bebas Lagi', '5 m x 5 m', '', 'Lantai 5', 10000000, 'Belum termasuk listrik dan air', 1, '2021-03-24 17:45:11', 1, '2021-03-24 17:45:11');
+INSERT INTO `tbl_tenants` (`tenant_id`, `tenant_code`, `tenant_name`, `tenant_size`, `tenant_image`, `tenant_location`, `tenant_price`, `tenant_info`, `tenant_availability`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
+(1, '', 'Main Tenant AZ', '8 m x 15 m', '', 'Lantai LG', 11500000, 'Exclude listrik dan air', 1, 1, '2021-03-19 13:01:58', 1, '2021-03-25 10:43:11'),
+(2, '', 'Tenant Kecil', '5 m x 8 m', '', 'Lantai 1', 15000000, 'Belum termasuk listrik dan air', 1, 1, '2021-03-24 17:41:42', 1, '2021-03-24 17:41:42'),
+(3, '', 'Tenant Lebih Besar', '8 m x 10 m', '', 'Lantai 1', 20000000, 'Belum termasuk listrik dan air', 1, 1, '2021-03-24 17:42:25', 1, '2021-03-24 17:42:25'),
+(4, '', 'Tenant Bebas', '5 m x 5 m', '', 'Lantai 2', 10000000, 'Belum termasuk listrik dan air', 1, 1, '2021-03-24 17:44:31', 1, '2021-03-24 17:44:31'),
+(5, '', 'Tenant Bebas Lagi', '5 m x 5 m', '', 'Lantai 5', 10000000, 'Belum termasuk listrik dan air', 1, 1, '2021-03-24 17:45:11', 1, '2021-03-24 17:45:11');
 
 -- --------------------------------------------------------
 
@@ -177,6 +193,8 @@ CREATE TABLE `tbl_transactions` (
   `transaction_tenant_id` int(3) NOT NULL,
   `transaction_rent_from` datetime NOT NULL,
   `transaction_rent_to` datetime NOT NULL,
+  `transaction_type_of_business` varchar(50) NOT NULL,
+  `transaction_note` varchar(250) NOT NULL,
   `transaction_rent_type_id` int(2) NOT NULL,
   `transaction_active_status_id` int(2) NOT NULL,
   `transaction_customer_id` int(5) NOT NULL,
@@ -189,8 +207,12 @@ CREATE TABLE `tbl_transactions` (
 -- Dumping data for table `tbl_transactions`
 --
 
-INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_no`, `transaction_tenant_id`, `transaction_rent_from`, `transaction_rent_to`, `transaction_rent_type_id`, `transaction_active_status_id`, `transaction_customer_id`, `transaction_date`, `modified_by`, `modified_date`) VALUES
-(1, 'TRX001-19032021', 1, '2021-03-19 12:59:01', '2021-03-27 19:05:01', 1, 1, 1, '2021-03-19 12:59:01', 1, '2021-03-19 12:59:01');
+INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_no`, `transaction_tenant_id`, `transaction_rent_from`, `transaction_rent_to`, `transaction_type_of_business`, `transaction_note`, `transaction_rent_type_id`, `transaction_active_status_id`, `transaction_customer_id`, `transaction_date`, `modified_by`, `modified_date`) VALUES
+(1, 'TRX001-19032021', 1, '2021-03-19 12:59:01', '2021-03-27 19:05:01', '', '', 1, 1, 1, '2021-03-19 12:59:01', 1, '2021-03-19 12:59:01'),
+(2, 'fgfdgfdgf', 2, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', '', 0, 0, 1, '0000-00-00 00:00:00', 1, '0000-00-00 00:00:00'),
+(3, 'adawsrdsf', 1, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', '', 0, 0, 1, '0000-00-00 00:00:00', 1, '0000-00-00 00:00:00'),
+(4, 'TRX-00004', 1, '2021-03-29 00:00:00', '2021-03-29 00:00:00', 'sdsadsa', 'dsada', 1, 1, 1, '2021-03-29 18:00:04', 1, '2021-03-29 18:00:04'),
+(5, 'TRX-00005', 3, '2021-03-29 00:00:00', '2021-03-29 00:00:00', 'sadsada', 'sadasd', 1, 1, 1, '2021-03-29 18:00:44', 1, '2021-03-29 18:00:44');
 
 -- --------------------------------------------------------
 
@@ -298,7 +320,7 @@ ALTER TABLE `tbl_payments`
 -- AUTO_INCREMENT for table `tbl_status`
 --
 ALTER TABLE `tbl_status`
-  MODIFY `status_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `status_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `tbl_tenants`
@@ -310,7 +332,7 @@ ALTER TABLE `tbl_tenants`
 -- AUTO_INCREMENT for table `tbl_transactions`
 --
 ALTER TABLE `tbl_transactions`
-  MODIFY `transaction_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `transaction_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`

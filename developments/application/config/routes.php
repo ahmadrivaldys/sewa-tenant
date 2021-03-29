@@ -69,6 +69,8 @@ $route['dashboard/sunting-tenant/process'] = 'Controller_Admin/save_tenant_proce
 $route['dashboard/sunting-admin/process']  = 'Controller_Admin/save_admin_process';
 $route['dashboard/hapus-tenant/process']   = 'Controller_Admin/delete_tenant_process';
 $route['dashboard/hapus-admin/process']    = 'Controller_Admin/delete_admin_process';
+$route['dashboard/ajukan-sewa']            = 'Controller_Admin/view_add_transaction';
+$route['dashboard/ajukan-sewa/process']    = 'Controller_Admin/save_transaction_process';
 
 
 // Routes for Auth

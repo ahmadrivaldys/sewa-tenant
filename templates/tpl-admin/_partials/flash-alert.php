@@ -1,3 +1,20 @@
+<!-- Transaction -->
+<?php if($this->session->flashdata('add-transaction-succeeded')): ?>
+    <div class="alert alert-success alert-dismissible show fade">
+        <div class="alert-body">
+            <button class="close" data-dismiss="alert">
+                <span>×</span>
+            </button>
+            <?php
+                if($this->session->flashdata('add-transaction-succeeded'))
+                {
+                    echo $this->session->flashdata('add-transaction-succeeded');
+                }
+            ?>
+        </div>
+    </div>
+<?php endif; ?>
+
 <!-- Tenant -->
 <?php if($this->session->flashdata('add-tenant-succeeded') OR $this->session->flashdata('update-tenant-succeeded') OR $this->session->flashdata('delete-tenant-succeeded')): ?>
     <div class="alert alert-success alert-dismissible show fade">

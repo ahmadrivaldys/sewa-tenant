@@ -11,6 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?php echo base_url('assets/plugins/bootstrap/bootstrap.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/plugins/fontawesome/all.min.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/plugins/jquery-selectric/selectric.css'); ?>">
+    <link rel="stylesheet" href="<?php echo base_url('assets/plugins/bootstrap-daterangepicker/bootstrap-daterangepicker.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/style.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/components.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/custom.css'); ?>">
@@ -116,6 +117,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url('assets/js/admin/custom.js'); ?>"></script>
     <script src="<?php echo base_url('assets/plugins/jquery.pwstrength/jquery.pwstrength.min.js'); ?>"></script>
     <script src="<?php echo base_url('assets/plugins/jquery-selectric/jquery.selectric.min.js'); ?>"></script>
+    <script src="<?php echo base_url('assets/plugins/bootstrap-daterangepicker/bootstrap-daterangepicker.js'); ?>"></script>
     <script>
         "use strict";
 

@@ -4,14 +4,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Model_Admin extends CI_Model
 {
     // Transaction
+    public function add_transaction($data)
+    {
+        return $this->db->insert('tbl_transactions', $data);
+    }
+
     public function get_transactions_list()
     {
-        $this->db->select('trx.transaction_no, trx.transaction_date, tnt.tenant_name, usr.user_fullname');
+        $this->db->select('trx.transaction_no, trx.transaction_date, tnt.tenant_name');
         $this->db->from('tbl_transactions trx');
         $this->db->join('tbl_tenants tnt', 'tnt.tenant_id = trx.transaction_tenant_id');
-        $this->db->join('tbl_users usr', 'usr.user_id = trx.transaction_customer_id');
 
         return $this->db->get()->result();
+    }
+
+    public function get_last_transactions_id()
+    {
+        $this->db->select_max('transaction_id');
+        $this->db->from('tbl_transactions');
+
+        return $this->db->get()->row();
     }
 
 
@@ -21,10 +33,11 @@ class Model_Admin extends CI_Model
         return $this->db->insert('tbl_tenants', $data);
     }
 
-    public function get_tenants_list()
+    public function get_tenants_list($where)
     {
         $this->db->select('tenant_id, tenant_name, tenant_size, tenant_location, tenant_price, tenant_info, tenant_image');
         $this->db->from('tbl_tenants');
+        $this->db->where($where);
 
         return $this->db->get()->result();
     }
