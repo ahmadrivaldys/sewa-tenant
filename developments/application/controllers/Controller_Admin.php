@@ -79,72 +79,123 @@ class Controller_Admin extends CI_Controller
 		$user_id = $this->session->userdata('user_id');
 
 		// Getting all input
-        $transaction_tenant    = $this->input->post('transaction_tenant');
+        $transaction_tenant_id = $this->input->post('transaction_tenant');
         $transaction_rent_from = $this->input->post('transaction_rent_from');
         $transaction_rent_to   = $this->input->post('transaction_rent_to');
         $transaction_tob       = $this->input->post('transaction_type_of_business');
+        $transaction_comp_name = $this->input->post('transaction_company_name');
         $transaction_note      = $this->input->post('transaction_note');
 
-		// Date of transaction was added
-        $transaction_date      = date_create('now')->format('Y-m-d H:i:s');
-
-		// Create transaction no
-		$last_trx_id    = $this->model_admin->get_last_transactions_id()->transaction_id;
-		$next_trx_id    = $last_trx_id + 1;
-		$total_digit    = strlen($next_trx_id);
-		$transaction_no = '';
-
-		if($total_digit == 1)
+		// Validation if tenant has not been selected
+		if($transaction_tenant_id == 0)
 		{
-			$transaction_no = 'TRX-0000' . $next_trx_id;
-		}
-		elseif($total_digit == 2)
-		{
-			$transaction_no = 'TRX-000' . $next_trx_id;
-		}
-		elseif($total_digit == 3)
-		{
-			$transaction_no = 'TRX-00' . $next_trx_id;
-		}
-		elseif($total_digit == 4)
-		{
-			$transaction_no = 'TRX-0' . $next_trx_id;
-		}
-		elseif($total_digit == 5 OR $total_digit > 5)
-		{
-			$transaction_no = 'TRX-' . $next_trx_id;
-		}
+			$this->session->set_flashdata('tenant-not-selected', 'Harap pilih tenant-nya terlebih dulu.');
 
-
-		// Gathering all data that already available to be stored into the database
-        $data['transaction_tenant_id']        = $transaction_tenant;
-        $data['transaction_no']               = $transaction_no;
-        $data['transaction_rent_from']        = date_create($transaction_rent_from)->format('Y-m-d H:i:s');
-        $data['transaction_rent_to']          = date_create($transaction_rent_to)->format('Y-m-d H:i:s');
-        $data['transaction_type_of_business'] = $transaction_tob;
-        $data['transaction_note']             = $transaction_note;
-        $data['transaction_rent_type_id']     = 1;
-        $data['transaction_active_status_id'] = 1;
-        $data['transaction_customer_id']      = $user_id;
-        $data['transaction_date']             = $transaction_date;
-        $data['modified_by']                  = $user_id;
-        $data['modified_date']                = $transaction_date;
-
-		// Storing the data into the database
-		$save_tenant = $this->model_admin->add_transaction($data);
-
-		// Show the message if the storing process was succeeded or failed
-		if($save_tenant)
-		{
-		$this->session->set_flashdata('add-transaction-succeeded', 'Pengajuan sewa tenant berhasil dibuat.');
+			// User will be redirected to 'Ajukan Sewa' page
+			redirect('dashboard/ajukan-sewa');
 		}
 		else
 		{
-			$this->session->set_flashdata('add-transaction-failed', 'Pengajuan sewa tenant gagal dibuat.');
-		}
+			// Date of transaction was added
+			$transaction_date = date_create('now')->format('Y-m-d H:i:s');
 
-        // After finish, user will be redirected to 'Kelola Transaksi' page
-        redirect('dashboard/kelola-transaksi');
+			// Steps for creating transaction no
+			$transaction_no = '';
+
+			// -- Get last transaction id and no from all transactions
+			$last_trx_id    = $this->model_admin->get_last_transactions_id()->transaction_id;
+			$last_trx_no    = $this->model_admin->get_last_transactions_no($last_trx_id)->transaction_no;
+
+			$last_trx_date  = substr($last_trx_no, 4, 6);
+			$this_trx_date  = date_create('now')->format('dmy');
+
+			// -- If the new transaction (this transaction) on the same day, get the previous transaction id on that day
+			if($last_trx_date == $this_trx_date)
+			{
+				$previous_trx_id = substr($last_trx_no, 11);
+				$next_trx_id     = ltrim($previous_trx_id) + 1;
+				$this_trx_id     = sprintf('%03d', $next_trx_id);
+
+				// -- Create the transaction no
+				$transaction_no  = 'TRX-' . $this_trx_date . '.' . $this_trx_id;
+			}
+			else
+			{
+				$this_trx_id     = sprintf('%03d', 1);
+
+				// -- Create the transaction no
+				$transaction_no  = 'TRX-' . $this_trx_date . '.' . $this_trx_id;
+			}
+
+			// Gathering all data that already available to be stored into the database
+			$data['transaction_tenant_id']        = $transaction_tenant_id;
+			$data['transaction_no']               = $transaction_no;
+			$data['transaction_rent_from']        = date_create($transaction_rent_from)->format('Y-m-d H:i:s');
+			$data['transaction_rent_to']          = date_create($transaction_rent_to)->format('Y-m-d H:i:s');
+			$data['transaction_type_of_business'] = $transaction_tob;
+			$data['transaction_company_name']     = $transaction_comp_name;
+			$data['transaction_note']             = $transaction_note;
+			$data['transaction_rent_type_id']     = 1;
+			$data['transaction_active_status_id'] = 1;
+			$data['transaction_customer_id']      = $user_id;
+			$data['transaction_date']             = $transaction_date;
+			$data['modified_by']                  = $user_id;
+			$data['modified_date']                = $transaction_date;
+
+			// Validation for minimum rental time
+			$rent_date_from   = date_create($transaction_rent_from);
+			$rent_date_to     = date_create($transaction_rent_to);
+			$rent_date_diff   = date_diff($rent_date_from, $rent_date_to);
+
+			$rent_total_month = $rent_date_diff->m;
+			$rent_total_day   = $rent_date_diff->d;
+			$rent_total_time  = '';
+
+			// -- Get tenant minimum rental time
+			$where['tenant_id'] = $transaction_tenant_id;
+			$tenant_min_period  = $this->model_admin->get_tenant($where)->tenant_min_period;
+
+			// -- If minimum rental time is qualified, store the data into the database. If not, show the error message.
+			if($rent_total_month >= $tenant_min_period)
+			{
+				// Storing the data into the database
+				$save_tenant = $this->model_admin->add_transaction($data);
+
+				// Show the message if the storing process was succeeded or failed
+				if($save_tenant)
+				{
+					$this->session->set_flashdata('add-transaction-succeeded', 'Pengajuan sewa tenant berhasil dibuat.');
+				}
+				else
+				{
+					$this->session->set_flashdata('add-transaction-failed', 'Pengajuan sewa tenant gagal dibuat.');
+				}
+			}
+			else
+			{
+				if($rent_total_day == 0)
+				{
+					$rent_total_time = $rent_total_month . ' bulan.';
+				}
+				else
+				{
+					$rent_total_time = $rent_total_month . ' bulan ' . $rent_total_day . ' hari.';
+				}
+
+				// Get tenant name
+				$tenant_name  = $this->model_admin->get_tenant($where)->tenant_name;
+
+				$flash_msg    = 'Waktu sewa minimal untuk <b>[' . $tenant_name . ']</b> adalah <b>' . $tenant_min_period . ' bulan</b>. Waktu sewa yang Anda ajukan adalah <b>' . $rent_total_time . '</b> Silakan ajukan lagi.';
+
+				$this->session->set_flashdata('min-rent-not-qualified', $flash_msg);
+
+				// User will be redirected to 'Ajukan Sewa' page
+				redirect('dashboard/ajukan-sewa');
+			}
+
+			// After finish, user will be redirected to 'Kelola Transaksi' page
+			redirect('dashboard/kelola-transaksi');
+		}
 	}
 
 	public function get_tenants_list()
@@ -167,6 +218,16 @@ class Controller_Admin extends CI_Controller
 		{
 			redirect('dashboard/kelola-transaksi');
 		}
+	}
+
+	public function get_tenant_info()
+	{
+		$tenant_id = $this->input->post('tenant_id', TRUE);
+
+		$where['tenant_id'] = $tenant_id;
+		$get_tenant_info    = $this->model_admin->get_tenant($where);
+
+		echo json_encode($get_tenant_info);
 	}
 
 	public function view_add_tenant()
@@ -215,24 +276,26 @@ class Controller_Admin extends CI_Controller
 		$user_id = $this->session->userdata('user_id');
 
 		// Getting all input
-		$submit_type     = $this->input->post('submit_type');
-        $tenant_name     = $this->input->post('tenant_name');
-        $tenant_size     = $this->input->post('tenant_size');
-        $tenant_location = $this->input->post('tenant_location');
-        $tenant_price    = $this->input->post('tenant_price');
-        $tenant_info     = $this->input->post('tenant_info');
+		$submit_type       = $this->input->post('submit_type');
+        $tenant_name       = $this->input->post('tenant_name');
+        $tenant_size       = $this->input->post('tenant_size');
+        $tenant_location   = $this->input->post('tenant_location');
+        $tenant_price      = $this->input->post('tenant_price');
+        $tenant_min_period = $this->input->post('tenant_min_period');
+        $tenant_info       = $this->input->post('tenant_info');
 
 		// Date of tenant data was added
         $tenant_date     = date_create('now')->format('Y-m-d H:i:s');
 
 		// Gathering all data that already available to be stored into the database
-        $data['tenant_name']     = $tenant_name;
-        $data['tenant_size']     = $tenant_size;
-        $data['tenant_location'] = $tenant_location;
-        $data['tenant_price']    = $tenant_price;
-        $data['tenant_info']     = $tenant_info;
-        $data['modified_by']     = $user_id;
-        $data['modified_date']   = $tenant_date;
+        $data['tenant_name']       = $tenant_name;
+        $data['tenant_size']       = $tenant_size;
+        $data['tenant_location']   = $tenant_location;
+        $data['tenant_price']      = $tenant_price;
+        $data['tenant_min_period'] = $tenant_min_period;
+        $data['tenant_info']       = $tenant_info;
+        $data['modified_by']       = $user_id;
+        $data['modified_date']     = $tenant_date;
 
 		// Before storing the data, check the submit type first, is this new data or update
         if($submit_type == 'new')

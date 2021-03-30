@@ -66,6 +66,7 @@ $route['dashboard/tambah-tenant/process']  = 'Controller_Admin/save_tenant_proce
 $route['dashboard/tambah-admin/process']   = 'Controller_Admin/save_admin_process';
 $route['dashboard/sunting-tenant/(:num)']  = 'Controller_Admin/view_edit_tenant/$1';
 $route['dashboard/sunting-tenant/process'] = 'Controller_Admin/save_tenant_process';
+$route['dashboard/informasi-tenant']       = 'Controller_Admin/get_tenant_info';
 $route['dashboard/sunting-admin/process']  = 'Controller_Admin/save_admin_process';
 $route['dashboard/hapus-tenant/process']   = 'Controller_Admin/delete_tenant_process';
 $route['dashboard/hapus-admin/process']    = 'Controller_Admin/delete_admin_process';

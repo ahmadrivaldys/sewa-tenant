@@ -12,6 +12,7 @@
                     <th>Ukuran</th>
                     <th>Lokasi</th>
                     <th>Harga</th>
+                    <th>Waktu Sewa Min. (Bulan)</th>
                     <th>Keterangan</th>
                     <th>Foto</th>
                     <th>Aksi</th>
@@ -30,6 +31,7 @@
                         <td><?php echo $tenant_list->tenant_size; ?></td>
                         <td><?php echo $tenant_list->tenant_location; ?></td>
                         <td><?php echo $tenant_list->tenant_price; ?></td>
+                        <td><?php echo $tenant_list->tenant_min_period; ?></td>
                         <td><?php echo $tenant_list->tenant_info; ?></td>
                         <td><?php echo $tenant_list->tenant_image; ?></td>
                         <td>

@@ -15,6 +15,27 @@
     </div>
 <?php endif; ?>
 
+<?php if($this->session->flashdata('min-rent-not-qualified') OR $this->session->flashdata('tenant-not-selected')): ?>
+    <div class="alert alert-warning alert-dismissible show fade">
+        <div class="alert-body">
+            <button class="close" data-dismiss="alert">
+                <span>×</span>
+            </button>
+            <?php
+                if($this->session->flashdata('min-rent-not-qualified'))
+                {
+                    echo $this->session->flashdata('min-rent-not-qualified');
+                }
+                if($this->session->flashdata('tenant-not-selected'))
+                {
+                    echo $this->session->flashdata('tenant-not-selected');
+                }
+            ?>
+        </div>
+    </div>
+<?php endif; ?>
+
+
 <!-- Tenant -->
 <?php if($this->session->flashdata('add-tenant-succeeded') OR $this->session->flashdata('update-tenant-succeeded') OR $this->session->flashdata('delete-tenant-succeeded')): ?>
     <div class="alert alert-success alert-dismissible show fade">

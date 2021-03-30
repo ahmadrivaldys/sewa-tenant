@@ -11,9 +11,11 @@ class Model_Admin extends CI_Model
 
     public function get_transactions_list()
     {
-        $this->db->select('trx.transaction_no, trx.transaction_date, tnt.tenant_name');
+        $this->db->select('trx.transaction_no, trx.transaction_rent_from, trx.transaction_rent_to, trx.transaction_date, tnt.tenant_name, sts.status_code, sts.status_name');
         $this->db->from('tbl_transactions trx');
         $this->db->join('tbl_tenants tnt', 'tnt.tenant_id = trx.transaction_tenant_id');
+        $this->db->join('tbl_status sts', 'sts.status_code = trx.transaction_active_status_id');
+        $this->db->where('sts.status_category_code', 'ACTIVE_PERIOD');
 
         return $this->db->get()->result();
     }
@@ -22,6 +24,15 @@ class Model_Admin extends CI_Model
     {
         $this->db->select_max('transaction_id');
         $this->db->from('tbl_transactions');
+
+        return $this->db->get()->row();
+    }
+    
+    public function get_last_transactions_no($where)
+    {
+        $this->db->select('transaction_no');
+        $this->db->from('tbl_transactions');
+        $this->db->where('transaction_id', $where);
 
         return $this->db->get()->row();
     }
@@ -35,7 +46,7 @@ class Model_Admin extends CI_Model
 
     public function get_tenants_list($where)
     {
-        $this->db->select('tenant_id, tenant_name, tenant_size, tenant_location, tenant_price, tenant_info, tenant_image');
+        $this->db->select('tenant_id, tenant_name, tenant_size, tenant_location, tenant_price, tenant_min_period, tenant_info, tenant_image');
         $this->db->from('tbl_tenants');
         $this->db->where($where);
 
@@ -44,11 +55,17 @@ class Model_Admin extends CI_Model
 
     public function get_tenant($where)
     {
-        $this->db->select('tenant_id, tenant_name, tenant_size, tenant_location, tenant_price, tenant_info, tenant_image');
+        $this->db->select('tenant_id, tenant_name, tenant_size, tenant_location, tenant_price, tenant_min_period, tenant_info, tenant_image');
         $this->db->from('tbl_tenants');
         $this->db->where($where);
 
         return $this->db->get()->row();
+    }
+
+    public function get_tenant_info($tenant_id)
+    {
+        $query = $this->db->get_where('tbl_tenants', array('tenant_id' => $tenant_id));
+        return $query;
     }
 
     public function update_tenant($data, $where)

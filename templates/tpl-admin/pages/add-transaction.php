@@ -12,12 +12,24 @@
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Tenant</label>
                         <div class="col-sm-12 col-md-7">
-                            <select class="selectric form-control full-width" name="transaction_tenant" required>
+                            <select class="selectric form-control full-width" name="transaction_tenant" id="transaction_tenant" required>
                                 <option>- Pilih Tenant -</option>
                                 <?php foreach($get_tnt_list as $tenant_list): ?>
                                     <option value="<?php echo $tenant_list->tenant_id; ?>"><?php echo $tenant_list->tenant_name; ?></option>
                                 <?php endforeach; ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4" id="tenant-info-wrapper">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+                        <div class="col-sm-12 col-md-7 transaction_tenant_info" id="transaction_tenant_info">
+                            <ul class="list-group">
+                                <li class="list-group-item" id="tenant_size"></li>
+                                <li class="list-group-item" id="tenant_location"></li>
+                                <li class="list-group-item" id="tenant_price"></li>
+                                <li class="list-group-item" id="tenant_min_period"></li>
+                                <li class="list-group-item" id="tenant_info"></li>
+                            </ul>
                         </div>
                     </div>
                     <div class="form-group row mb-4">
@@ -42,6 +54,12 @@
                         </div>
                     </div>
                     <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Nama Perusahaan / Usaha</label>
+                        <div class="col-sm-12 col-md-7">
+                            <input type="text" class="form-control" name="transaction_company_name" required>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Catatan</label>
                         <div class="col-sm-12 col-md-7">
                             <textarea class="form-control custom-textarea" name="transaction_note"></textarea>
@@ -58,3 +76,34 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function()
+    {
+        $('#tenant-info-wrapper').hide();
+
+        $('#transaction_tenant').change(function()
+        {
+            $('#tenant-info-wrapper').show();
+            
+            var tenant_id = $(this).val();
+
+            $.ajax({
+                url : "<?php echo base_url('dashboard/informasi-tenant');?>",
+                method : "POST",
+                data : {tenant_id: tenant_id},
+                async : true,
+                dataType : 'json',
+                success: function(data)
+                {
+                    $('#tenant_size').html('<div class="tenant-info">Ukuran</div>' + data.tenant_size);
+                    $('#tenant_location').html(data.tenant_location);
+                    $('#tenant_price').html(data.tenant_price);
+                    $('#tenant_min_period').html(data.tenant_min_period + ' bulan');
+                    $('#tenant_info').html(data.tenant_info);
+                }
+            });
+            return false;
+        }); 
+    });
+</script>

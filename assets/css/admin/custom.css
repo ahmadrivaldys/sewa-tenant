@@ -27,6 +27,12 @@ textarea.custom-textarea
     padding: 5px 10px;
 }
 
+.activestatus-label
+{
+    font-size: 10px;
+    padding: 5px 10px;
+}
+
 .modal-backdrop
 {
     position: fixed;
@@ -139,3 +145,14 @@ textarea.custom-textarea
 {
     width: 100%;
 }
+
+.tenant-info
+{
+    width: 100px;
+    font-weight: 700;
+}
+
+/* .transaction_tenant_info
+{
+    border: 1px solid salmon;
+} */
