@@ -153,16 +153,24 @@ class Controller_Admin extends CI_Controller
 
 			// -- Get tenant minimum rental time
 			$where['tenant_id'] = $transaction_tenant_id;
-			$tenant_min_period  = $this->model_admin->get_tenant($where)->tenant_min_period;
+			$tenant_info        = $this->model_admin->get_tenant($where);
+			$tenant_min_period  = $tenant_info->tenant_min_period;
 
 			// -- If minimum rental time is qualified, store the data into the database. If not, show the error message.
 			if($rent_total_month >= $tenant_min_period)
 			{
-				// Storing the data into the database
-				$save_tenant = $this->model_admin->add_transaction($data);
+				// Storing the data into the database (create transaction)
+				$save_tenant  = $this->model_admin->add_transaction($data);
+
+				// Storing the data into the database (create payment data)
+				$pay['payment_nominal']        = $tenant_info->tenant_price;
+				$pay['payment_status_id']      = 1;
+				$pay['payment_transaction_no'] = $transaction_no;
+
+				$save_payment = $this->model_admin->add_payment_data($pay);
 
 				// Show the message if the storing process was succeeded or failed
-				if($save_tenant)
+				if($save_tenant && $save_payment)
 				{
 					$this->session->set_flashdata('add-transaction-succeeded', 'Pengajuan sewa tenant berhasil dibuat.');
 				}
@@ -195,6 +203,59 @@ class Controller_Admin extends CI_Controller
 
 			// After finish, user will be redirected to 'Kelola Transaksi' page
 			redirect('dashboard/kelola-transaksi');
+		}
+	}
+
+	public function view_transaction_detail($transaction_no)
+	{
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		if($usertype == "Customer")
+		{	
+			$where = $transaction_no;
+			$data['get_trx_detail']  = $this->model_admin->get_transaction_detail($where);
+			$data['page_title']      = 'Rincian Sewa';
+			$data['page_subtitle']   = 'Di menu ini Anda melihat rincian dari data pengajuan sewa Anda.';
+			$data['content_title']   = 'Rincian Sewa';
+
+			$this->template->main('tpl-admin/pages/transaction-detail', $data);
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
+	}
+
+	public function view_contract()
+	{
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		if($usertype == "Customer")
+		{	
+			$data['page_title']      = 'Perjanjian';
+			$data['page_subtitle']   = '-';
+			$data['content_title']   = 'Perjanjian';
+
+			$this->template->main('tpl-admin/pages/contract', $data);
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
+	}
+
+	public function print_contract()
+	{
+		$submit_doc = $this->input->post('submit_doc');
+
+		if(isset($submit_doc))
+		{
+			header("Content-Type: application/vnd.msword");
+			header("Expires: 0");
+			header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+			header("content-disposition: attachment;filename=hasilekspor.doc");
 		}
 	}
 

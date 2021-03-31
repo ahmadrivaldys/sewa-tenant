@@ -37,6 +37,31 @@ class Model_Admin extends CI_Model
         return $this->db->get()->row();
     }
 
+    public function get_transaction_detail($where)
+    {
+        $this->db->select('trx.transaction_no, trx.transaction_rent_from, trx.transaction_rent_to, trx.transaction_type_of_business, trx.transaction_company_name, trx.transaction_date, tnt.tenant_name, ren.status_code as rent_status_code, ren.status_name as rent_status, rty.status_code as renttype_status_code, rty.status_name as renttype_status, stp.status_code as payment_status_code, stp.status_name as payment_status, usr.user_fullname');
+        $this->db->from('tbl_transactions trx');
+        $this->db->join('tbl_tenants tnt', 'tnt.tenant_id = trx.transaction_tenant_id');
+        $this->db->join('tbl_status ren', 'ren.status_code = trx.transaction_active_status_id');
+        $this->db->join('tbl_status rty', 'rty.status_code = trx.transaction_rent_type_id');
+        $this->db->join('tbl_users usr', 'usr.user_id = trx.transaction_customer_id');
+        $this->db->join('tbl_payments pay', 'pay.payment_transaction_no = trx.transaction_no');
+        $this->db->join('tbl_status stp', 'stp.status_code = pay.payment_status_id');
+        $this->db->where('ren.status_category_code', 'ACTIVE_PERIOD');
+        $this->db->where('rty.status_category_code', 'RENT_TYPE');
+        $this->db->where('stp.status_category_code', 'PAYMENT');
+        $this->db->where('trx.transaction_no', $where);
+
+        return $this->db->get()->row();
+    }
+
+
+    // Payment
+    public function add_payment_data($data)
+    {
+        return $this->db->insert('tbl_payments', $data);
+    }
+
 
     // Tenant
     public function add_tenant($data)

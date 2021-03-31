@@ -146,13 +146,48 @@ textarea.custom-textarea
     width: 100%;
 }
 
+.tenant-info-list
+{
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
 .tenant-info
 {
-    width: 100px;
     font-weight: 700;
 }
 
-/* .transaction_tenant_info
+.tenant-info-color
 {
-    border: 1px solid salmon;
-} */
+    color: #6c757d;
+    padding-bottom: 15px;
+    padding-top: 15px;
+}
+
+.top-hr
+{
+    margin-top: 25px !important;
+    margin-bottom: 10px !important;
+}
+
+.bg-secondary
+{
+    background-color: #34395e !important;
+}
+
+.tbl-label
+{
+    font-weight: 700;
+}
+
+.invoice-title-custom
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.button-radius
+{
+    border-radius: 30px !important;
+}

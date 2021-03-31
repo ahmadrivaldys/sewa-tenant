@@ -4,10 +4,11 @@
             OR $page_title == 'Sunting Tenant'
             OR $page_title == 'Tambah Admin'
             OR $page_title == 'Sunting Admin'
-            OR $page_title == 'Ajukan Sewa'): ?>
+            OR $page_title == 'Ajukan Sewa'
+            OR $page_title == 'Rincian Sewa'): ?>
 
         <div class="section-header-back">
-            <a href="<?php echo $_SERVER['HTTP_REFERER']; ?>" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+            <a href="#" onclick="back_to_previous()" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
         </div>
     <?php endif; ?>
 
@@ -40,3 +41,10 @@
     </div>
 
 </div>
+
+<script>
+    function back_to_previous()
+    {
+        history.go(-1);
+    }
+</script>

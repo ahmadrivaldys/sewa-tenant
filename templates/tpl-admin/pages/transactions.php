@@ -42,7 +42,7 @@
                                 <span class="badge badge-danger activestatus-label"><?php echo $transaction_list->status_name; ?></span>
                             <?php endif; ?>
                         </td>
-                        <td class="text-center"><a href="#" class="btn btn-secondary">Detail</a></td>
+                        <td class="text-center"><a href="<?php echo base_url('dashboard/rincian-sewa/'.$transaction_list->transaction_no); ?>" class="btn btn-primary">Detail</a></td>
                     </tr>
                 <?php $no++; endforeach; ?>
             </table>

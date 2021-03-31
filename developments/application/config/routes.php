@@ -72,6 +72,10 @@ $route['dashboard/hapus-tenant/process']   = 'Controller_Admin/delete_tenant_pro
 $route['dashboard/hapus-admin/process']    = 'Controller_Admin/delete_admin_process';
 $route['dashboard/ajukan-sewa']            = 'Controller_Admin/view_add_transaction';
 $route['dashboard/ajukan-sewa/process']    = 'Controller_Admin/save_transaction_process';
+$route['dashboard/rincian-sewa/(:any)']    = 'Controller_Admin/view_transaction_detail/$1';
+$route['dashboard/tagihan/(:any)']         = 'Controller_Admin/view_invoice/$1';
+$route['dashboard/perjanjian']         = 'Controller_Admin/view_contract';
+$route['dashboard/perjanjian/cetak']         = 'Controller_Admin/print_contract';
 
 
 // Routes for Auth

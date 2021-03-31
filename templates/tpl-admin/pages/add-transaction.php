@@ -24,11 +24,12 @@
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
                         <div class="col-sm-12 col-md-7 transaction_tenant_info" id="transaction_tenant_info">
                             <ul class="list-group">
-                                <li class="list-group-item" id="tenant_size"></li>
-                                <li class="list-group-item" id="tenant_location"></li>
-                                <li class="list-group-item" id="tenant_price"></li>
-                                <li class="list-group-item" id="tenant_min_period"></li>
-                                <li class="list-group-item" id="tenant_info"></li>
+                                <li class="list-group-item list-group-item-light tenant-info-list tenant-info-color"><div class="tenant-info">Spesifikasi Tenant</div></li>
+                                <li class="list-group-item tenant-info-list" id="tenant_size"></li>
+                                <li class="list-group-item tenant-info-list" id="tenant_location"></li>
+                                <li class="list-group-item tenant-info-list" id="tenant_price"></li>
+                                <li class="list-group-item tenant-info-list" id="tenant_min_period"></li>
+                                <li class="list-group-item tenant-info-list" id="tenant_info"></li>
                             </ul>
                         </div>
                     </div>
@@ -97,10 +98,10 @@
                 success: function(data)
                 {
                     $('#tenant_size').html('<div class="tenant-info">Ukuran</div>' + data.tenant_size);
-                    $('#tenant_location').html(data.tenant_location);
-                    $('#tenant_price').html(data.tenant_price);
-                    $('#tenant_min_period').html(data.tenant_min_period + ' bulan');
-                    $('#tenant_info').html(data.tenant_info);
+                    $('#tenant_location').html('<div class="tenant-info">Lokasi</div>' + data.tenant_location);
+                    $('#tenant_price').html('<div class="tenant-info">Harga</div>' + data.tenant_price);
+                    $('#tenant_min_period').html('<div class="tenant-info">Waktu Sewa Min.</div>' + data.tenant_min_period + ' bulan');
+                    $('#tenant_info').html('<div class="tenant-info">Keterangan</div>' + data.tenant_info);
                 }
             });
             return false;

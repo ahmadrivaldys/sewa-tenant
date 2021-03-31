@@ -53,13 +53,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="main-sidebar">
                 <aside id="sidebar-wrapper">
                     <div class="sidebar-brand sidebar-logo">
-                        <a href="index.html">
+                        <a href="<?php echo base_url('dashboard'); ?>">
                             <img src="<?php echo base_url('assets/images/admin/logo.svg'); ?>" class="main-logo" alt="Logo Gandaria City">
                         </a>
                     </div>
 
                     <div class="sidebar-brand sidebar-brand-sm">
-                        <a href="index.html">St</a>
+                        <a href="<?php echo base_url('dashboard'); ?>">St</a>
                     </div>
 
                     <!-- Sidebar Menu -->
@@ -69,8 +69,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                     <div class="p-3 mt-4 mb-4 hide-sidebar-mini">
                     
-                    <a href="documentation.html" class="btn btn-primary btn-lg btn-icon-split btn-block">
-                        <i class="far fa-question-circle"></i> <div>Documentation</div>
+                    <a href="#" class="btn btn-primary btn-lg btn-icon-split btn-block">
+                        <i class="far fa-question-circle"></i> <div>Panduan</div>
                     </a>
                     </div>
                 </aside>
@@ -87,8 +87,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                     <!-- Content -->
                     <div class="section-body">
-                        <h2 class="section-title"><?php echo $page_title; ?></h2>
-                        <p class="section-lead"><?php echo $page_subtitle; ?></p>
+                        <?php if($page_title != 'Rincian Sewa'): ?>
+                            <h2 class="section-title"><?php echo $page_title; ?></h2>
+                            <p class="section-lead"><?php echo $page_subtitle; ?></p>
+                        <?php endif; ?>
                         
                         <?php echo $content; ?>
                     </div>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 30, 2021 at 01:15 PM
+-- Generation Time: Mar 31, 2021 at 01:18 PM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -86,10 +86,15 @@ CREATE TABLE `tbl_payments` (
   `payment_method_id` int(2) NOT NULL,
   `payment_status_id` int(2) NOT NULL,
   `payment_transaction_no` varchar(20) NOT NULL,
-  `payment_date` datetime NOT NULL,
-  `modified_by` int(5) NOT NULL,
-  `modified_date` datetime NOT NULL
+  `payment_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_payments`
+--
+
+INSERT INTO `tbl_payments` (`payment_id`, `payment_nominal`, `payment_method_id`, `payment_status_id`, `payment_transaction_no`, `payment_date`) VALUES
+(1, 11500000, 0, 1, 'TRX-310321.001', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -199,6 +204,7 @@ CREATE TABLE `tbl_transactions` (
   `transaction_note` varchar(250) NOT NULL,
   `transaction_rent_type_id` int(2) NOT NULL,
   `transaction_active_status_id` int(2) NOT NULL,
+  `transaction_contract_file` varchar(100) NOT NULL,
   `transaction_customer_id` int(5) NOT NULL,
   `transaction_date` datetime NOT NULL,
   `modified_by` int(5) NOT NULL,
@@ -209,8 +215,8 @@ CREATE TABLE `tbl_transactions` (
 -- Dumping data for table `tbl_transactions`
 --
 
-INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_no`, `transaction_tenant_id`, `transaction_rent_from`, `transaction_rent_to`, `transaction_type_of_business`, `transaction_company_name`, `transaction_note`, `transaction_rent_type_id`, `transaction_active_status_id`, `transaction_customer_id`, `transaction_date`, `modified_by`, `modified_date`) VALUES
-(24, 'TRX-300321.001', 1, '2021-03-30 00:00:00', '2021-04-30 00:00:00', 'asdada', 'PT ABC', 'scsacsad', 1, 1, 1, '2021-03-30 16:09:22', 1, '2021-03-30 16:09:22');
+INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_no`, `transaction_tenant_id`, `transaction_rent_from`, `transaction_rent_to`, `transaction_type_of_business`, `transaction_company_name`, `transaction_note`, `transaction_rent_type_id`, `transaction_active_status_id`, `transaction_contract_file`, `transaction_customer_id`, `transaction_date`, `modified_by`, `modified_date`) VALUES
+(28, 'TRX-310321.001', 1, '2021-03-31 00:00:00', '2021-05-20 00:00:00', 'Makanan', 'PT Makanan Sehat', '', 1, 1, '', 1, '2021-03-31 13:37:15', 1, '2021-03-31 13:37:15');
 
 -- --------------------------------------------------------
 
@@ -312,7 +318,7 @@ ALTER TABLE `tbl_admins`
 -- AUTO_INCREMENT for table `tbl_payments`
 --
 ALTER TABLE `tbl_payments`
-  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tbl_status`
@@ -330,7 +336,7 @@ ALTER TABLE `tbl_tenants`
 -- AUTO_INCREMENT for table `tbl_transactions`
 --
 ALTER TABLE `tbl_transactions`
-  MODIFY `transaction_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `transaction_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`
