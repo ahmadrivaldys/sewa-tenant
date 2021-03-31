@@ -1,3 +1,9 @@
+<?php
+    header("Content-Type: application/vnd.msword");
+    header("Expires: 0");
+    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+    header("content-disposition: attachment;filename=hasilekspor.doc");
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,17 +41,5 @@
 
 
         Pihak Penyewa						PT. Artisan Wahyu
-    <form name="doc_test" action="<?php echo ($_SERVER['PHP_SELF']); ?>" method="post">
-        <input type="submit" name="submit_doc" value="Ekspor ke MS WORD">
-    </form>
-
-    <?php
-		if(isset($_POST['submit_doc'])) {
-			header("Content-Type: application/vnd.msword");
-			header("Expires: 0");
-			header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-			header("content-disposition: attachment;filename=hasilekspor.doc");
-		}
-	?>
 </body>
 </html>
