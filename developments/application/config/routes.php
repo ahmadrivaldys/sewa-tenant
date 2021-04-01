@@ -61,21 +61,21 @@ $route['dashboard/kelola-tenant']    = 'Controller_Admin/get_tenants_list';
 $route['dashboard/kelola-admin']     = 'Controller_Admin/get_admins_list';
 $route['dashboard/kelola-pelanggan'] = 'Controller_Admin/get_customers_list';
 
-$route['dashboard/tambah-tenant']          = 'Controller_Admin/view_add_tenant';
-$route['dashboard/tambah-tenant/process']  = 'Controller_Admin/save_tenant_process';
-$route['dashboard/tambah-admin/process']   = 'Controller_Admin/save_admin_process';
-$route['dashboard/sunting-tenant/(:num)']  = 'Controller_Admin/view_edit_tenant/$1';
-$route['dashboard/sunting-tenant/process'] = 'Controller_Admin/save_tenant_process';
-$route['dashboard/informasi-tenant']       = 'Controller_Admin/get_tenant_info';
-$route['dashboard/sunting-admin/process']  = 'Controller_Admin/save_admin_process';
-$route['dashboard/hapus-tenant/process']   = 'Controller_Admin/delete_tenant_process';
-$route['dashboard/hapus-admin/process']    = 'Controller_Admin/delete_admin_process';
-$route['dashboard/ajukan-sewa']            = 'Controller_Admin/view_add_transaction';
-$route['dashboard/ajukan-sewa/process']    = 'Controller_Admin/save_transaction_process';
-$route['dashboard/rincian-sewa/(:any)']    = 'Controller_Admin/view_transaction_detail/$1';
-$route['dashboard/tagihan/(:any)']         = 'Controller_Admin/view_invoice/$1';
-$route['dashboard/perjanjian']         = 'Controller_Admin/view_contract';
-$route['dashboard/perjanjian/cetak']         = 'Controller_Admin/print_contract';
+$route['dashboard/tambah-tenant']             = 'Controller_Admin/view_add_tenant';
+$route['dashboard/tambah-tenant/process']     = 'Controller_Admin/save_tenant_process';
+$route['dashboard/tambah-admin/process']      = 'Controller_Admin/save_admin_process';
+$route['dashboard/sunting-tenant/(:num)']     = 'Controller_Admin/view_edit_tenant/$1';
+$route['dashboard/sunting-tenant/process']    = 'Controller_Admin/save_tenant_process';
+$route['dashboard/informasi-tenant']          = 'Controller_Admin/get_tenant_info';
+$route['dashboard/sunting-admin/process']     = 'Controller_Admin/save_admin_process';
+$route['dashboard/hapus-tenant/process']      = 'Controller_Admin/delete_tenant_process';
+$route['dashboard/hapus-admin/process']       = 'Controller_Admin/delete_admin_process';
+$route['dashboard/ajukan-sewa']               = 'Controller_Admin/view_add_transaction';
+$route['dashboard/ajukan-sewa/process']       = 'Controller_Admin/save_transaction_process';
+$route['dashboard/rincian-sewa/(:any)']       = 'Controller_Admin/view_transaction_detail/$1';
+$route['dashboard/tagihan/(:any)']            = 'Controller_Admin/view_invoice/$1';
+$route['dashboard/surat-perjanjian/(:any)']   = 'Controller_Admin/download_contract/$1';
+$route['dashboard/unggah-perjanjian/process'] = 'Controller_Admin/upload_contract';
 
 
 // Routes for Auth

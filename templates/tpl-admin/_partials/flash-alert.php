@@ -1,5 +1,5 @@
 <!-- Transaction -->
-<?php if($this->session->flashdata('add-transaction-succeeded')): ?>
+<?php if($this->session->flashdata('add-transaction-succeeded') OR $this->session->flashdata('add-contract-succeeded')): ?>
     <div class="alert alert-success alert-dismissible show fade">
         <div class="alert-body">
             <button class="close" data-dismiss="alert">
@@ -9,6 +9,30 @@
                 if($this->session->flashdata('add-transaction-succeeded'))
                 {
                     echo $this->session->flashdata('add-transaction-succeeded');
+                }
+                if($this->session->flashdata('add-contract-succeeded'))
+                {
+                    echo $this->session->flashdata('add-contract-succeeded');
+                }
+            ?>
+        </div>
+    </div>
+<?php endif; ?>
+
+<?php if($this->session->flashdata('add-transaction-failed') OR $this->session->flashdata('add-contract-failed')): ?>
+    <div class="alert alert-danger alert-dismissible show fade">
+        <div class="alert-body">
+            <button class="close" data-dismiss="alert">
+                <span>×</span>
+            </button>
+            <?php
+                if($this->session->flashdata('add-transaction-failed'))
+                {
+                    echo $this->session->flashdata('add-transaction-failed');
+                }
+                if($this->session->flashdata('add-contract-failed'))
+                {
+                    echo $this->session->flashdata('add-contract-failed');
                 }
             ?>
         </div>

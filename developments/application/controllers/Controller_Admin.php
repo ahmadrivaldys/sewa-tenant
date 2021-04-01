@@ -227,18 +227,94 @@ class Controller_Admin extends CI_Controller
 		}
 	}
 
-	public function view_contract()
+	public function download_contract($transaction_no)
 	{
 		// Get usertype session
 		$usertype = $this->session->userdata('usertype');
 
-		if($usertype == "Customer")
-		{	
-			$data['page_title']      = 'Perjanjian';
-			$data['page_subtitle']   = '-';
-			$data['content_title']   = 'Perjanjian';
+		// Get user_id
+		$user_id  = $this->session->userdata('user_id');
 
-			$this->template->main('tpl-admin/pages/contract', $data);
+		if($usertype == "Customer")
+		{
+			$where['user_id']   = $user_id;
+			$get_customer_data  = $this->model_admin->get_customer_contract($where);
+
+			// Create date of contract
+			$contract_date  = date('d');
+			$contract_month = date('m');
+			$contract_year  = date('Y');
+
+			if($contract_month == '01')
+			{
+				$contract_month = 'Januari';
+			}
+			elseif($contract_month == '02')
+			{
+				$contract_month = 'Februari';
+			}
+			elseif($contract_month == '03')
+			{
+				$contract_month = 'Maret';
+			}
+			elseif($contract_month == '04')
+			{
+				$contract_month = 'April';
+			}
+			elseif($contract_month == '05')
+			{
+				$contract_month = 'Mei';
+			}
+			elseif($contract_month == '06')
+			{
+				$contract_month = 'Juni';
+			}
+			elseif($contract_month == '07')
+			{
+				$contract_month = 'Juli';
+			}
+			elseif($contract_month == '08')
+			{
+				$contract_month = 'Agustus';
+			}
+			elseif($contract_month == '09')
+			{
+				$contract_month = 'September';
+			}
+			elseif($contract_month == '10')
+			{
+				$contract_month = 'Oktober';
+			}
+			elseif($contract_month == '11')
+			{
+				$contract_month = 'November';
+			}
+			elseif($contract_month == '12')
+			{
+				$contract_month = 'Desember';
+			}
+
+			$contract_date = $contract_date . ' ' . $contract_month . ' ' . $contract_year;
+
+			$cust_name     = $get_customer_data->user_fullname;
+			$cust_company  = $get_customer_data->transaction_company_name;
+			$cust_address  = $get_customer_data->user_address;
+			$cust_tob      = $get_customer_data->transaction_type_of_business;
+			$cust_phone_no = $get_customer_data->user_phone_no;
+
+			$document_template = file_get_contents(base_url('assets/files/template-contract.rtf'));
+			$document_template = str_replace('#CustomerName', $cust_name, $document_template);
+			$document_template = str_replace('#CustomerCompany', $cust_company, $document_template);
+			$document_template = str_replace('#CustomerAddress', $cust_address, $document_template);
+			$document_template = str_replace('#CustomerBusinessType', $cust_tob, $document_template);
+			$document_template = str_replace('#CustomerPhoneNumber', $cust_phone_no, $document_template);
+			$document_template = str_replace('#ContractDate', $contract_date, $document_template);
+
+			header("Content-type: application/msword");
+			header("Content-disposition: inline; filename=Surat-Perjanjian_" . $transaction_no . ".doc");
+			header("Content-length: ".strlen($document_template));
+			
+			echo $document_template;
 		}
 		else
 		{
@@ -246,17 +322,39 @@ class Controller_Admin extends CI_Controller
 		}
 	}
 
-	public function print_contract()
+	public function upload_contract()
 	{
-		$submit_doc = $this->input->post('submit_doc');
+		$transaction_no = $this->input->post('transaction_no');
 
-		if(isset($submit_doc))
+		$config['upload_path']   = './assets/uploads';
+		$config['allowed_types'] = 'doc|docx|pdf';
+		$config['file_name']     = 'Unggahan_Surat-Perjanjian_' . str_replace('.', '-', $transaction_no);
+	
+		$this->load->library('upload', $config);
+	
+		if($this->upload->do_upload('transaction_contract'))
 		{
-			header("Content-Type: application/vnd.msword");
-			header("Expires: 0");
-			header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-			header("content-disposition: attachment;filename=hasilekspor.doc");
+			$upload_contract = $this->upload->data();
+
+			$data['transaction_contract_file'] = $upload_contract['file_name'];
+			$where['transaction_no'] = $transaction_no;
+
+            // Storing the data into the database
+            $save_contract = $this->model_admin->update_transaction($data, $where);
+
+			// Show the message if the upload process was succeeded
+			$this->session->set_flashdata('add-contract-succeeded', 'Pengunggahan surat perjanjian berhasil.');
 		}
+		else
+		{
+			$error = $this->upload->display_errors();
+			
+			// Show the message if the upload process was failed
+			$this->session->set_flashdata('add-contract-failed', $error);
+		}
+
+		// After finish, user will be redirected to 'Rincian Sewa' page
+        redirect('dashboard/rincian-sewa/' . $transaction_no);
 	}
 
 	public function get_tenants_list()

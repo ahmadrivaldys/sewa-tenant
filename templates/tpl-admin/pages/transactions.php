@@ -12,6 +12,7 @@
                     <th class="text-center">Tenant</th>
                     <th class="text-center">Periode Sewa</th>
                     <th class="text-center">Status Sewa</th>
+                    <th class="text-center">Template Kontrak</th>
                     <th class="text-center">Aksi</th>
                 </tr>
 
@@ -20,11 +21,15 @@
                         <td colspan="6" class="text-center">Data tidak tersedia.</td>
                     </tr>
                 <?php endif; ?>
-
+                
                 <?php $no = 1; foreach($get_trx_list as $transaction_list): ?>
                     <tr>
                         <td class="text-center"><?php echo $no; ?></td>
-                        <td class="text-center"><?php echo $transaction_list->transaction_no; ?></td>
+                        <td class="text-center">
+                            <a href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lihat Tagihan">
+                                <?php echo $transaction_list->transaction_no; ?>
+                            </a>
+                        </td>
                         <td><?php echo $transaction_list->tenant_name; ?></td>
                         <td class="text-center">
                             <?php echo date('d/m/Y', strtotime($transaction_list->transaction_rent_from)) . ' - ' . date('d/m/Y', strtotime($transaction_list->transaction_rent_to)); ?>
@@ -42,7 +47,12 @@
                                 <span class="badge badge-danger activestatus-label"><?php echo $transaction_list->status_name; ?></span>
                             <?php endif; ?>
                         </td>
-                        <td class="text-center"><a href="<?php echo base_url('dashboard/rincian-sewa/'.$transaction_list->transaction_no); ?>" class="btn btn-primary">Detail</a></td>
+                        <td class="text-center">
+                            <a href="<?php echo base_url('dashboard/surat-perjanjian/'.$transaction_list->transaction_no); ?>">Unduh</a>
+                        </td>
+                        <td class="text-center">
+                            <a href="<?php echo base_url('dashboard/rincian-sewa/'.$transaction_list->transaction_no); ?>" class="btn btn-primary">Detail</a>
+                        </td>
                     </tr>
                 <?php $no++; endforeach; ?>
             </table>
