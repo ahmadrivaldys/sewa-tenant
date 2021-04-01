@@ -14,7 +14,6 @@
                     <th>Harga</th>
                     <th>Waktu Sewa Min. (Bulan)</th>
                     <th>Keterangan</th>
-                    <th>Foto</th>
                     <th>Aksi</th>
                 </tr>
 
@@ -33,7 +32,6 @@
                         <td><?php echo $tenant_list->tenant_price; ?></td>
                         <td><?php echo $tenant_list->tenant_min_period; ?></td>
                         <td><?php echo $tenant_list->tenant_info; ?></td>
-                        <td><?php echo $tenant_list->tenant_image; ?></td>
                         <td>
                             <a href="<?php echo base_url('dashboard/sunting-tenant/'.$tenant_list->tenant_id); ?>" class="btn btn-icon btn-primary">
                                 <i class="fas fa-pencil-alt"></i>

@@ -30,6 +30,7 @@
                                 <li class="list-group-item tenant-info-list" id="tenant_price"></li>
                                 <li class="list-group-item tenant-info-list" id="tenant_min_period"></li>
                                 <li class="list-group-item tenant-info-list" id="tenant_info"></li>
+                                <li class="list-group-item tenant-info-list" id="tenant_image"></li>
                             </ul>
                         </div>
                     </div>
@@ -90,18 +91,30 @@
             var tenant_id = $(this).val();
 
             $.ajax({
-                url : "<?php echo base_url('dashboard/informasi-tenant');?>",
+                url : "<?php echo base_url('dashboard/informasi-tenant'); ?>",
                 method : "POST",
                 data : {tenant_id: tenant_id},
                 async : true,
                 dataType : 'json',
                 success: function(data)
                 {
+                    var image_url    = "<?php echo base_url('assets/images/'); ?>" + data.tenant_image;
+                    var tenant_image = "<img src=" + image_url + " alt ='Tenant Image' class='w-50'>";
+
                     $('#tenant_size').html('<div class="tenant-info">Ukuran</div>' + data.tenant_size);
                     $('#tenant_location').html('<div class="tenant-info">Lokasi</div>' + data.tenant_location);
                     $('#tenant_price').html('<div class="tenant-info">Harga</div>' + data.tenant_price);
                     $('#tenant_min_period').html('<div class="tenant-info">Waktu Sewa Min.</div>' + data.tenant_min_period + ' bulan');
                     $('#tenant_info').html('<div class="tenant-info">Keterangan</div>' + data.tenant_info);
+
+                    if(data.tenant_image)
+                    {
+                        $('#tenant_image').html('<div class="tenant-info">Foto Tampilan</div>' + tenant_image);
+                    }
+                    else
+                    {
+                        $('#tenant_image').html('<div class="tenant-info">Foto Tampilan</div> -');
+                    }
                 }
             });
             return false;

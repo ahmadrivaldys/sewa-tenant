@@ -96,7 +96,7 @@
     </div>
 <?php endif; ?>
 
-<?php if($this->session->flashdata('add-tenant-failed') OR $this->session->flashdata('update-tenant-failed') OR $this->session->flashdata('delete-tenant-failed')): ?>
+<?php if($this->session->flashdata('add-tenant-failed') OR $this->session->flashdata('update-tenant-failed') OR $this->session->flashdata('delete-tenant-failed') OR $this->session->flashdata('add-tenantimage-failed')): ?>
     <div class="alert alert-danger alert-dismissible show fade">
         <div class="alert-body">
             <button class="close" data-dismiss="alert">
@@ -114,6 +114,10 @@
                 if($this->session->flashdata('delete-tenant-failed'))
                 {
                     echo $this->session->flashdata('delete-tenant-failed');
+                }
+                if($this->session->flashdata('add-tenantimage-failed'))
+                {
+                    echo $this->session->flashdata('add-tenantimage-failed');
                 }
             ?>
         </div>

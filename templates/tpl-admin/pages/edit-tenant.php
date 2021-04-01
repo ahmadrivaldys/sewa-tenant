@@ -6,7 +6,7 @@
             </div>
 
             <div class="card-body">
-                <form method="POST" action="<?php echo base_url('dashboard/sunting-tenant/process'); ?>">
+                <form method="POST" action="<?php echo base_url('dashboard/sunting-tenant/process'); ?>" enctype="multipart/form-data">
                     <input type="hidden" name="submit_type" value="update"/>
                     <input type="hidden" name="tenant_id" value="<?php echo $get_tenant->tenant_id; ?>"/>
 
@@ -49,12 +49,17 @@
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Foto Tampilan</label>
                         <div class="col-sm-12 col-md-7">
-                            <div id="image-preview" class="image-preview">
-                                <label for="image-upload" id="image-label">Choose File</label>
-                                <input type="file" name="image" id="image-upload" />
-                            </div>
+                            <input type="file" class="form-control" name="tenant_image"/>
                         </div>
                     </div>
+                    <?php if(!empty($get_tenant->tenant_image)): ?>
+                        <div class="form-group row mb-4">
+                            <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">&nbsp;</label>
+                            <div class="col-sm-12 col-md-7">
+                                <img class="w-50" src="<?php echo base_url('assets/images/'.$get_tenant->tenant_image); ?>" alt="<?php echo $get_tenant->tenant_image; ?>">
+                            </div>
+                        </div>
+                    <?php endif; ?>
                     <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
                         <div class="col-sm-12 col-md-7">

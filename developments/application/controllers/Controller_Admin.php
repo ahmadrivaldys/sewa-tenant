@@ -431,6 +431,53 @@ class Controller_Admin extends CI_Controller
 
 	public function save_tenant_process()
 	{
+		$submit_type != 'new' ? $tenant_id = $this->input->post('tenant_id') : '';
+
+		// Get the input from 'tenant_image' field
+        $tenant_image_name = $_FILES['tenant_image']['name'];
+
+        // If 'tenant_image' field is not empty, then upload the photo
+        if(!empty($tenant_image_name))
+        {
+            // Setting up the configuration for upload
+            $config['upload_path']   = './assets/images/';
+            $config['allowed_types'] = 'gif|jpg|png|jpeg|bmp';
+            $config['file_name']     = str_replace(" ", "-", strtolower($tenant_image_name));
+
+            // Load library for upload and set the config
+            $this->load->library('upload', $config);
+
+            if($this->upload->do_upload('tenant_image'))
+            {
+                $thumbnail = $this->upload->data();
+
+                // Compress image
+                $config['image_library']  = 'gd2';
+                $config['source_image']   = './assets/images/'.$thumbnail['file_name'];
+                $config['create_thumb']   = FALSE;
+                $config['maintain_ratio'] = TRUE;
+                $config['quality']        = '90%';
+                $config['width']          = 0;
+                $config['height']         = 720;
+                $config['new_image']      = './assets/images/'.$thumbnail['file_name'];
+
+                $this->load->library('image_lib', $config);
+                $this->image_lib->resize();
+
+                // Set image name to be stored into the database
+                $data['tenant_image']   = $thumbnail['file_name'];
+            }
+            else
+            {
+                $error = $this->upload->display_errors();
+			
+				// Show the message if the upload process was failed
+				$this->session->set_flashdata('add-tenantimage-failed', $error);
+
+				redirect('dashboard/sunting-tenant/'.$tenant_id);
+            }
+        }
+
 		// Get user_id
 		$user_id = $this->session->userdata('user_id');
 
