@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 01, 2021 at 04:29 PM
+-- Generation Time: Apr 02, 2021 at 12:32 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.11
 
@@ -86,6 +86,7 @@ CREATE TABLE `tbl_payments` (
   `payment_method_id` int(2) NOT NULL,
   `payment_status_id` int(2) NOT NULL,
   `payment_transaction_no` varchar(20) NOT NULL,
+  `payment_paymentslip_file` varchar(100) NOT NULL,
   `payment_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -93,8 +94,8 @@ CREATE TABLE `tbl_payments` (
 -- Dumping data for table `tbl_payments`
 --
 
-INSERT INTO `tbl_payments` (`payment_id`, `payment_nominal`, `payment_method_id`, `payment_status_id`, `payment_transaction_no`, `payment_date`) VALUES
-(1, 11500000, 0, 1, 'TRX-310321.001', '0000-00-00 00:00:00');
+INSERT INTO `tbl_payments` (`payment_id`, `payment_nominal`, `payment_method_id`, `payment_status_id`, `payment_transaction_no`, `payment_paymentslip_file`, `payment_date`) VALUES
+(1, 11500000, 1, 1, 'TRX-310321.001', '', '2021-04-02 17:26:10');
 
 -- --------------------------------------------------------
 

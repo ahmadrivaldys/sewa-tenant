@@ -134,7 +134,7 @@
             </span>
         </div>
         
-        <?php echo form_open_multipart('dashboard/unggah-perjanjian/process'); ?>
+        <?php echo form_open_multipart('dashboard/unggah-perjanjian'); ?>
             <div class="modal-body modal-form-body">
                 <input type="hidden" name="transaction_no" value="<?php echo $get_trx_detail->transaction_no; ?>"/>
 

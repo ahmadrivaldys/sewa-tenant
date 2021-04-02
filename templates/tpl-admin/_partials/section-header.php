@@ -5,7 +5,8 @@
             OR $page_title == 'Tambah Admin'
             OR $page_title == 'Sunting Admin'
             OR $page_title == 'Ajukan Sewa'
-            OR $page_title == 'Rincian Sewa'): ?>
+            OR $page_title == 'Rincian Sewa'
+            OR $page_title == 'Tagihan'): ?>
 
         <div class="section-header-back">
             <a href="#" onclick="back_to_previous()" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>

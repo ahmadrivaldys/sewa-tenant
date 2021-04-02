@@ -26,7 +26,7 @@
                     <tr>
                         <td class="text-center"><?php echo $no; ?></td>
                         <td class="text-center">
-                            <a href="#" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lihat Tagihan">
+                            <a href="<?php echo base_url('dashboard/tagihan/'.$transaction_list->transaction_no); ?>" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lihat Tagihan">
                                 <?php echo $transaction_list->transaction_no; ?>
                             </a>
                         </td>

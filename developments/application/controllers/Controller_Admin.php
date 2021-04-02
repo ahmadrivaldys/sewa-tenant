@@ -227,6 +227,58 @@ class Controller_Admin extends CI_Controller
 		}
 	}
 
+	public function cancel_transaction()
+	{
+		$transaction_no = $this->input->post('transaction_no');
+
+		if(!empty($transaction_no))
+		{
+			$data['payment_status_id'] = 3;
+			$where['payment_transaction_no'] = $transaction_no;
+
+			// Storing the data into the database
+			$cancel_transaction = $this->model_admin->update_payment($data, $where);
+
+			// Show the message if the storing process was succeeded or failed
+			if($cancel_transaction)
+			{
+				$this->session->set_flashdata('cancel-transaction-succeeded', 'Pembatalkan transaksi berhasil.');
+			}
+			else
+			{
+				$this->session->set_flashdata('cancel-transaction-failed', 'Pembatalkan transaksi gagal.');
+			}
+
+			// After finish, user will be redirected to 'Tagihan' page
+			redirect('dashboard/tagihan/' . $transaction_no);
+		}
+		else
+		{
+			echo "Akses langsung tidak diperbolehkan.";
+		}
+	}
+
+	public function view_invoice($transaction_no)
+	{
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		if($usertype == "Customer")
+		{	
+			$where = $transaction_no;
+			$data['get_inv_data']  = $this->model_admin->get_transaction_detail($where);
+			$data['page_title']    = 'Tagihan';
+			$data['page_subtitle'] = 'Di menu ini Anda melihat rincian tagihan pembayaran.';
+			$data['content_title'] = 'Tagihan';
+
+			$this->template->main('tpl-admin/pages/invoice', $data);
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
+	}
+
 	public function download_contract($transaction_no)
 	{
 		// Get usertype session
@@ -326,35 +378,100 @@ class Controller_Admin extends CI_Controller
 	{
 		$transaction_no = $this->input->post('transaction_no');
 
-		$config['upload_path']   = './assets/uploads';
-		$config['allowed_types'] = 'doc|docx|pdf';
-		$config['file_name']     = 'Unggahan_Surat-Perjanjian_' . str_replace('.', '-', $transaction_no);
-	
-		$this->load->library('upload', $config);
-	
-		if($this->upload->do_upload('transaction_contract'))
+		if(!empty($transaction_no))
 		{
-			$upload_contract = $this->upload->data();
+			$config['upload_path']   = './assets/uploads/contract';
+			$config['allowed_types'] = 'doc|docx|pdf';
+			$config['file_name']     = 'Unggahan_Surat-Perjanjian_' . str_replace('.', '-', $transaction_no);
+		
+			$this->load->library('upload', $config);
+		
+			if($this->upload->do_upload('transaction_contract'))
+			{
+				$upload_contract = $this->upload->data();
 
-			$data['transaction_contract_file'] = $upload_contract['file_name'];
-			$where['transaction_no'] = $transaction_no;
+				$data['transaction_contract_file'] = $upload_contract['file_name'];
+				$where['transaction_no'] = $transaction_no;
 
-            // Storing the data into the database
-            $save_contract = $this->model_admin->update_transaction($data, $where);
+				// Storing the data into the database
+				$save_contract = $this->model_admin->update_transaction($data, $where);
 
-			// Show the message if the upload process was succeeded
-			$this->session->set_flashdata('add-contract-succeeded', 'Pengunggahan surat perjanjian berhasil.');
+				// Show the message if the upload process was succeeded
+				$this->session->set_flashdata('add-contract-succeeded', 'Pengunggahan surat perjanjian berhasil.');
+			}
+			else
+			{
+				$error = $this->upload->display_errors();
+				
+				// Show the message if the upload process was failed
+				$this->session->set_flashdata('add-contract-failed', $error);
+			}
+
+			// After finish, user will be redirected to 'Rincian Sewa' page
+			redirect('dashboard/rincian-sewa/' . $transaction_no);
 		}
 		else
 		{
-			$error = $this->upload->display_errors();
-			
-			// Show the message if the upload process was failed
-			$this->session->set_flashdata('add-contract-failed', $error);
+			echo "Akses langsung tidak diperbolehkan.";
 		}
+	}
 
-		// After finish, user will be redirected to 'Rincian Sewa' page
-        redirect('dashboard/rincian-sewa/' . $transaction_no);
+	public function upload_paymentslip()
+	{
+		$transaction_no = $this->input->post('transaction_no');
+
+		if(!empty($transaction_no))
+		{
+			$config['upload_path']   = './assets/uploads/payment-slip';
+			$config['allowed_types'] = 'gif|jpg|png|jpeg|bmp';
+			$config['file_name']     = 'Unggahan_Bukti-Pembayaran_' . str_replace('.', '-', $transaction_no);
+		
+			$this->load->library('upload', $config);
+		
+			if($this->upload->do_upload('transaction_paymentslip'))
+			{
+				$upload_paymentslip = $this->upload->data();
+
+                // Compress image
+                $config['image_library']  = 'gd2';
+                $config['source_image']   = './assets/uploads/payment-slip/'.$upload_paymentslip['file_name'];
+                $config['create_thumb']   = FALSE;
+                $config['maintain_ratio'] = TRUE;
+                $config['quality']        = '90%';
+                $config['width']          = 0;
+                $config['height']         = 720;
+                $config['new_image']      = './assets/uploads/payment-slip/'.$upload_paymentslip['file_name'];
+
+                $this->load->library('image_lib', $config);
+                $this->image_lib->resize();
+
+                // Set image name to be stored into the database
+				$data['payment_paymentslip_file'] = $upload_paymentslip['file_name'];
+
+				$data['payment_date']             = date_create('now')->format('Y-m-d H:i:s');;
+				$where['payment_transaction_no']  = $transaction_no;
+
+				// Storing the data into the database
+				$save_paymentslip = $this->model_admin->update_payment($data, $where);
+
+				// Show the message if the upload process was succeeded
+				$this->session->set_flashdata('add-paymentslip-succeeded', 'Pengunggahan bukti pembayaran berhasil.');
+			}
+			else
+			{
+				$error = $this->upload->display_errors();
+				
+				// Show the message if the upload process was failed
+				$this->session->set_flashdata('add-paymentslip-failed', $error);
+			}
+
+			// After finish, user will be redirected to 'Tagihan' page
+			redirect('dashboard/tagihan/' . $transaction_no);
+		}
+		else
+		{
+			echo "Akses langsung tidak diperbolehkan.";
+		}
 	}
 
 	public function get_tenants_list()

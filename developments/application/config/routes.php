@@ -75,7 +75,9 @@ $route['dashboard/ajukan-sewa/process']       = 'Controller_Admin/save_transacti
 $route['dashboard/rincian-sewa/(:any)']       = 'Controller_Admin/view_transaction_detail/$1';
 $route['dashboard/tagihan/(:any)']            = 'Controller_Admin/view_invoice/$1';
 $route['dashboard/surat-perjanjian/(:any)']   = 'Controller_Admin/download_contract/$1';
-$route['dashboard/unggah-perjanjian/process'] = 'Controller_Admin/upload_contract';
+$route['dashboard/unggah-perjanjian']         = 'Controller_Admin/upload_contract';
+$route['dashboard/batalkan-transaksi']        = 'Controller_Admin/cancel_transaction';
+$route['dashboard/unggah-bukti-bayar']        = 'Controller_Admin/upload_paymentslip';
 
 
 // Routes for Auth

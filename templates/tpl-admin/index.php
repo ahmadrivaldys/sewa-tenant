@@ -88,8 +88,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <!-- Content -->
                     <div class="section-body">
                         <?php if($page_title != 'Rincian Sewa'): ?>
+                            <?php if($page_title != 'Tagihan'): ?>
                             <h2 class="section-title"><?php echo $page_title; ?></h2>
                             <p class="section-lead"><?php echo $page_subtitle; ?></p>
+                            <?php endif; ?>
                         <?php endif; ?>
                         
                         <?php echo $content; ?>
