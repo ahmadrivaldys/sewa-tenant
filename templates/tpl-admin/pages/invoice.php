@@ -97,11 +97,13 @@
 
                         <address>
                             <strong>Status Pembayaran</strong><br>
-                            <?php if($get_inv_data->payment_status_code == 1): ?>
-                                    <span class="badge badge-light activestatus-label"><?php echo $get_inv_data->payment_status; ?></span>
+                            <?php if($get_inv_data->payment_status_code == 2 AND $get_inv_data->payment_verif_code == 2): ?>
+                                <span class="badge badge-secondary activestatus-label bg-secondary"><?php echo $get_inv_data->payment_verif; ?></span>
+                            <?php elseif($get_inv_data->payment_status_code == 1 AND $get_inv_data->payment_verif_code == 1): ?>
+                                <span class="badge badge-light activestatus-label"><?php echo $get_inv_data->payment_status; ?></span>
                             <?php endif; ?>
 
-                            <?php if($get_inv_data->payment_status_code == 2): ?>
+                            <?php if($get_inv_data->payment_status_code == 2 AND $get_inv_data->payment_verif_code == 3): ?>
                                 <span class="badge badge-success activestatus-label"><?php echo $get_inv_data->payment_status; ?></span>
                             <?php endif; ?>
 
@@ -155,8 +157,11 @@
     
     <hr>
     <div class="text-md-left">
-        <button class="btn btn-primary btn-icon icon-left" onclick="modal_trigger('unggah-bukti-bayar')"><i class="fas fa-credit-card"></i> Unggah Bukti Pembayaran</button>
-        <?php if($get_inv_data->payment_status_code == 1): ?>      
+        <?php if($get_inv_data->payment_status_code == 1 AND $get_inv_data->payment_verif_code == 1 OR $get_inv_data->payment_status_code == 2 AND $get_inv_data->payment_verif_code == 2): ?>      
+            <button class="btn btn-primary btn-icon icon-left" onclick="modal_trigger('unggah-bukti-bayar')"><i class="fas fa-credit-card"></i> Unggah Bukti Pembayaran</button>
+        <?php endif; ?>
+
+        <?php if($get_inv_data->payment_status_code == 1 AND $get_inv_data->payment_verif_code == 1): ?>      
             <button class="btn btn-danger btn-icon icon-left" onclick="modal_trigger('batalkan-transaksi')"><i class="fas fa-times"></i> Batalkan Transaksi</button>
         <?php endif; ?>
     </div>
@@ -215,6 +220,7 @@
         <?php echo form_open('dashboard/batalkan-transaksi'); ?>
             <div class="modal-body">
                 <input type="hidden" name="transaction_no" value="<?php echo $get_inv_data->transaction_no; ?>"/>
+                <input type="hidden" name="tenant_id" value="<?php echo $get_inv_data->tenant_id; ?>"/>
 
                 Apa Anda yakin ingin membatalkan transaksi ini?
             </div>

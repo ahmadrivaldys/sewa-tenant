@@ -39,18 +39,28 @@ class Model_Admin extends CI_Model
 
     public function get_transaction_detail($where)
     {
-        $this->db->select('trx.transaction_no, trx.transaction_rent_from, trx.transaction_rent_to, trx.transaction_type_of_business, trx.transaction_company_name, trx.transaction_contract_file, trx.transaction_date, tnt.tenant_name, ren.status_code as rent_status_code, ren.status_name as rent_status, rty.status_code as renttype_status_code, rty.status_name as renttype_status, stp.status_code as payment_status_code, stp.status_name as payment_status, usr.user_fullname, usr.user_address, pay.payment_nominal, mtd.method_bank_name, mtd.method_bank_account, mtd.method_type');
+        $this->db->select('trx.transaction_no, trx.transaction_rent_from, trx.transaction_rent_to');
+        $this->db->select('trx.transaction_type_of_business, trx.transaction_company_name, trx.transaction_contract_file');
+        $this->db->select('trx.transaction_date, tnt.tenant_id, tnt.tenant_name');
+        $this->db->select('ren.status_code as rent_status_code, ren.status_name as rent_status');
+        $this->db->select('rty.status_code as renttype_status_code, rty.status_name as renttype_status');
+        $this->db->select('pst.status_code as payment_status_code, pst.status_name as payment_status');
+        $this->db->select('vep.status_code as payment_verif_code, vep.status_name as payment_verif');
+        $this->db->select('usr.user_fullname, usr.user_address, pay.payment_nominal');
+        $this->db->select('mtd.method_bank_name, mtd.method_bank_account, mtd.method_type');
         $this->db->from('tbl_transactions trx');
         $this->db->join('tbl_tenants tnt', 'tnt.tenant_id = trx.transaction_tenant_id');
         $this->db->join('tbl_status ren', 'ren.status_code = trx.transaction_active_status_id');
         $this->db->join('tbl_status rty', 'rty.status_code = trx.transaction_rent_type_id');
         $this->db->join('tbl_users usr', 'usr.user_id = trx.transaction_customer_id');
         $this->db->join('tbl_payments pay', 'pay.payment_transaction_no = trx.transaction_no');
-        $this->db->join('tbl_status stp', 'stp.status_code = pay.payment_status_id');
+        $this->db->join('tbl_status pst', 'pst.status_code = pay.payment_status_id');
+        $this->db->join('tbl_status vep', 'vep.status_code = pay.payment_verif_id');
         $this->db->join('tbl_payment_methods mtd', 'mtd.method_id = pay.payment_method_id');
         $this->db->where('ren.status_category_code', 'ACTIVE_PERIOD');
         $this->db->where('rty.status_category_code', 'RENT_TYPE');
-        $this->db->where('stp.status_category_code', 'PAYMENT');
+        $this->db->where('pst.status_category_code', 'PAYMENT');
+        $this->db->where('vep.status_category_code', 'PAY_VERIFICATION');
         $this->db->where('trx.transaction_no', $where);
 
         return $this->db->get()->row();
@@ -66,6 +76,14 @@ class Model_Admin extends CI_Model
     public function add_payment_data($data)
     {
         return $this->db->insert('tbl_payments', $data);
+    }
+
+    public function get_payment_method_list()
+    {
+        $this->db->select('method_id, method_bank_name, method_type');
+        $this->db->from('tbl_payment_methods');
+
+        return $this->db->get()->result();
     }
 
     public function update_payment($data, $where)

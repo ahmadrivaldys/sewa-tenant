@@ -61,6 +61,7 @@ class Controller_Admin extends CI_Controller
 			$where['tenant_availability'] = 1;
 
 			$data['get_tnt_list']  = $this->model_admin->get_tenants_list($where);
+			$data['get_pay_mtd']   = $this->model_admin->get_payment_method_list();
 			$data['page_title']    = 'Ajukan Sewa';
 			$data['page_subtitle'] = 'Di menu ini Anda mengajukan penyewaan tenant.';
 			$data['content_title'] = 'Ajukan Sewa Tenant';
@@ -79,17 +80,35 @@ class Controller_Admin extends CI_Controller
 		$user_id = $this->session->userdata('user_id');
 
 		// Getting all input
-        $transaction_tenant_id = $this->input->post('transaction_tenant');
-        $transaction_rent_from = $this->input->post('transaction_rent_from');
-        $transaction_rent_to   = $this->input->post('transaction_rent_to');
-        $transaction_tob       = $this->input->post('transaction_type_of_business');
-        $transaction_comp_name = $this->input->post('transaction_company_name');
-        $transaction_note      = $this->input->post('transaction_note');
+        $transaction_tenant_id  = $this->input->post('transaction_tenant');
+        $transaction_rent_from  = $this->input->post('transaction_rent_from');
+        $transaction_rent_to    = $this->input->post('transaction_rent_to');
+        $transaction_tob        = $this->input->post('transaction_type_of_business');
+        $transaction_comp_name  = $this->input->post('transaction_company_name');
+        $transaction_pay_method = $this->input->post('transaction_payment_method');
+        $transaction_note       = $this->input->post('transaction_note');
 
 		// Validation if tenant has not been selected
-		if($transaction_tenant_id == 0)
+		if($transaction_tenant_id == 0 OR $transaction_pay_method == 0)
 		{
-			$this->session->set_flashdata('tenant-not-selected', 'Harap pilih tenant-nya terlebih dulu.');
+			$err_message = '';
+
+			if($transaction_tenant_id == 0)
+			{
+				$err_message = 'Harap pilih tenant-nya terlebih dulu.';
+			}
+
+			if($transaction_pay_method == 0)
+			{
+				$err_message = 'Harap pilih metode pembayarannya terlebih dulu.';
+			}
+
+			if($transaction_tenant_id == 0 && $transaction_pay_method == 0)
+			{
+				$err_message = 'Harap pilih <b>tenant</b> dan <b>metode pembayarannya</b> terlebih dulu.';
+			}
+
+			$this->session->set_flashdata('tenant-not-selected', $err_message);
 
 			// User will be redirected to 'Ajukan Sewa' page
 			redirect('dashboard/ajukan-sewa');
@@ -160,17 +179,24 @@ class Controller_Admin extends CI_Controller
 			if($rent_total_month >= $tenant_min_period)
 			{
 				// Storing the data into the database (create transaction)
-				$save_tenant  = $this->model_admin->add_transaction($data);
+				$save_transaction = $this->model_admin->add_transaction($data);
 
 				// Storing the data into the database (create payment data)
 				$pay['payment_nominal']        = $tenant_info->tenant_price;
+				$pay['payment_method_id']      = $transaction_pay_method;
 				$pay['payment_status_id']      = 1;
+				$pay['payment_verif_id']       = 1;
 				$pay['payment_transaction_no'] = $transaction_no;
 
 				$save_payment = $this->model_admin->add_payment_data($pay);
 
+				// Storing the data into the database (update tenant availability)
+				$tnt['tenant_availability']    = 2;
+
+				$save_tenant = $this->model_admin->update_tenant($tnt, $where);
+
 				// Show the message if the storing process was succeeded or failed
-				if($save_tenant && $save_payment)
+				if($save_transaction && $save_payment && $save_tenant)
 				{
 					$this->session->set_flashdata('add-transaction-succeeded', 'Pengajuan sewa tenant berhasil dibuat.');
 				}
@@ -230,17 +256,25 @@ class Controller_Admin extends CI_Controller
 	public function cancel_transaction()
 	{
 		$transaction_no = $this->input->post('transaction_no');
+		$tenant_id      = $this->input->post('tenant_id');
 
 		if(!empty($transaction_no))
 		{
-			$data['payment_status_id'] = 3;
-			$where['payment_transaction_no'] = $transaction_no;
+			$pay['payment_status_id']             = 3;
+			$data['transaction_active_status_id'] = 3;
+			$tnt['tenant_availability']           = 1;
+
+			$pay_where['payment_transaction_no'] = $transaction_no;
+			$where['transaction_no']             = $transaction_no;
+			$tnt_where['tenant_id']              = $tenant_id;
 
 			// Storing the data into the database
-			$cancel_transaction = $this->model_admin->update_payment($data, $where);
+			$cancel_payment     = $this->model_admin->update_payment($pay, $pay_where);
+			$cancel_transaction = $this->model_admin->update_transaction($data, $where);
+			$cancel_tenant      = $this->model_admin->update_tenant($tnt, $tnt_where);
 
 			// Show the message if the storing process was succeeded or failed
-			if($cancel_transaction)
+			if($cancel_payment && $cancel_transaction && $cancel_tenant)
 			{
 				$this->session->set_flashdata('cancel-transaction-succeeded', 'Pembatalkan transaksi berhasil.');
 			}
@@ -448,7 +482,9 @@ class Controller_Admin extends CI_Controller
                 // Set image name to be stored into the database
 				$data['payment_paymentslip_file'] = $upload_paymentslip['file_name'];
 
-				$data['payment_date']             = date_create('now')->format('Y-m-d H:i:s');;
+				$data['payment_status_id']        = 2;
+				$data['payment_verif_id']         = 2;
+				$data['payment_date']             = date_create('now')->format('Y-m-d H:i:s');
 				$where['payment_transaction_no']  = $transaction_no;
 
 				// Storing the data into the database

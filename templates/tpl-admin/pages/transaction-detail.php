@@ -99,11 +99,13 @@
                             <td data-width="215" class="tbl-label">Status Pembayaran</td>
                             <td data-width="25" class="text-center px-0">:</td>
                             <td class="pl-0">
-                                <?php if($get_trx_detail->payment_status_code == 1): ?>
+                                <?php if($get_trx_detail->payment_status_code == 2 AND $get_trx_detail->payment_verif_code == 2): ?>
+                                    <span class="badge badge-secondary activestatus-label bg-secondary"><?php echo $get_trx_detail->payment_verif; ?></span>
+                                <?php elseif($get_trx_detail->payment_status_code == 1 AND $get_trx_detail->payment_verif_code == 1): ?>
                                     <span class="badge badge-light activestatus-label"><?php echo $get_trx_detail->payment_status; ?></span>
                                 <?php endif; ?>
 
-                                <?php if($get_trx_detail->payment_status_code == 2): ?>
+                                <?php if($get_trx_detail->payment_status_code == 2 AND $get_trx_detail->payment_verif_code == 3): ?>
                                     <span class="badge badge-success activestatus-label"><?php echo $get_trx_detail->payment_status; ?></span>
                                 <?php endif; ?>
 

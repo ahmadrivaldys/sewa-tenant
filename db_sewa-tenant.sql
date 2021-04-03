@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 02, 2021 at 12:32 PM
+-- Generation Time: Apr 03, 2021 at 06:24 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.11
 
@@ -87,6 +87,8 @@ CREATE TABLE `tbl_payments` (
   `payment_status_id` int(2) NOT NULL,
   `payment_transaction_no` varchar(20) NOT NULL,
   `payment_paymentslip_file` varchar(100) NOT NULL,
+  `payment_verif_id` int(2) NOT NULL,
+  `payment_verif_by` int(5) NOT NULL,
   `payment_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -94,8 +96,8 @@ CREATE TABLE `tbl_payments` (
 -- Dumping data for table `tbl_payments`
 --
 
-INSERT INTO `tbl_payments` (`payment_id`, `payment_nominal`, `payment_method_id`, `payment_status_id`, `payment_transaction_no`, `payment_paymentslip_file`, `payment_date`) VALUES
-(1, 11500000, 1, 1, 'TRX-310321.001', '', '2021-04-02 17:26:10');
+INSERT INTO `tbl_payments` (`payment_id`, `payment_nominal`, `payment_method_id`, `payment_status_id`, `payment_transaction_no`, `payment_paymentslip_file`, `payment_verif_id`, `payment_verif_by`, `payment_date`) VALUES
+(1, 11500000, 1, 1, 'TRX-310321.001', '', 1, 0, '2021-04-03 22:13:19');
 
 -- --------------------------------------------------------
 
@@ -131,9 +133,9 @@ INSERT INTO `tbl_payment_methods` (`method_id`, `method_bank_name`, `method_bank
 CREATE TABLE `tbl_status` (
   `status_id` int(2) NOT NULL,
   `status_code` int(2) NOT NULL,
-  `status_name` varchar(20) NOT NULL,
-  `status_category` varchar(15) NOT NULL,
-  `status_category_code` varchar(15) NOT NULL
+  `status_name` varchar(30) NOT NULL,
+  `status_category` varchar(25) NOT NULL,
+  `status_category_code` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -152,7 +154,10 @@ INSERT INTO `tbl_status` (`status_id`, `status_code`, `status_name`, `status_cat
 (9, 1, 'Tersedia', 'Ketersediaan', 'AVAILABILITY'),
 (10, 2, 'Tidak Tersedia', 'Ketersediaan', 'AVAILABILITY'),
 (11, 1, 'Aktif', 'Akun', 'ACCOUNT'),
-(12, 0, 'Ditutup', 'Akun', 'ACCOUNT');
+(12, 2, 'Ditutup', 'Akun', 'ACCOUNT'),
+(13, 1, 'Menunggu Verifikasi Pembayaran', 'Verifikasi Pembayaran', 'PAY_VERIFICATION'),
+(14, 2, 'Proses Verifikasi Pembayaran', 'Verifikasi Pembayaran', 'PAY_VERIFICATION'),
+(15, 3, 'Pembayaran Terverifikasi', 'Verifikasi Pembayaran', 'PAY_VERIFICATION');
 
 -- --------------------------------------------------------
 
@@ -182,7 +187,7 @@ CREATE TABLE `tbl_tenants` (
 --
 
 INSERT INTO `tbl_tenants` (`tenant_id`, `tenant_code`, `tenant_name`, `tenant_size`, `tenant_image`, `tenant_location`, `tenant_price`, `tenant_min_period`, `tenant_info`, `tenant_availability`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
-(1, '', 'Main Tenant AZ', '8 m x 15 m', 'xps-7zwvnvsaafy-unsplash.jpg', 'Lantai LG', 11500000, 1, 'Exclude listrik dan air', 1, 1, '2021-03-19 13:01:58', 1, '2021-04-01 20:52:09'),
+(1, '', 'Main Tenant AZ', '8 m x 15 m', 'xps-7zwvnvsaafy-unsplash.jpg', 'Lantai LG', 11500000, 1, 'Exclude listrik dan air', 2, 1, '2021-03-19 13:01:58', 1, '2021-04-01 20:52:09'),
 (2, '', 'Tenant Kecil', '5 m x 8 m', '', 'Lantai 1', 15000000, 6, 'Belum termasuk listrik dan air', 1, 1, '2021-03-24 17:41:42', 1, '2021-04-01 20:49:37'),
 (3, '', 'Tenant Lebih Besar', '8 m x 10 m', '', 'Lantai 1', 20000000, 2, 'Belum termasuk listrik dan air', 1, 1, '2021-03-24 17:42:25', 1, '2021-03-30 11:32:50'),
 (4, '', 'Tenant Bebas', '5 m x 5 m', '', 'Lantai 2', 10000000, 3, 'Belum termasuk listrik dan air', 1, 1, '2021-03-24 17:44:31', 1, '2021-03-30 11:32:57'),
@@ -206,6 +211,8 @@ CREATE TABLE `tbl_transactions` (
   `transaction_rent_type_id` int(2) NOT NULL,
   `transaction_active_status_id` int(2) NOT NULL,
   `transaction_contract_file` varchar(100) NOT NULL,
+  `transaction_contract_verif_id` int(2) NOT NULL,
+  `transaction_contract_verif_by` int(5) NOT NULL,
   `transaction_customer_id` int(5) NOT NULL,
   `transaction_date` datetime NOT NULL,
   `modified_by` int(5) NOT NULL,
@@ -216,8 +223,8 @@ CREATE TABLE `tbl_transactions` (
 -- Dumping data for table `tbl_transactions`
 --
 
-INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_no`, `transaction_tenant_id`, `transaction_rent_from`, `transaction_rent_to`, `transaction_type_of_business`, `transaction_company_name`, `transaction_note`, `transaction_rent_type_id`, `transaction_active_status_id`, `transaction_contract_file`, `transaction_customer_id`, `transaction_date`, `modified_by`, `modified_date`) VALUES
-(28, 'TRX-310321.001', 1, '2021-03-31 00:00:00', '2021-05-20 00:00:00', 'Makanan', 'PT Makanan Sehat', '', 1, 1, '', 1, '2021-03-31 13:37:15', 1, '2021-03-31 13:37:15');
+INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_no`, `transaction_tenant_id`, `transaction_rent_from`, `transaction_rent_to`, `transaction_type_of_business`, `transaction_company_name`, `transaction_note`, `transaction_rent_type_id`, `transaction_active_status_id`, `transaction_contract_file`, `transaction_contract_verif_id`, `transaction_contract_verif_by`, `transaction_customer_id`, `transaction_date`, `modified_by`, `modified_date`) VALUES
+(28, 'TRX-310321.001', 1, '2021-03-31 00:00:00', '2021-05-20 00:00:00', 'Makanan', 'PT Makanan Sehat', '', 1, 1, '', 0, 0, 1, '2021-03-31 13:37:15', 1, '2021-03-31 13:37:15');
 
 -- --------------------------------------------------------
 
@@ -319,13 +326,13 @@ ALTER TABLE `tbl_admins`
 -- AUTO_INCREMENT for table `tbl_payments`
 --
 ALTER TABLE `tbl_payments`
-  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tbl_status`
 --
 ALTER TABLE `tbl_status`
-  MODIFY `status_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `status_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `tbl_tenants`
@@ -337,7 +344,7 @@ ALTER TABLE `tbl_tenants`
 -- AUTO_INCREMENT for table `tbl_transactions`
 --
 ALTER TABLE `tbl_transactions`
-  MODIFY `transaction_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `transaction_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`

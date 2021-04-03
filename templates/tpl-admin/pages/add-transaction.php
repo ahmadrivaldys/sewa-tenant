@@ -62,6 +62,17 @@
                         </div>
                     </div>
                     <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Metode Pembayaran</label>
+                        <div class="col-sm-12 col-md-7">
+                            <select class="selectric form-control full-width" name="transaction_payment_method" id="transaction_payment_method" required>
+                                <option>- Pilih Metode Pembayaran -</option>
+                                <?php foreach($get_pay_mtd as $payment_method): ?>
+                                    <option value="<?php echo $payment_method->method_id; ?>"><?php echo $payment_method->method_bank_name; ?> - <?php echo $payment_method->method_type; ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-4">
                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Catatan</label>
                         <div class="col-sm-12 col-md-7">
                             <textarea class="form-control custom-textarea" name="transaction_note"></textarea>
