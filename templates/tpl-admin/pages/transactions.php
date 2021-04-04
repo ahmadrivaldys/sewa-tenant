@@ -1,3 +1,5 @@
+<?php $usertype = $this->session->userdata('usertype'); ?>
+
 <div class="card">
     <div class="card-header">
         <h4><?php echo $content_title; ?></h4>
@@ -12,7 +14,15 @@
                     <th class="text-center">Tenant</th>
                     <th class="text-center">Periode Sewa</th>
                     <th class="text-center">Status Sewa</th>
-                    <th class="text-center">Template Kontrak</th>
+                    <?php if($usertype == 'Customer'): ?>
+                        <th class="text-center">Template Kontrak</th>
+                    <?php endif; ?>
+                    <?php if($usertype == 'Administrator' OR $usertype == 'Leasing'): ?>
+                        <th class="text-center">Dokumen Kontrak</th>
+                    <?php endif; ?>
+                    <?php if($usertype == 'Administrator' OR $usertype == 'Billing'): ?>
+                        <th class="text-center">Bukti Pembayaran</th>
+                    <?php endif; ?>
                     <th class="text-center">Aksi</th>
                 </tr>
 
@@ -47,9 +57,29 @@
                                 <span class="badge badge-danger activestatus-label"><?php echo $transaction_list->status_name; ?></span>
                             <?php endif; ?>
                         </td>
-                        <td class="text-center">
-                            <a href="<?php echo base_url('dashboard/surat-perjanjian/'.$transaction_list->transaction_no); ?>">Unduh</a>
-                        </td>
+                        <?php if($usertype == 'Customer'): ?>
+                            <td class="text-center">
+                                <a href="<?php echo base_url('dashboard/surat-perjanjian/'.$transaction_list->transaction_no); ?>">Unduh</a>
+                            </td>
+                        <?php endif; ?>
+                        <?php if($usertype == 'Administrator' OR $usertype == 'Leasing'): ?>
+                            <td class="text-center">
+                                <?php if(!empty($transaction_list->transaction_contract_file)): ?>
+                                    <a href="#">Lihat</a>
+                                <?php else: ?>
+                                    -
+                                <?php endif; ?>
+                            </td>
+                        <?php endif; ?>
+                        <?php if($usertype == 'Administrator' OR $usertype == 'Billing'): ?>
+                            <td class="text-center">
+                                <?php if(!empty($transaction_list->payment_paymentslip_file)): ?>
+                                    <a href="#">Lihat</a>
+                                <?php else: ?>
+                                    -
+                                <?php endif; ?>
+                            </td>
+                        <?php endif; ?>
                         <td class="text-center">
                             <a href="<?php echo base_url('dashboard/rincian-sewa/'.$transaction_list->transaction_no); ?>" class="btn btn-primary">Detail</a>
                         </td>

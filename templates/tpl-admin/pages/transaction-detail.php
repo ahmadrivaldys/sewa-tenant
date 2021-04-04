@@ -7,9 +7,15 @@
                         <div class="section-title mt-0"><?php echo $page_title; ?></div>
                         <p class="section-lead mb-0"><?php echo $page_subtitle; ?></p>
                     </div>
-                    <div class="card-header-action">
-                        <a href="#" class="btn btn-icon icon-left btn-info button-radius" onclick="modal_trigger('unggah-perjanjian')"><i class="fas fa-upload"></i> Unggah Dok. Perjanjian</a>
-                    </div>
+                    <?php
+                        $usertype = $this->session->userdata('usertype');
+
+                        if($usertype == 'Customer'):
+                    ?>
+                        <div class="card-header-action">
+                            <a href="#" class="btn btn-icon icon-left btn-info button-radius" onclick="modal_trigger('unggah-perjanjian')"><i class="fas fa-upload"></i> Unggah Dok. Perjanjian</a>
+                        </div>
+                    <?php endif; ?>
                 </div>
                 <hr>
             </div>

@@ -157,8 +157,14 @@
     
     <hr>
     <div class="text-md-left">
-        <?php if($get_inv_data->payment_status_code == 1 AND $get_inv_data->payment_verif_code == 1 OR $get_inv_data->payment_status_code == 2 AND $get_inv_data->payment_verif_code == 2): ?>      
-            <button class="btn btn-primary btn-icon icon-left" onclick="modal_trigger('unggah-bukti-bayar')"><i class="fas fa-credit-card"></i> Unggah Bukti Pembayaran</button>
+        <?php
+            $usertype = $this->session->userdata('usertype');
+
+            if($usertype == 'Customer'):
+        ?>
+            <?php if($get_inv_data->payment_status_code == 1 AND $get_inv_data->payment_verif_code == 1 OR $get_inv_data->payment_status_code == 2 AND $get_inv_data->payment_verif_code == 2): ?>      
+                <button class="btn btn-primary btn-icon icon-left" onclick="modal_trigger('unggah-bukti-bayar')"><i class="fas fa-credit-card"></i> Unggah Bukti Pembayaran</button>
+            <?php endif; ?>
         <?php endif; ?>
 
         <?php if($get_inv_data->payment_status_code == 1 AND $get_inv_data->payment_verif_code == 1): ?>      

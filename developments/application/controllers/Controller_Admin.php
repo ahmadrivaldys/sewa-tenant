@@ -28,7 +28,7 @@ class Controller_Admin extends CI_Controller
 
 		if($usertype == "Administrator" OR $usertype == "Leasing")
 		{
-			$data['get_trx_list']  = $this->model_admin->get_transactions_list();
+			// $data['get_trx_list']  = $this->model_admin->get_transactions_list();
 			$data['page_title']    = 'Dashboard';
 			$data['page_subtitle'] = 'Di menu ini Anda dapat memantau keseluruhan ringkasan data.';
 			$data['content_title'] = 'Ringkasan Data';
@@ -43,7 +43,20 @@ class Controller_Admin extends CI_Controller
 
 	public function get_transactions_list()
 	{
-		$data['get_trx_list']  = $this->model_admin->get_transactions_list();
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		// Get user_id session
+		$user_id = $this->session->userdata('user_id');
+
+		if($usertype == 'Customer')
+		{
+			$where['transaction_customer_id'] = $user_id;
+		}
+
+		$where[1] = 1;
+
+		$data['get_trx_list']  = $this->model_admin->get_transactions_list($where);
         $data['page_title']    = 'Kelola Transaksi';
 		$data['page_subtitle'] = 'Di menu ini Anda dapat melihat pengajuan sewa tenant yang telah dibuat.';
 		$data['content_title'] = 'Daftar Transaksi';
@@ -76,7 +89,7 @@ class Controller_Admin extends CI_Controller
 
 	public function save_transaction_process()
 	{
-		// Get user_id
+		// Get user_id session
 		$user_id = $this->session->userdata('user_id');
 
 		// Getting all input
@@ -234,23 +247,14 @@ class Controller_Admin extends CI_Controller
 
 	public function view_transaction_detail($transaction_no)
 	{
-		// Get usertype session
-		$usertype = $this->session->userdata('usertype');
+		$where = $transaction_no;
 
-		if($usertype == "Customer")
-		{	
-			$where = $transaction_no;
-			$data['get_trx_detail']  = $this->model_admin->get_transaction_detail($where);
-			$data['page_title']      = 'Rincian Sewa';
-			$data['page_subtitle']   = 'Di menu ini Anda melihat rincian dari data pengajuan sewa Anda.';
-			$data['content_title']   = 'Rincian Sewa';
+		$data['get_trx_detail']  = $this->model_admin->get_transaction_detail($where);
+		$data['page_title']      = 'Rincian Sewa';
+		$data['page_subtitle']   = 'Di menu ini Anda melihat rincian dari data pengajuan sewa Anda.';
+		$data['content_title']   = 'Rincian Sewa';
 
-			$this->template->main('tpl-admin/pages/transaction-detail', $data);
-		}
-		else
-		{
-			redirect('dashboard/kelola-transaksi');
-		}
+		$this->template->main('tpl-admin/pages/transaction-detail', $data);
 	}
 
 	public function cancel_transaction()
@@ -294,23 +298,14 @@ class Controller_Admin extends CI_Controller
 
 	public function view_invoice($transaction_no)
 	{
-		// Get usertype session
-		$usertype = $this->session->userdata('usertype');
+		$where = $transaction_no;
 
-		if($usertype == "Customer")
-		{	
-			$where = $transaction_no;
-			$data['get_inv_data']  = $this->model_admin->get_transaction_detail($where);
-			$data['page_title']    = 'Tagihan';
-			$data['page_subtitle'] = 'Di menu ini Anda melihat rincian tagihan pembayaran.';
-			$data['content_title'] = 'Tagihan';
+		$data['get_inv_data']  = $this->model_admin->get_transaction_detail($where);
+		$data['page_title']    = 'Tagihan';
+		$data['page_subtitle'] = 'Di menu ini Anda melihat rincian tagihan pembayaran.';
+		$data['content_title'] = 'Tagihan';
 
-			$this->template->main('tpl-admin/pages/invoice', $data);
-		}
-		else
-		{
-			redirect('dashboard/kelola-transaksi');
-		}
+		$this->template->main('tpl-admin/pages/invoice', $data);
 	}
 
 	public function download_contract($transaction_no)

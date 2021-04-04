@@ -9,13 +9,15 @@ class Model_Admin extends CI_Model
         return $this->db->insert('tbl_transactions', $data);
     }
 
-    public function get_transactions_list()
+    public function get_transactions_list($where)
     {
-        $this->db->select('trx.transaction_no, trx.transaction_rent_from, trx.transaction_rent_to, trx.transaction_date, tnt.tenant_name, sts.status_code, sts.status_name');
+        $this->db->select('trx.transaction_no, trx.transaction_rent_from, trx.transaction_rent_to, trx.transaction_contract_file, trx.transaction_date, tnt.tenant_name, sts.status_code, sts.status_name, pay.payment_paymentslip_file');
         $this->db->from('tbl_transactions trx');
         $this->db->join('tbl_tenants tnt', 'tnt.tenant_id = trx.transaction_tenant_id');
         $this->db->join('tbl_status sts', 'sts.status_code = trx.transaction_active_status_id');
+        $this->db->join('tbl_payments pay', 'pay.payment_transaction_no = trx.transaction_no');
         $this->db->where('sts.status_category_code', 'ACTIVE_PERIOD');
+        $this->db->where($where);
 
         return $this->db->get()->result();
     }
