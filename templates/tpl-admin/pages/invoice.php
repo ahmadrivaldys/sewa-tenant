@@ -132,9 +132,9 @@
                         <tr>
                             <td>1</td>
                             <td><?php echo $get_inv_data->tenant_name; ?></td>
-                            <td class="text-center"><?php echo $get_inv_data->payment_nominal; ?></td>
+                            <td class="text-center"><?php echo rupiah($get_inv_data->payment_nominal); ?></td>
                             <td class="text-center"><?php echo date('d/m/Y', strtotime($get_inv_data->transaction_rent_from)) . ' - ' . date('d/m/Y', strtotime($get_inv_data->transaction_rent_to)); ?></td>
-                            <td class="text-right"><?php echo $get_inv_data->payment_nominal; ?></td>
+                            <td class="text-right"><?php echo rupiah($get_inv_data->payment_nominal); ?></td>
                         </tr>
                     </table>
                 </div>
@@ -147,7 +147,7 @@
                         <hr class="mt-2 mb-2">
                         <div class="invoice-detail-item">
                             <div class="invoice-detail-name">Total</div>
-                            <div class="invoice-detail-value invoice-detail-value-lg"><?php echo $get_inv_data->payment_nominal; ?></div>
+                            <div class="invoice-detail-value invoice-detail-value-lg"><?php echo rupiah($get_inv_data->payment_nominal); ?></div>
                         </div>
                     </div>
                 </div>

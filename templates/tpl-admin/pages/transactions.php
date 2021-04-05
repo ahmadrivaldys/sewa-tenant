@@ -65,7 +65,7 @@
                         <?php if($usertype == 'Administrator' OR $usertype == 'Leasing'): ?>
                             <td class="text-center">
                                 <?php if(!empty($transaction_list->transaction_contract_file)): ?>
-                                    <a href="#">Lihat</a>
+                                    <a href="#" onclick="modal_trigger('tampilkan-surat-perjanjian')">Lihat</a>
                                 <?php else: ?>
                                     -
                                 <?php endif; ?>
@@ -74,7 +74,7 @@
                         <?php if($usertype == 'Administrator' OR $usertype == 'Billing'): ?>
                             <td class="text-center">
                                 <?php if(!empty($transaction_list->payment_paymentslip_file)): ?>
-                                    <a href="#">Lihat</a>
+                                    <a href="#" onclick="modal_trigger('bukti-pembayaran')">Lihat</a>
                                 <?php else: ?>
                                     -
                                 <?php endif; ?>
@@ -93,3 +93,63 @@
         &nbsp;
     </div>
 </div>
+
+
+<!-- Modal Payment Slip -->
+<?php foreach($get_trx_list as $transaction_list): ?>
+    <div class="modal-backdrop" id="bukti-pembayaran" onclick="windowOnClick(this)">
+        <div class="modal-content modal-form-content">
+            <div class="modal-header modal-form-header">
+                <h5 class="modal-title">Bukti Pembayaran</h5>
+                <span class="close-modal" onclick="modal_trigger('bukti-pembayaran')">
+                    <svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'>
+                        <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='M368 368L144 144M368 144L144 368'/>
+                    </svg>
+                </span>
+            </div>
+            
+            <?php echo form_open_multipart('dashboard/verifikasi-pembayaran'); ?>
+                <div class="modal-body modal-form-body">
+
+                    <div class="text-center">
+                        <img src="<?php echo base_url('assets/uploads/payment-slip/'.$transaction_list->payment_paymentslip_file); ?>" style="width: 250px; margin: auto;" alt="Bukti Pembayaran">
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" onclick="modal_trigger('bukti-pembayaran')">Batal</button>
+                    <button type="submit" class="btn btn-primary">Verifikasi</button>
+                </div>
+            <?php echo form_close(); ?>
+        </div>
+    </div>
+<?php $no++; endforeach; ?>
+
+
+<!-- Modal Contract Document -->
+<?php foreach($get_trx_list as $transaction_list): ?>
+    <div class="modal-backdrop" id="tampilkan-surat-perjanjian" onclick="windowOnClick(this)">
+        <div class="modal-content modal-form-content">
+            <div class="modal-header modal-form-header">
+                <h5 class="modal-title">Surat Perjanjian</h5>
+                <span class="close-modal" onclick="modal_trigger('tampilkan-surat-perjanjian')">
+                    <svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'>
+                        <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='M368 368L144 144M368 144L144 368'/>
+                    </svg>
+                </span>
+            </div>
+            
+            <?php echo form_open_multipart('dashboard/verifikasi-pembayaran'); ?>
+                <div class="modal-body modal-form-body">
+
+                <a href="<?php echo base_url('assets/uploads/contract/'.$transaction_list->transaction_contract_file); ?>"><?php echo $transaction_list->transaction_contract_file; ?></a>
+                </div>
+
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" onclick="modal_trigger('tampilkan-surat-perjanjian')">Batal</button>
+                    <button type="submit" class="btn btn-primary">Verifikasi</button>
+                </div>
+            <?php echo form_close(); ?>
+        </div>
+    </div>
+<?php $no++; endforeach; ?>

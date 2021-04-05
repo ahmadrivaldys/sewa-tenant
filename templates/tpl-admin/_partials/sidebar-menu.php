@@ -36,7 +36,7 @@
                 <li <?php if($page_title == 'Kelola Akun Pelanggan') echo "class='active'"; ?>><a href="<?php echo $url_customer; ?>">Pelanggan</a></li>
             </ul>
         <?php else: ?>
-            <a href="<?php echo $url_admin; ?>" class="nav-link"><i class="far fa-user"></i> <span>Admin</span></a>
+            <a href="<?php echo $url_customer; ?>" class="nav-link"><i class="far fa-user"></i> <span>Pelanggan</span></a>
         <?php endif; ?>
     </li>
 <?php endif; ?>

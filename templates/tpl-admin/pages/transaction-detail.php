@@ -95,7 +95,7 @@
                             <td data-width="25" class="text-center px-0">:</td>
                             <td class="pl-0">
                                 <?php if($get_trx_detail->transaction_contract_file): ?>
-                                    <a href="<?php echo base_url('assets/uploads/'.$get_trx_detail->transaction_contract_file); ?>"><?php echo $get_trx_detail->transaction_contract_file; ?></a>
+                                    <a href="<?php echo base_url('assets/uploads/contract/'.$get_trx_detail->transaction_contract_file); ?>"><?php echo $get_trx_detail->transaction_contract_file; ?></a>
                                 <?php else: ?>
                                     -
                                 <?php endif; ?>

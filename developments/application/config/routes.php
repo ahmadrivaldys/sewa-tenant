@@ -79,6 +79,8 @@ $route['dashboard/unggah-perjanjian']         = 'Controller_Admin/upload_contrac
 $route['dashboard/batalkan-transaksi']        = 'Controller_Admin/cancel_transaction';
 $route['dashboard/unggah-bukti-bayar']        = 'Controller_Admin/upload_paymentslip';
 
+$route['dashboard/pelanggan/(:any)/(:num)/detail'] = 'Controller_Admin/view_customer_detail/$1/$2';
+
 
 // Routes for Auth
 $route['auth']                       = 'Controller_Auth';

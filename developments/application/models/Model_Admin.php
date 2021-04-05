@@ -190,7 +190,7 @@ class Model_Admin extends CI_Model
     // Customer
     public function get_customers_list()
     {
-        $this->db->select('user_identity_no, user_taxpayer_id_no, user_fullname, user_email, user_photo');
+        $this->db->select('user_id, user_identity_no, user_taxpayer_id_no, user_fullname, user_email, user_photo');
         $this->db->from('tbl_users');
 
         return $this->db->get()->result();
@@ -202,6 +202,15 @@ class Model_Admin extends CI_Model
         $this->db->from('tbl_users usr');
         $this->db->join('tbl_transactions trx', 'trx.transaction_customer_id = usr.user_id');
         $this->db->where($where);
+
+        return $this->db->get()->row();
+    }
+
+    public function get_customer_detail($where)
+    {
+        $this->db->select('*');
+        $this->db->from('tbl_users usr');
+        $this->db->where('usr.user_id', $where);
 
         return $this->db->get()->row();
     }

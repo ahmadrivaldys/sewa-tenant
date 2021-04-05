@@ -29,7 +29,7 @@
                         <td><?php echo $tenant_list->tenant_name; ?></td>
                         <td><?php echo $tenant_list->tenant_size; ?></td>
                         <td><?php echo $tenant_list->tenant_location; ?></td>
-                        <td><?php echo $tenant_list->tenant_price; ?></td>
+                        <td><?php echo rupiah($tenant_list->tenant_price); ?></td>
                         <td><?php echo $tenant_list->tenant_min_period; ?></td>
                         <td><?php echo $tenant_list->tenant_info; ?></td>
                         <td>

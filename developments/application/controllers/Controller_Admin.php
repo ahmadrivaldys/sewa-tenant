@@ -410,7 +410,7 @@ class Controller_Admin extends CI_Controller
 		if(!empty($transaction_no))
 		{
 			$config['upload_path']   = './assets/uploads/contract';
-			$config['allowed_types'] = 'doc|docx|pdf';
+			$config['allowed_types'] = 'doc|docx|rtf';
 			$config['file_name']     = 'Unggahan_Surat-Perjanjian_' . str_replace('.', '-', $transaction_no);
 		
 			$this->load->library('upload', $config);
@@ -533,6 +533,7 @@ class Controller_Admin extends CI_Controller
 
 		$where['tenant_id'] = $tenant_id;
 		$get_tenant_info    = $this->model_admin->get_tenant($where);
+		$get_tenant_info->tenant_price = rupiah($get_tenant_info->tenant_price);
 
 		echo json_encode($get_tenant_info);
 	}
@@ -886,7 +887,7 @@ class Controller_Admin extends CI_Controller
 		// Get usertype session
 		$usertype = $this->session->userdata('usertype');
 
-		if($usertype == "Administrator")
+		if($usertype == "Administrator" OR $usertype == "Leasing")
 		{
 			$data['get_cus_list']  = $this->model_admin->get_customers_list();
 			$data['page_title']    = 'Kelola Akun Pelanggan';
@@ -897,14 +898,19 @@ class Controller_Admin extends CI_Controller
 		}
 		else
 		{
-			if($usertype == "Leasing")
-			{
-				redirect('dashboard');
-			}
-			else
-			{
-				redirect('dashboard/kelola-transaksi');
-			}
+			redirect('dashboard/kelola-transaksi');
 		}
+	}
+
+	public function view_customer_detail($customer_name, $customer_id)
+	{
+		$where = $customer_id;
+
+		$data['get_cus_detail'] = $this->model_admin->get_customer_detail($where);
+		$data['page_title']     = 'Rincian Data Pelanggan';
+		$data['page_subtitle']  = 'Di menu ini Anda melihat rincian data pelanggan.';
+		$data['content_title']  = 'Rincian Data Pelanggan';
+
+		$this->template->main('tpl-admin/pages/customer-detail', $data);
 	}
 }

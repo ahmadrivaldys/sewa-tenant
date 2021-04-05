@@ -89,8 +89,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <div class="section-body">
                         <?php if($page_title != 'Rincian Sewa'): ?>
                             <?php if($page_title != 'Tagihan'): ?>
-                            <h2 class="section-title"><?php echo $page_title; ?></h2>
-                            <p class="section-lead"><?php echo $page_subtitle; ?></p>
+                                <?php if($page_title != 'Rincian Data Pelanggan'): ?>
+                                    <h2 class="section-title"><?php echo $page_title; ?></h2>
+                                    <p class="section-lead"><?php echo $page_subtitle; ?></p>
+                                <?php endif; ?>
                             <?php endif; ?>
                         <?php endif; ?>
                         
@@ -122,11 +124,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url('assets/plugins/jquery.pwstrength/jquery.pwstrength.min.js'); ?>"></script>
     <script src="<?php echo base_url('assets/plugins/jquery-selectric/jquery.selectric.min.js'); ?>"></script>
     <script src="<?php echo base_url('assets/plugins/bootstrap-daterangepicker/bootstrap-daterangepicker.js'); ?>"></script>
+    <script src="<?php echo base_url('assets/plugins/cleave.js/cleave.min.js'); ?>"></script>
     <script>
         "use strict";
 
         // PW Strength
         $(".pwstrength").pwstrength();
+
+
+        var cleave = new Cleave('.tenant-price', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
 
 
         // Modal
