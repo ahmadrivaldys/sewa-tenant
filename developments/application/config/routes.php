@@ -78,6 +78,8 @@ $route['dashboard/surat-perjanjian/(:any)']   = 'Controller_Admin/download_contr
 $route['dashboard/unggah-perjanjian']         = 'Controller_Admin/upload_contract';
 $route['dashboard/batalkan-transaksi']        = 'Controller_Admin/cancel_transaction';
 $route['dashboard/unggah-bukti-bayar']        = 'Controller_Admin/upload_paymentslip';
+$route['dashboard/verifikasi-pembayaran']     = 'Controller_Admin/verify_payment';
+$route['dashboard/verifikasi-kontrak']        = 'Controller_Admin/verify_contract';
 
 $route['dashboard/pelanggan/(:any)/(:num)/detail'] = 'Controller_Admin/view_customer_detail/$1/$2';
 

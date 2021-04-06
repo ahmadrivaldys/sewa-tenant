@@ -11,12 +11,20 @@ class Model_Admin extends CI_Model
 
     public function get_transactions_list($where)
     {
-        $this->db->select('trx.transaction_no, trx.transaction_rent_from, trx.transaction_rent_to, trx.transaction_contract_file, trx.transaction_date, tnt.tenant_name, sts.status_code, sts.status_name, pay.payment_paymentslip_file');
+        $this->db->select('trx.transaction_no, trx.transaction_rent_from, trx.transaction_rent_to');
+        $this->db->select('trx.transaction_contract_file, trx.transaction_contract_verif_id, trx.transaction_date');
+        $this->db->select('tnt.tenant_name, sts.status_code, sts.status_name, pay.payment_paymentslip_file');
+        $this->db->select('vec.status_code as verifycon_status_code, vec.status_name as verifycon_status_name');
+        $this->db->select('vep.status_code as verifyps_status_code, vep.status_name as verifyps_status_name');
         $this->db->from('tbl_transactions trx');
         $this->db->join('tbl_tenants tnt', 'tnt.tenant_id = trx.transaction_tenant_id');
-        $this->db->join('tbl_status sts', 'sts.status_code = trx.transaction_active_status_id');
         $this->db->join('tbl_payments pay', 'pay.payment_transaction_no = trx.transaction_no');
+        $this->db->join('tbl_status sts', 'sts.status_code = trx.transaction_active_status_id');
+        $this->db->join('tbl_status vec', 'vec.status_code = trx.transaction_contract_verif_id');
+        $this->db->join('tbl_status vep', 'vep.status_code = pay.payment_verif_id');
         $this->db->where('sts.status_category_code', 'ACTIVE_PERIOD');
+        $this->db->where('vec.status_category_code', 'DOC_VERIFICATION');
+        $this->db->where('vep.status_category_code', 'PAY_VERIFICATION');
         $this->db->where($where);
 
         return $this->db->get()->result();
@@ -44,10 +52,12 @@ class Model_Admin extends CI_Model
         $this->db->select('trx.transaction_no, trx.transaction_rent_from, trx.transaction_rent_to');
         $this->db->select('trx.transaction_type_of_business, trx.transaction_company_name, trx.transaction_contract_file');
         $this->db->select('trx.transaction_date, tnt.tenant_id, tnt.tenant_name');
+        $this->db->select('trx.transaction_contract_verif_id, pay.payment_verif_id');
         $this->db->select('ren.status_code as rent_status_code, ren.status_name as rent_status');
         $this->db->select('rty.status_code as renttype_status_code, rty.status_name as renttype_status');
         $this->db->select('pst.status_code as payment_status_code, pst.status_name as payment_status');
         $this->db->select('vep.status_code as payment_verif_code, vep.status_name as payment_verif');
+        $this->db->select('vec.status_code as verifycon_status_code, vec.status_name as verifycon_status_name');
         $this->db->select('usr.user_fullname, usr.user_address, pay.payment_nominal');
         $this->db->select('mtd.method_bank_name, mtd.method_bank_account, mtd.method_type');
         $this->db->from('tbl_transactions trx');
@@ -58,11 +68,13 @@ class Model_Admin extends CI_Model
         $this->db->join('tbl_payments pay', 'pay.payment_transaction_no = trx.transaction_no');
         $this->db->join('tbl_status pst', 'pst.status_code = pay.payment_status_id');
         $this->db->join('tbl_status vep', 'vep.status_code = pay.payment_verif_id');
+        $this->db->join('tbl_status vec', 'vec.status_code = trx.transaction_contract_verif_id');
         $this->db->join('tbl_payment_methods mtd', 'mtd.method_id = pay.payment_method_id');
         $this->db->where('ren.status_category_code', 'ACTIVE_PERIOD');
         $this->db->where('rty.status_category_code', 'RENT_TYPE');
         $this->db->where('pst.status_category_code', 'PAYMENT');
         $this->db->where('vep.status_category_code', 'PAY_VERIFICATION');
+        $this->db->where('vec.status_category_code', 'DOC_VERIFICATION');
         $this->db->where('trx.transaction_no', $where);
 
         return $this->db->get()->row();

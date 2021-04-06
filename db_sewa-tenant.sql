@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 05, 2021 at 12:23 PM
+-- Generation Time: Apr 06, 2021 at 01:16 PM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -98,7 +98,7 @@ CREATE TABLE `tbl_payments` (
 --
 
 INSERT INTO `tbl_payments` (`payment_id`, `payment_nominal`, `payment_method_id`, `payment_status_id`, `payment_transaction_no`, `payment_paymentslip_file`, `payment_verif_id`, `payment_verif_by`, `payment_date`) VALUES
-(1, 11500000, 1, 2, 'TRX-310321.001', 'Unggahan_Bukti-Pembayaran_TRX-310321-001.png', 2, 0, '2021-04-05 17:01:38');
+(1, 11500000, 1, 2, 'TRX-310321.001', 'Unggahan_Bukti-Pembayaran_TRX-310321-001.png', 3, 1, '2021-04-05 17:01:38');
 
 -- --------------------------------------------------------
 
@@ -158,7 +158,10 @@ INSERT INTO `tbl_status` (`status_id`, `status_code`, `status_name`, `status_cat
 (12, 2, 'Ditutup', 'Akun', 'ACCOUNT'),
 (13, 1, 'Menunggu Verifikasi Pembayaran', 'Verifikasi Pembayaran', 'PAY_VERIFICATION'),
 (14, 2, 'Proses Verifikasi Pembayaran', 'Verifikasi Pembayaran', 'PAY_VERIFICATION'),
-(15, 3, 'Pembayaran Terverifikasi', 'Verifikasi Pembayaran', 'PAY_VERIFICATION');
+(15, 3, 'Pembayaran Terverifikasi', 'Verifikasi Pembayaran', 'PAY_VERIFICATION'),
+(16, 1, 'Menunggu Verifikasi Dokumen', 'Verifikasi Dokumen', 'DOC_VERIFICATION'),
+(17, 2, 'Proses Verifikasi Dokumen', 'Verifikasi Dokumen', 'DOC_VERIFICATION'),
+(18, 3, 'Dokumen Terverifikasi', 'Verifikasi Dokumen', 'DOC_VERIFICATION');
 
 -- --------------------------------------------------------
 
@@ -225,7 +228,7 @@ CREATE TABLE `tbl_transactions` (
 --
 
 INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_no`, `transaction_tenant_id`, `transaction_rent_from`, `transaction_rent_to`, `transaction_type_of_business`, `transaction_company_name`, `transaction_note`, `transaction_rent_type_id`, `transaction_active_status_id`, `transaction_contract_file`, `transaction_contract_verif_id`, `transaction_contract_verif_by`, `transaction_customer_id`, `transaction_date`, `modified_by`, `modified_date`) VALUES
-(28, 'TRX-310321.001', 1, '2021-03-31 00:00:00', '2021-05-20 00:00:00', 'Makanan', 'PT Makanan Sehat', '', 1, 1, 'Unggahan_Surat-Perjanjian_TRX-310321-001.rtf', 0, 0, 1, '2021-03-31 13:37:15', 1, '2021-03-31 13:37:15');
+(28, 'TRX-310321.001', 1, '2021-03-31 00:00:00', '2021-05-20 00:00:00', 'Makanan', 'PT Makanan Sehat', '', 1, 2, 'Unggahan_Surat-Perjanjian_TRX-310321-001.rtf', 3, 1, 1, '2021-03-31 13:37:15', 1, '2021-03-31 13:37:15');
 
 -- --------------------------------------------------------
 
@@ -333,7 +336,7 @@ ALTER TABLE `tbl_payments`
 -- AUTO_INCREMENT for table `tbl_status`
 --
 ALTER TABLE `tbl_status`
-  MODIFY `status_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `status_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `tbl_tenants`

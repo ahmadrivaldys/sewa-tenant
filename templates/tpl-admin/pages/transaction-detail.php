@@ -12,9 +12,11 @@
 
                         if($usertype == 'Customer'):
                     ?>
-                        <div class="card-header-action">
-                            <a href="#" class="btn btn-icon icon-left btn-info button-radius" onclick="modal_trigger('unggah-perjanjian')"><i class="fas fa-upload"></i> Unggah Dok. Perjanjian</a>
-                        </div>
+                        <?php if($get_trx_detail->verifycon_status_code != 3): ?>
+                            <div class="card-header-action">
+                                <a href="#" class="btn btn-icon icon-left btn-info button-radius" onclick="modal_trigger('unggah-perjanjian')"><i class="fas fa-upload"></i> Unggah Dok. Perjanjian</a>
+                            </div>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </div>
                 <hr>
@@ -96,6 +98,7 @@
                             <td class="pl-0">
                                 <?php if($get_trx_detail->transaction_contract_file): ?>
                                     <a href="<?php echo base_url('assets/uploads/contract/'.$get_trx_detail->transaction_contract_file); ?>"><?php echo $get_trx_detail->transaction_contract_file; ?></a>
+                                    (<?php echo $get_trx_detail->verifycon_status_name; ?>)
                                 <?php else: ?>
                                     -
                                 <?php endif; ?>

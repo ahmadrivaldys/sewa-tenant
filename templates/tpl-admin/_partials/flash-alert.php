@@ -1,5 +1,10 @@
 <!-- Transaction -->
-<?php if($this->session->flashdata('add-transaction-succeeded') OR $this->session->flashdata('add-contract-succeeded') OR $this->session->flashdata('cancel-transaction-succeeded') OR $this->session->flashdata('add-paymentslip-succeeded')): ?>
+<?php if($this->session->flashdata('add-transaction-succeeded')
+        OR $this->session->flashdata('add-contract-succeeded')
+        OR $this->session->flashdata('cancel-transaction-succeeded')
+        OR $this->session->flashdata('add-paymentslip-succeeded')
+        OR $this->session->flashdata('contract-verification-succeeded')
+        OR $this->session->flashdata('payment-verification-succeeded')): ?>
     <div class="alert alert-success alert-dismissible show fade">
         <div class="alert-body">
             <button class="close" data-dismiss="alert">
@@ -22,12 +27,25 @@
                 {
                     echo $this->session->flashdata('add-paymentslip-succeeded');
                 }
+                if($this->session->flashdata('contract-verification-succeeded'))
+                {
+                    echo $this->session->flashdata('contract-verification-succeeded');
+                }
+                if($this->session->flashdata('payment-verification-succeeded'))
+                {
+                    echo $this->session->flashdata('payment-verification-succeeded');
+                }
             ?>
         </div>
     </div>
 <?php endif; ?>
 
-<?php if($this->session->flashdata('add-transaction-failed') OR $this->session->flashdata('add-contract-failed') OR $this->session->flashdata('cancel-transaction-failed') OR $this->session->flashdata('add-paymentslip-failed')): ?>
+<?php if($this->session->flashdata('add-transaction-failed')
+        OR $this->session->flashdata('add-contract-failed')
+        OR $this->session->flashdata('cancel-transaction-failed')
+        OR $this->session->flashdata('add-paymentslip-failed')
+        OR $this->session->flashdata('contract-verification-failed')
+        OR $this->session->flashdata('payment-verification-failed')): ?>
     <div class="alert alert-danger alert-dismissible show fade">
         <div class="alert-body">
             <button class="close" data-dismiss="alert">
@@ -49,6 +67,14 @@
                 if($this->session->flashdata('add-paymentslip-failed'))
                 {
                     echo $this->session->flashdata('add-paymentslip-failed');
+                }
+                if($this->session->flashdata('contract-verification-failed'))
+                {
+                    echo $this->session->flashdata('contract-verification-failed');
+                }
+                if($this->session->flashdata('payment-verification-failed'))
+                {
+                    echo $this->session->flashdata('payment-verification-failed');
                 }
             ?>
         </div>

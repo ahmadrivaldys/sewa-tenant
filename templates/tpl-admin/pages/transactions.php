@@ -110,15 +110,21 @@
             
             <?php echo form_open_multipart('dashboard/verifikasi-pembayaran'); ?>
                 <div class="modal-body modal-form-body">
+                    <input type="hidden" name="transaction_no" value="<?php echo $transaction_list->transaction_no; ?>"/>
 
                     <div class="text-center">
-                        <img src="<?php echo base_url('assets/uploads/payment-slip/'.$transaction_list->payment_paymentslip_file); ?>" style="width: 250px; margin: auto;" alt="Bukti Pembayaran">
+                        <img src="<?php echo base_url('assets/uploads/payment-slip/'.$transaction_list->payment_paymentslip_file); ?>" style="width: 250px; margin: auto; display: block;" alt="Bukti Pembayaran">
+                        <?php if($transaction_list->verifyps_status_code == 3): ?>
+                            <span class="badge badge-success activestatus-label mt-3"><?php echo $transaction_list->verifyps_status_name ?></span>
+                        <?php endif; ?>
                     </div>
                 </div>
 
                 <div class="modal-footer bg-whitesmoke br">
                     <button type="button" class="btn btn-secondary" onclick="modal_trigger('bukti-pembayaran')">Batal</button>
-                    <button type="submit" class="btn btn-primary">Verifikasi</button>
+                    <?php if($transaction_list->verifyps_status_code != 3): ?>
+                        <button type="submit" class="btn btn-primary">Verifikasi</button>
+                    <?php endif; ?>
                 </div>
             <?php echo form_close(); ?>
         </div>
@@ -139,15 +145,23 @@
                 </span>
             </div>
             
-            <?php echo form_open_multipart('dashboard/verifikasi-pembayaran'); ?>
+            <?php echo form_open('dashboard/verifikasi-kontrak'); ?>
                 <div class="modal-body modal-form-body">
+                    <input type="hidden" name="transaction_no" value="<?php echo $transaction_list->transaction_no; ?>"/>
 
-                <a href="<?php echo base_url('assets/uploads/contract/'.$transaction_list->transaction_contract_file); ?>"><?php echo $transaction_list->transaction_contract_file; ?></a>
+                    <div class="text-center">
+                        <a href="<?php echo base_url('assets/uploads/contract/'.$transaction_list->transaction_contract_file); ?>"><?php echo $transaction_list->transaction_contract_file; ?></a>
+                        <?php if($transaction_list->verifycon_status_code == 3): ?>
+                            <span class="badge badge-success activestatus-label mt-2"><?php echo $transaction_list->verifycon_status_name ?></span>
+                        <?php endif; ?>
+                    </div>
                 </div>
 
                 <div class="modal-footer bg-whitesmoke br">
                     <button type="button" class="btn btn-secondary" onclick="modal_trigger('tampilkan-surat-perjanjian')">Batal</button>
-                    <button type="submit" class="btn btn-primary">Verifikasi</button>
+                    <?php if($transaction_list->verifycon_status_code != 3): ?>
+                        <button type="submit" class="btn btn-primary">Verifikasi</button>
+                    <?php endif; ?>
                 </div>
             <?php echo form_close(); ?>
         </div>

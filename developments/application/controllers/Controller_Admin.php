@@ -101,7 +101,7 @@ class Controller_Admin extends CI_Controller
         $transaction_pay_method = $this->input->post('transaction_payment_method');
         $transaction_note       = $this->input->post('transaction_note');
 
-		// Validation if tenant has not been selected
+		// Validation if tenant and payment method has not been selected
 		if($transaction_tenant_id == 0 OR $transaction_pay_method == 0)
 		{
 			$err_message = '';
@@ -160,19 +160,20 @@ class Controller_Admin extends CI_Controller
 			}
 
 			// Gathering all data that already available to be stored into the database
-			$data['transaction_tenant_id']        = $transaction_tenant_id;
-			$data['transaction_no']               = $transaction_no;
-			$data['transaction_rent_from']        = date_create($transaction_rent_from)->format('Y-m-d H:i:s');
-			$data['transaction_rent_to']          = date_create($transaction_rent_to)->format('Y-m-d H:i:s');
-			$data['transaction_type_of_business'] = $transaction_tob;
-			$data['transaction_company_name']     = $transaction_comp_name;
-			$data['transaction_note']             = $transaction_note;
-			$data['transaction_rent_type_id']     = 1;
-			$data['transaction_active_status_id'] = 1;
-			$data['transaction_customer_id']      = $user_id;
-			$data['transaction_date']             = $transaction_date;
-			$data['modified_by']                  = $user_id;
-			$data['modified_date']                = $transaction_date;
+			$data['transaction_tenant_id']         = $transaction_tenant_id;
+			$data['transaction_no']                = $transaction_no;
+			$data['transaction_rent_from']         = date_create($transaction_rent_from)->format('Y-m-d H:i:s');
+			$data['transaction_rent_to']           = date_create($transaction_rent_to)->format('Y-m-d H:i:s');
+			$data['transaction_type_of_business']  = $transaction_tob;
+			$data['transaction_company_name']      = $transaction_comp_name;
+			$data['transaction_note']              = $transaction_note;
+			$data['transaction_rent_type_id']      = 1;
+			$data['transaction_active_status_id']  = 1;
+			$data['transaction_contract_verif_id'] = 1;
+			$data['transaction_customer_id']       = $user_id;
+			$data['transaction_date']              = $transaction_date;
+			$data['modified_by']                   = $user_id;
+			$data['modified_date']                 = $transaction_date;
 
 			// Validation for minimum rental time
 			$rent_date_from   = date_create($transaction_rent_from);
@@ -249,10 +250,10 @@ class Controller_Admin extends CI_Controller
 	{
 		$where = $transaction_no;
 
-		$data['get_trx_detail']  = $this->model_admin->get_transaction_detail($where);
-		$data['page_title']      = 'Rincian Sewa';
-		$data['page_subtitle']   = 'Di menu ini Anda melihat rincian dari data pengajuan sewa Anda.';
-		$data['content_title']   = 'Rincian Sewa';
+		$data['get_trx_detail'] = $this->model_admin->get_transaction_detail($where);
+		$data['page_title']     = 'Rincian Sewa';
+		$data['page_subtitle']  = 'Di menu ini Anda melihat rincian dari data pengajuan sewa Anda.';
+		$data['content_title']  = 'Rincian Sewa';
 
 		$this->template->main('tpl-admin/pages/transaction-detail', $data);
 	}
@@ -419,7 +420,8 @@ class Controller_Admin extends CI_Controller
 			{
 				$upload_contract = $this->upload->data();
 
-				$data['transaction_contract_file'] = $upload_contract['file_name'];
+				$data['transaction_contract_file']     = $upload_contract['file_name'];
+				$data['transaction_contract_verif_id'] = 2;
 				$where['transaction_no'] = $transaction_no;
 
 				// Storing the data into the database
@@ -438,6 +440,53 @@ class Controller_Admin extends CI_Controller
 
 			// After finish, user will be redirected to 'Rincian Sewa' page
 			redirect('dashboard/rincian-sewa/' . $transaction_no);
+		}
+		else
+		{
+			echo "Akses langsung tidak diperbolehkan.";
+		}
+	}
+
+	public function verify_contract()
+	{
+		// Get user_id session
+		$user_id = $this->session->userdata('user_id');
+
+		$transaction_no = $this->input->post('transaction_no');
+
+		if(!empty($transaction_no))
+		{
+			$where['transaction_no'] = $transaction_no;
+			$data['transaction_contract_verif_id'] = 3;
+			$data['transaction_contract_verif_by'] = $user_id;
+
+			// Storing the data into the database
+			$verify_contract = $this->model_admin->update_transaction($data, $where);
+
+			$get_trx_detail = $this->model_admin->get_transaction_detail($transaction_no);
+
+			$contract_ver_status = $get_trx_detail->transaction_contract_verif_id;
+			$payment_ver_status  = $get_trx_detail->payment_verif_id;
+
+			if($contract_ver_status == 3 && $payment_ver_status == 3)
+			{
+				$active['transaction_active_status_id'] = 2;
+
+				$this->model_admin->update_transaction($active, $where);
+			}
+
+			// Show the message if the upload process was succeeded
+			if($verify_contract)
+			{
+				$this->session->set_flashdata('contract-verification-succeeded', 'Berhasil melakukan verifikasi surat perjanjian/kontrak.');
+			}
+			else
+			{
+				$this->session->set_flashdata('contract-verification-failed', 'Gagal melakukan verifikasi surat perjanjian/kontrak.');
+			}
+
+			// After finish, user will be redirected to 'Kelola Transaksi' page
+			redirect('dashboard/kelola-transaksi');
 		}
 		else
 		{
@@ -498,6 +547,54 @@ class Controller_Admin extends CI_Controller
 
 			// After finish, user will be redirected to 'Tagihan' page
 			redirect('dashboard/tagihan/' . $transaction_no);
+		}
+		else
+		{
+			echo "Akses langsung tidak diperbolehkan.";
+		}
+	}
+
+	public function verify_payment()
+	{
+		// Get user_id session
+		$user_id = $this->session->userdata('user_id');
+
+		$transaction_no = $this->input->post('transaction_no');
+
+		if(!empty($transaction_no))
+		{
+			$where['payment_transaction_no'] = $transaction_no;
+			$data['payment_verif_id'] = 3;
+			$data['payment_verif_by'] = $user_id;
+
+			// Storing the data into the database
+			$verify_payment = $this->model_admin->update_payment($data, $where);
+
+			$get_trx_detail = $this->model_admin->get_transaction_detail($transaction_no);
+
+			$contract_ver_status = $get_trx_detail->transaction_contract_verif_id;
+			$payment_ver_status  = $get_trx_detail->payment_verif_id;
+
+			if($contract_ver_status == 3 && $payment_ver_status == 3)
+			{
+				$whr['transaction_no'] = $transaction_no;
+				$active['transaction_active_status_id'] = 2;
+
+				$this->model_admin->update_transaction($active, $whr);
+			}
+
+			// Show the message if the upload process was succeeded
+			if($verify_payment)
+			{
+				$this->session->set_flashdata('payment-verification-succeeded', 'Berhasil melakukan verifikasi bukti pembayaran.');
+			}
+			else
+			{
+				$this->session->set_flashdata('payment-verification-failed', 'Gagal melakukan verifikasi bukti pembayaran.');
+			}
+
+			// After finish, user will be redirected to 'Kelola Transaksi' page
+			redirect('dashboard/kelola-transaksi');
 		}
 		else
 		{
