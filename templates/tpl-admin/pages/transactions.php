@@ -127,7 +127,7 @@
                         <tr>
                             <td class="text-center"><?php echo $no; ?></td>
                             <td class="text-center">
-                                <a href="<?php echo base_url('dashboard/tagihan/'.$renewal_list->renewal_no); ?>" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lihat Tagihan">
+                                <a href="<?php echo base_url('dashboard/tagihan-perpanjangan/'.$renewal_list->renewal_no); ?>" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lihat Tagihan">
                                     <?php echo $renewal_list->renewal_no; ?>
                                 </a>
                             </td>
@@ -156,7 +156,7 @@
                             <?php if($usertype == 'Administrator' OR $usertype == 'Leasing'): ?>
                                 <td class="text-center">
                                     <?php if(!empty($renewal_list->renewal_contract_file)): ?>
-                                        <a href="#" onclick="modal_trigger('tampilkan-surat-perjanjian')">Lihat</a>
+                                        <a href="#" onclick="modal_trigger('tampilkan-surat-perjanjian-perpanjangan')">Lihat</a>
                                     <?php else: ?>
                                         -
                                     <?php endif; ?>
@@ -165,7 +165,7 @@
                             <?php if($usertype == 'Administrator' OR $usertype == 'Billing'): ?>
                                 <td class="text-center">
                                     <?php if(!empty($renewal_list->payment_paymentslip_file)): ?>
-                                        <a href="#" onclick="modal_trigger('bukti-pembayaran')">Lihat</a>
+                                        <a href="#" onclick="modal_trigger('bukti-pembayaran-perpanjangan')">Lihat</a>
                                     <?php else: ?>
                                         -
                                     <?php endif; ?>
@@ -242,7 +242,7 @@
                     <input type="hidden" name="transaction_no" value="<?php echo $transaction_list->transaction_no; ?>"/>
 
                     <div class="text-center">
-                        <a href="<?php echo base_url('assets/uploads/contract/'.$transaction_list->transaction_contract_file); ?>"><?php echo $transaction_list->transaction_contract_file; ?></a>
+                        <a href="<?php echo base_url('assets/uploads/contract/'.$transaction_list->transaction_contract_file); ?>" style="display: block;"><?php echo $transaction_list->transaction_contract_file; ?></a>
                         <?php if($transaction_list->verifycon_status_code == 3): ?>
                             <span class="badge badge-success activestatus-label mt-2"><?php echo $transaction_list->verifycon_status_name ?></span>
                         <?php endif; ?>
@@ -252,6 +252,82 @@
                 <div class="modal-footer bg-whitesmoke br">
                     <button type="button" class="btn btn-secondary" onclick="modal_trigger('tampilkan-surat-perjanjian')">Batal</button>
                     <?php if($transaction_list->verifycon_status_code != 3): ?>
+                        <button type="submit" class="btn btn-primary">Verifikasi</button>
+                    <?php endif; ?>
+                </div>
+            <?php echo form_close(); ?>
+        </div>
+    </div>
+<?php $no++; endforeach; ?>
+
+
+<!-- Renewal - Modal Payment Slip -->
+<?php foreach($get_ret_list as $renewal_list): ?>
+    <div class="modal-backdrop" id="bukti-pembayaran-perpanjangan" onclick="windowOnClick(this)">
+        <div class="modal-content modal-form-content">
+            <div class="modal-header modal-form-header">
+                <h5 class="modal-title">Bukti Pembayaran</h5>
+                <span class="close-modal" onclick="modal_trigger('bukti-pembayaran-perpanjangan')">
+                    <svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'>
+                        <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='M368 368L144 144M368 144L144 368'/>
+                    </svg>
+                </span>
+            </div>
+            
+            <?php echo form_open_multipart('dashboard/verifikasi-pembayaran'); ?>
+                <div class="modal-body modal-form-body">
+                    <input type="hidden" name="transaction_no" value="<?php echo $renewal_list->renewal_no; ?>"/>
+                    <input type="hidden" name="transaction_type" value="renewal"/>
+
+                    <div class="text-center">
+                        <img src="<?php echo base_url('assets/uploads/payment-slip/'.$renewal_list->payment_paymentslip_file); ?>" style="width: 250px; margin: auto; display: block;" alt="Bukti Pembayaran">
+                        <?php if($renewal_list->verifyps_status_code == 3): ?>
+                            <span class="badge badge-success activestatus-label mt-3"><?php echo $renewal_list->verifyps_status_name ?></span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" onclick="modal_trigger('bukti-pembayaran-perpanjangan')">Batal</button>
+                    <?php if($renewal_list->verifyps_status_code != 3): ?>
+                        <button type="submit" class="btn btn-primary">Verifikasi</button>
+                    <?php endif; ?>
+                </div>
+            <?php echo form_close(); ?>
+        </div>
+    </div>
+<?php $no++; endforeach; ?>
+
+
+<!-- Renewal - Modal Contract Document -->
+<?php foreach($get_ret_list as $renewal_list): ?>
+    <div class="modal-backdrop" id="tampilkan-surat-perjanjian-perpanjangan" onclick="windowOnClick(this)">
+        <div class="modal-content modal-form-content">
+            <div class="modal-header modal-form-header">
+                <h5 class="modal-title">Surat Perjanjian</h5>
+                <span class="close-modal" onclick="modal_trigger('tampilkan-surat-perjanjian-perpanjangan')">
+                    <svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'>
+                        <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='M368 368L144 144M368 144L144 368'/>
+                    </svg>
+                </span>
+            </div>
+            
+            <?php echo form_open('dashboard/verifikasi-kontrak'); ?>
+                <div class="modal-body modal-form-body">
+                    <input type="hidden" name="transaction_no" value="<?php echo $renewal_list->renewal_no; ?>"/>
+                    <input type="hidden" name="transaction_type" value="renewal"/>
+
+                    <div class="text-center">
+                        <a href="<?php echo base_url('assets/uploads/contract/'.$renewal_list->renewal_contract_file); ?>" style="display: block;"><?php echo $renewal_list->renewal_contract_file; ?></a>
+                        <?php if($renewal_list->verifycon_status_code == 3): ?>
+                            <span class="badge badge-success activestatus-label mt-2"><?php echo $renewal_list->verifycon_status_name ?></span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" onclick="modal_trigger('tampilkan-surat-perjanjian-perpanjangan')">Batal</button>
+                    <?php if($renewal_list->verifycon_status_code != 3): ?>
                         <button type="submit" class="btn btn-primary">Verifikasi</button>
                     <?php endif; ?>
                 </div>

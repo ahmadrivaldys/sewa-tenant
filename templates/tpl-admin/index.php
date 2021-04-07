@@ -91,8 +91,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <?php if($page_title != 'Tagihan'): ?>
                                 <?php if($page_title != 'Rincian Data Pelanggan'): ?>
                                     <?php if($page_title != 'Rincian Perpanjangan Sewa'): ?>
-                                        <h2 class="section-title"><?php echo $page_title; ?></h2>
-                                        <p class="section-lead"><?php echo $page_subtitle; ?></p>
+                                        <?php if($page_title != 'Tagihan Perpanjangan'): ?>
+                                            <h2 class="section-title"><?php echo $page_title; ?></h2>
+                                            <p class="section-lead"><?php echo $page_subtitle; ?></p>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 <?php endif; ?>
                             <?php endif; ?>

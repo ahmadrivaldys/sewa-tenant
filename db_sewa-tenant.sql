@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 07, 2021 at 11:07 AM
+-- Generation Time: Apr 07, 2021 at 01:15 PM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -99,9 +99,8 @@ CREATE TABLE `tbl_payments` (
 --
 
 INSERT INTO `tbl_payments` (`payment_id`, `payment_nominal`, `payment_method_id`, `payment_status_id`, `payment_transaction_no`, `payment_paymentslip_file`, `payment_verif_id`, `payment_verif_by`, `payment_type`, `payment_date`) VALUES
-(1, 11500000, 1, 2, 'TRX-310321.001', 'Unggahan_Bukti-Pembayaran_TRX-310321-001.png', 3, 1, 'new', '2021-04-05 17:01:38'),
-(4, 11500000, 6, 1, 'TRX-310321.001', '', 1, 0, 'renewal', '0000-00-00 00:00:00'),
-(5, 11500000, 4, 1, 'TRX-310321.001', '', 1, 0, '', '0000-00-00 00:00:00');
+(1, 11500000, 1, 2, 'TRX-310321.001', 'Unggahan_Bukti-Pembayaran_TRX-310321-001.png', 3, 1, 'new', '2021-04-07 17:48:59'),
+(7, 11500000, 2, 2, 'TRX-310321.001', 'Unggahan_Bukti-Pembayaran_TRX-310321-001_Perpanjangan.jpg', 3, 1, 'renewal', '2021-04-07 17:53:49');
 
 -- --------------------------------------------------------
 
@@ -159,7 +158,7 @@ CREATE TABLE `tbl_renewal_transactions` (
 --
 
 INSERT INTO `tbl_renewal_transactions` (`renewal_id`, `renewal_no`, `renewal_tenant_id`, `renewal_rent_from`, `renewal_rent_to`, `renewal_type_of_business`, `renewal_company_name`, `renewal_note`, `renewal_rent_type_id`, `renewal_active_status_id`, `renewal_contract_file`, `renewal_contract_verif_id`, `renewal_contract_verif_by`, `renewal_customer_id`, `renewal_date`, `modified_by`, `modified_date`) VALUES
-(3, 'TRX-310321.001', 1, '2021-04-07 00:00:00', '2021-05-08 00:00:00', 'Makanan', 'PT Makanan Sehat', '', 2, 1, '', 1, 0, 1, '2021-04-07 16:05:44', 1, '2021-04-07 16:05:44');
+(5, 'TRX-310321.001', 1, '2021-04-07 00:00:00', '2021-05-08 00:00:00', 'Makanan', 'PT Makanan Sehat', '', 2, 2, 'Unggahan_Surat-Perjanjian_TRX-310321-001_Perpanjangan.rtf', 3, 1, 1, '2021-04-07 16:33:43', 1, '2021-04-07 16:33:43');
 
 -- --------------------------------------------------------
 
@@ -372,13 +371,13 @@ ALTER TABLE `tbl_admins`
 -- AUTO_INCREMENT for table `tbl_payments`
 --
 ALTER TABLE `tbl_payments`
-  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `tbl_renewal_transactions`
 --
 ALTER TABLE `tbl_renewal_transactions`
-  MODIFY `renewal_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `renewal_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_status`

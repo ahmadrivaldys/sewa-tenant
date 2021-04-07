@@ -77,6 +77,7 @@ $route['dashboard/ajukan-perpanjangan-sewa/process'] = 'Controller_Admin/save_re
 $route['dashboard/rincian-sewa/(:any)']       = 'Controller_Admin/view_transaction_detail/$1';
 $route['dashboard/rincian-perpanjangan/(:any)'] = 'Controller_Admin/view_renewal_detail/$1';
 $route['dashboard/tagihan/(:any)']            = 'Controller_Admin/view_invoice/$1';
+$route['dashboard/tagihan-perpanjangan/(:any)'] = 'Controller_Admin/view_renewal_invoice/$1';
 $route['dashboard/surat-perjanjian/(:any)']   = 'Controller_Admin/download_contract/$1';
 $route['dashboard/unggah-perjanjian']         = 'Controller_Admin/upload_contract';
 $route['dashboard/batalkan-transaksi']        = 'Controller_Admin/cancel_transaction';

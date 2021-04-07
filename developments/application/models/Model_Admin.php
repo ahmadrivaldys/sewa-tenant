@@ -180,6 +180,11 @@ class Model_Admin extends CI_Model
         return $this->db->get()->row();
     }
 
+    public function update_renewal_transaction($data, $where)
+    {
+        return $this->db->update('tbl_renewal_transactions', $data, $where);
+    }
+
 
     // Payment
     public function add_payment_data($data)

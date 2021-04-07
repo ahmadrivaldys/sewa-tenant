@@ -148,6 +148,7 @@
         <?php echo form_open_multipart('dashboard/unggah-perjanjian'); ?>
             <div class="modal-body modal-form-body">
                 <input type="hidden" name="transaction_no" value="<?php echo $get_ret_detail->renewal_no; ?>"/>
+                <input type="hidden" name="transaction_type" value="renewal"/>
 
                 <div class="form-group">
                     <div class="input-group">

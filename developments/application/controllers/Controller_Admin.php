@@ -87,6 +87,7 @@ class Controller_Admin extends CI_Controller
 		}
 
 		$where[1] = 1;
+		$where_renewal[1] = 1;
 
 		$data['get_trx_list']  = $this->model_admin->get_transactions_list($where);
 		$data['get_ret_list']  = $this->model_admin->get_renewals_list($where_renewal);
@@ -233,6 +234,7 @@ class Controller_Admin extends CI_Controller
 				$pay['payment_method_id']      = $transaction_pay_method;
 				$pay['payment_status_id']      = 1;
 				$pay['payment_verif_id']       = 1;
+				$pay['payment_type']           = 'new';
 				$pay['payment_transaction_no'] = $transaction_no;
 
 				$save_payment = $this->model_admin->add_payment_data($pay);
@@ -329,6 +331,18 @@ class Controller_Admin extends CI_Controller
 		{
 			echo "Akses langsung tidak diperbolehkan.";
 		}
+	}
+
+	public function view_invoice($transaction_no)
+	{
+		$where = $transaction_no;
+
+		$data['get_inv_data']  = $this->model_admin->get_transaction_detail($where);
+		$data['page_title']    = 'Tagihan';
+		$data['page_subtitle'] = 'Di menu ini Anda melihat rincian tagihan pembayaran.';
+		$data['content_title'] = 'Tagihan';
+
+		$this->template->main('tpl-admin/pages/invoice', $data);
 	}
 
 	public function view_add_renewal()
@@ -435,6 +449,7 @@ class Controller_Admin extends CI_Controller
 				$pay['payment_method_id']      = $renewal_pay_method;
 				$pay['payment_status_id']      = 1;
 				$pay['payment_verif_id']       = 1;
+				$pay['payment_type']           = 'renewal';
 				$pay['payment_transaction_no'] = $transaction_no;
 
 				$save_payment = $this->model_admin->add_payment_data($pay);
@@ -488,16 +503,16 @@ class Controller_Admin extends CI_Controller
 		$this->template->main('tpl-admin/pages/renewal-detail', $data);
 	}
 
-	public function view_invoice($transaction_no)
+	public function view_renewal_invoice($renewal_no)
 	{
-		$where = $transaction_no;
+		$where = $renewal_no;
 
-		$data['get_inv_data']  = $this->model_admin->get_transaction_detail($where);
-		$data['page_title']    = 'Tagihan';
+		$data['get_inv_data']  = $this->model_admin->get_renewal_detail($where);
+		$data['page_title']    = 'Tagihan Perpanjangan';
 		$data['page_subtitle'] = 'Di menu ini Anda melihat rincian tagihan pembayaran.';
-		$data['content_title'] = 'Tagihan';
+		$data['content_title'] = 'Tagihan Perpanjangan';
 
-		$this->template->main('tpl-admin/pages/invoice', $data);
+		$this->template->main('tpl-admin/pages/renewal-invoice', $data);
 	}
 
 	public function download_contract($transaction_no)
@@ -597,13 +612,22 @@ class Controller_Admin extends CI_Controller
 
 	public function upload_contract()
 	{
-		$transaction_no = $this->input->post('transaction_no');
+		$transaction_no   = $this->input->post('transaction_no');
+		$transaction_type = $this->input->post('transaction_type');
 
 		if(!empty($transaction_no))
 		{
 			$config['upload_path']   = './assets/uploads/contract';
 			$config['allowed_types'] = 'doc|docx|rtf';
-			$config['file_name']     = 'Unggahan_Surat-Perjanjian_' . str_replace('.', '-', $transaction_no);
+
+			if($transaction_type == 'renewal')
+			{
+				$config['file_name']     = 'Unggahan_Surat-Perjanjian_' . str_replace('.', '-', $transaction_no) . '_Perpanjangan';
+			}
+			else
+			{
+				$config['file_name']     = 'Unggahan_Surat-Perjanjian_' . str_replace('.', '-', $transaction_no);
+			}
 		
 			$this->load->library('upload', $config);
 		
@@ -611,15 +635,36 @@ class Controller_Admin extends CI_Controller
 			{
 				$upload_contract = $this->upload->data();
 
-				$data['transaction_contract_file']     = $upload_contract['file_name'];
-				$data['transaction_contract_verif_id'] = 2;
-				$where['transaction_no'] = $transaction_no;
+				if($transaction_type == 'renewal')
+				{
+					$data['renewal_contract_file']     = $upload_contract['file_name'];
+					$data['renewal_contract_verif_id'] = 2;
+					$where['renewal_no'] = $transaction_no;
 
-				// Storing the data into the database
-				$save_contract = $this->model_admin->update_transaction($data, $where);
+					// Storing the data into the database
+					$save_contract = $this->model_admin->update_renewal_transaction($data, $where);
 
-				// Show the message if the upload process was succeeded
-				$this->session->set_flashdata('add-contract-succeeded', 'Pengunggahan surat perjanjian berhasil.');
+					// Show the message if the upload process was succeeded
+					$this->session->set_flashdata('add-contract-succeeded', 'Pengunggahan surat perjanjian berhasil.');
+
+					// After finish, user will be redirected to 'Rincian Perpanjangan Sewa' page
+					redirect('dashboard/rincian-perpanjangan/' . $transaction_no);
+				}
+				else
+				{
+					$data['transaction_contract_file']     = $upload_contract['file_name'];
+					$data['transaction_contract_verif_id'] = 2;
+					$where['transaction_no'] = $transaction_no;
+
+					// Storing the data into the database
+					$save_contract = $this->model_admin->update_transaction($data, $where);
+
+					// Show the message if the upload process was succeeded
+					$this->session->set_flashdata('add-contract-succeeded', 'Pengunggahan surat perjanjian berhasil.');
+
+					// After finish, user will be redirected to 'Rincian Sewa' page
+					redirect('dashboard/rincian-sewa/' . $transaction_no);
+				}
 			}
 			else
 			{
@@ -628,9 +673,6 @@ class Controller_Admin extends CI_Controller
 				// Show the message if the upload process was failed
 				$this->session->set_flashdata('add-contract-failed', $error);
 			}
-
-			// After finish, user will be redirected to 'Rincian Sewa' page
-			redirect('dashboard/rincian-sewa/' . $transaction_no);
 		}
 		else
 		{
@@ -643,27 +685,52 @@ class Controller_Admin extends CI_Controller
 		// Get user_id session
 		$user_id = $this->session->userdata('user_id');
 
-		$transaction_no = $this->input->post('transaction_no');
+		$transaction_no   = $this->input->post('transaction_no');
+		$transaction_type = $this->input->post('transaction_type');
 
 		if(!empty($transaction_no))
 		{
-			$where['transaction_no'] = $transaction_no;
-			$data['transaction_contract_verif_id'] = 3;
-			$data['transaction_contract_verif_by'] = $user_id;
-
-			// Storing the data into the database
-			$verify_contract = $this->model_admin->update_transaction($data, $where);
-
-			$get_trx_detail = $this->model_admin->get_transaction_detail($transaction_no);
-
-			$contract_ver_status = $get_trx_detail->transaction_contract_verif_id;
-			$payment_ver_status  = $get_trx_detail->payment_verif_id;
-
-			if($contract_ver_status == 3 && $payment_ver_status == 3)
+			if($transaction_type == 'renewal')
 			{
-				$active['transaction_active_status_id'] = 2;
+				$where['renewal_no'] = $transaction_no;
+				$data['renewal_contract_verif_id'] = 3;
+				$data['renewal_contract_verif_by'] = $user_id;
 
-				$this->model_admin->update_transaction($active, $where);
+				// Storing the data into the database
+				$verify_contract = $this->model_admin->update_renewal_transaction($data, $where);
+
+				$get_ret_detail = $this->model_admin->get_renewal_detail($transaction_no);
+
+				$contract_ver_status = $get_ret_detail->renewal_contract_verif_id;
+				$payment_ver_status  = $get_ret_detail->payment_verif_id;
+
+				if($contract_ver_status == 3 && $payment_ver_status == 3)
+				{
+					$active['renewal_active_status_id'] = 2;
+
+					$this->model_admin->update_renewal_transaction($active, $where);
+				}
+			}
+			else
+			{
+				$where['transaction_no'] = $transaction_no;
+				$data['transaction_contract_verif_id'] = 3;
+				$data['transaction_contract_verif_by'] = $user_id;
+
+				// Storing the data into the database
+				$verify_contract = $this->model_admin->update_transaction($data, $where);
+
+				$get_trx_detail = $this->model_admin->get_transaction_detail($transaction_no);
+
+				$contract_ver_status = $get_trx_detail->transaction_contract_verif_id;
+				$payment_ver_status  = $get_trx_detail->payment_verif_id;
+
+				if($contract_ver_status == 3 && $payment_ver_status == 3)
+				{
+					$active['transaction_active_status_id'] = 2;
+
+					$this->model_admin->update_transaction($active, $where);
+				}
 			}
 
 			// Show the message if the upload process was succeeded
@@ -687,13 +754,22 @@ class Controller_Admin extends CI_Controller
 
 	public function upload_paymentslip()
 	{
-		$transaction_no = $this->input->post('transaction_no');
+		$transaction_no   = $this->input->post('transaction_no');
+		$transaction_type = $this->input->post('transaction_type');
 
 		if(!empty($transaction_no))
 		{
 			$config['upload_path']   = './assets/uploads/payment-slip';
 			$config['allowed_types'] = 'gif|jpg|png|jpeg|bmp';
-			$config['file_name']     = 'Unggahan_Bukti-Pembayaran_' . str_replace('.', '-', $transaction_no);
+			
+			if($transaction_type == 'renewal')
+			{
+				$config['file_name']     = 'Unggahan_Bukti-Pembayaran_' . str_replace('.', '-', $transaction_no) . '_Perpanjangan';
+			}
+			else
+			{
+				$config['file_name']     = 'Unggahan_Bukti-Pembayaran_' . str_replace('.', '-', $transaction_no);
+			}
 		
 			$this->load->library('upload', $config);
 		
@@ -722,11 +798,20 @@ class Controller_Admin extends CI_Controller
 				$data['payment_date']             = date_create('now')->format('Y-m-d H:i:s');
 				$where['payment_transaction_no']  = $transaction_no;
 
+				if($transaction_type == 'renewal')
+				{
+					$where['payment_type'] = 'renewal';
+				}
+				else
+				{
+					$where['payment_type'] = 'new';
+				}
+
 				// Storing the data into the database
 				$save_paymentslip = $this->model_admin->update_payment($data, $where);
 
 				// Show the message if the upload process was succeeded
-				$this->session->set_flashdata('add-paymentslip-succeeded', 'Pengunggahan bukti pembayaran berhasil.');
+				$this->session->set_flashdata('add-paymentslip-succeeded', 'Pengunggahan bukti pembayaran berhasil.');				
 			}
 			else
 			{
@@ -736,8 +821,16 @@ class Controller_Admin extends CI_Controller
 				$this->session->set_flashdata('add-paymentslip-failed', $error);
 			}
 
-			// After finish, user will be redirected to 'Tagihan' page
-			redirect('dashboard/tagihan/' . $transaction_no);
+			if($transaction_type == 'renewal')
+			{
+				// After finish, user will be redirected to 'Tagihan Perpanjangan' page
+				redirect('dashboard/tagihan-perpanjangan/' . $transaction_no);
+			}
+			else
+			{
+				// After finish, user will be redirected to 'Tagihan' page
+				redirect('dashboard/tagihan/' . $transaction_no);
+			}
 		}
 		else
 		{
@@ -750,7 +843,8 @@ class Controller_Admin extends CI_Controller
 		// Get user_id session
 		$user_id = $this->session->userdata('user_id');
 
-		$transaction_no = $this->input->post('transaction_no');
+		$transaction_no   = $this->input->post('transaction_no');
+		$transaction_type = $this->input->post('transaction_type');
 
 		if(!empty($transaction_no))
 		{
@@ -758,20 +852,45 @@ class Controller_Admin extends CI_Controller
 			$data['payment_verif_id'] = 3;
 			$data['payment_verif_by'] = $user_id;
 
-			// Storing the data into the database
-			$verify_payment = $this->model_admin->update_payment($data, $where);
-
-			$get_trx_detail = $this->model_admin->get_transaction_detail($transaction_no);
-
-			$contract_ver_status = $get_trx_detail->transaction_contract_verif_id;
-			$payment_ver_status  = $get_trx_detail->payment_verif_id;
-
-			if($contract_ver_status == 3 && $payment_ver_status == 3)
+			if($transaction_type == 'renewal')
 			{
-				$whr['transaction_no'] = $transaction_no;
-				$active['transaction_active_status_id'] = 2;
+				$where['payment_type'] = 'renewal';
 
-				$this->model_admin->update_transaction($active, $whr);
+				// Storing the data into the database
+				$verify_payment = $this->model_admin->update_payment($data, $where);
+
+				$get_ret_detail = $this->model_admin->get_renewal_detail($transaction_no);
+
+				$contract_ver_status = $get_ret_detail->renewal_contract_verif_id;
+				$payment_ver_status  = $get_ret_detail->payment_verif_id;
+
+				if($contract_ver_status == 3 && $payment_ver_status == 3)
+				{
+					$whr['renewal_no'] = $transaction_no;
+					$active['renewal_active_status_id'] = 2;
+
+					$this->model_admin->update_renewal_transaction($active, $whr);
+				}
+			}
+			else
+			{
+				$where['payment_type'] = 'new';
+
+				// Storing the data into the database
+				$verify_payment = $this->model_admin->update_payment($data, $where);
+
+				$get_trx_detail = $this->model_admin->get_transaction_detail($transaction_no);
+
+				$contract_ver_status = $get_trx_detail->transaction_contract_verif_id;
+				$payment_ver_status  = $get_trx_detail->payment_verif_id;
+
+				if($contract_ver_status == 3 && $payment_ver_status == 3)
+				{
+					$whr['transaction_no'] = $transaction_no;
+					$active['transaction_active_status_id'] = 2;
+
+					$this->model_admin->update_transaction($active, $whr);
+				}
 			}
 
 			// Show the message if the upload process was succeeded
@@ -877,7 +996,7 @@ class Controller_Admin extends CI_Controller
         if(!empty($tenant_image_name))
         {
             // Setting up the configuration for upload
-            $config['upload_path']   = './assets/images/';
+            $config['upload_path']   = './assets/images/admin/tenant';
             $config['allowed_types'] = 'gif|jpg|png|jpeg|bmp';
             $config['file_name']     = str_replace(" ", "-", strtolower($tenant_image_name));
 
