@@ -7,7 +7,9 @@
             OR $page_title == 'Ajukan Sewa'
             OR $page_title == 'Rincian Sewa'
             OR $page_title == 'Tagihan'
-            OR $page_title == 'Rincian Data Pelanggan'): ?>
+            OR $page_title == 'Rincian Data Pelanggan'
+            OR $page_title == 'Ajukan Perpanjangan Sewa'
+            OR $page_title == 'Rincian Perpanjangan Sewa'): ?>
 
         <div class="section-header-back">
             <a href="#" onclick="back_to_previous()" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>

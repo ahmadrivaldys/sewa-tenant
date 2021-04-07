@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 06, 2021 at 01:16 PM
+-- Generation Time: Apr 07, 2021 at 11:07 AM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -90,6 +90,7 @@ CREATE TABLE `tbl_payments` (
   `payment_paymentslip_file` varchar(100) NOT NULL,
   `payment_verif_id` int(2) NOT NULL,
   `payment_verif_by` int(5) NOT NULL,
+  `payment_type` varchar(10) NOT NULL,
   `payment_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -97,8 +98,10 @@ CREATE TABLE `tbl_payments` (
 -- Dumping data for table `tbl_payments`
 --
 
-INSERT INTO `tbl_payments` (`payment_id`, `payment_nominal`, `payment_method_id`, `payment_status_id`, `payment_transaction_no`, `payment_paymentslip_file`, `payment_verif_id`, `payment_verif_by`, `payment_date`) VALUES
-(1, 11500000, 1, 2, 'TRX-310321.001', 'Unggahan_Bukti-Pembayaran_TRX-310321-001.png', 3, 1, '2021-04-05 17:01:38');
+INSERT INTO `tbl_payments` (`payment_id`, `payment_nominal`, `payment_method_id`, `payment_status_id`, `payment_transaction_no`, `payment_paymentslip_file`, `payment_verif_id`, `payment_verif_by`, `payment_type`, `payment_date`) VALUES
+(1, 11500000, 1, 2, 'TRX-310321.001', 'Unggahan_Bukti-Pembayaran_TRX-310321-001.png', 3, 1, 'new', '2021-04-05 17:01:38'),
+(4, 11500000, 6, 1, 'TRX-310321.001', '', 1, 0, 'renewal', '0000-00-00 00:00:00'),
+(5, 11500000, 4, 1, 'TRX-310321.001', '', 1, 0, '', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -124,6 +127,39 @@ INSERT INTO `tbl_payment_methods` (`method_id`, `method_bank_name`, `method_bank
 (4, 'BCA', '123456789006', 'Akun Virtual'),
 (5, 'Mandiri', '135792468006', 'Akun Virtual'),
 (6, 'BNI', '1122334455006', 'Akun Virtual');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_renewal_transactions`
+--
+
+CREATE TABLE `tbl_renewal_transactions` (
+  `renewal_id` int(5) NOT NULL,
+  `renewal_no` varchar(20) NOT NULL,
+  `renewal_tenant_id` int(3) NOT NULL,
+  `renewal_rent_from` datetime NOT NULL,
+  `renewal_rent_to` datetime NOT NULL,
+  `renewal_type_of_business` varchar(50) NOT NULL,
+  `renewal_company_name` varchar(50) NOT NULL,
+  `renewal_note` varchar(250) NOT NULL,
+  `renewal_rent_type_id` int(2) NOT NULL,
+  `renewal_active_status_id` int(2) NOT NULL,
+  `renewal_contract_file` varchar(100) NOT NULL,
+  `renewal_contract_verif_id` int(2) NOT NULL,
+  `renewal_contract_verif_by` int(5) NOT NULL,
+  `renewal_customer_id` int(5) NOT NULL,
+  `renewal_date` datetime NOT NULL,
+  `modified_by` int(5) NOT NULL,
+  `modified_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_renewal_transactions`
+--
+
+INSERT INTO `tbl_renewal_transactions` (`renewal_id`, `renewal_no`, `renewal_tenant_id`, `renewal_rent_from`, `renewal_rent_to`, `renewal_type_of_business`, `renewal_company_name`, `renewal_note`, `renewal_rent_type_id`, `renewal_active_status_id`, `renewal_contract_file`, `renewal_contract_verif_id`, `renewal_contract_verif_by`, `renewal_customer_id`, `renewal_date`, `modified_by`, `modified_date`) VALUES
+(3, 'TRX-310321.001', 1, '2021-04-07 00:00:00', '2021-05-08 00:00:00', 'Makanan', 'PT Makanan Sehat', '', 2, 1, '', 1, 0, 1, '2021-04-07 16:05:44', 1, '2021-04-07 16:05:44');
 
 -- --------------------------------------------------------
 
@@ -228,7 +264,7 @@ CREATE TABLE `tbl_transactions` (
 --
 
 INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_no`, `transaction_tenant_id`, `transaction_rent_from`, `transaction_rent_to`, `transaction_type_of_business`, `transaction_company_name`, `transaction_note`, `transaction_rent_type_id`, `transaction_active_status_id`, `transaction_contract_file`, `transaction_contract_verif_id`, `transaction_contract_verif_by`, `transaction_customer_id`, `transaction_date`, `modified_by`, `modified_date`) VALUES
-(28, 'TRX-310321.001', 1, '2021-03-31 00:00:00', '2021-05-20 00:00:00', 'Makanan', 'PT Makanan Sehat', '', 1, 2, 'Unggahan_Surat-Perjanjian_TRX-310321-001.rtf', 3, 1, 1, '2021-03-31 13:37:15', 1, '2021-03-31 13:37:15');
+(28, 'TRX-310321.001', 1, '2021-03-31 00:00:00', '2021-04-07 13:07:41', 'Makanan', 'PT Makanan Sehat', '', 1, 3, 'Unggahan_Surat-Perjanjian_TRX-310321-001.rtf', 3, 1, 1, '2021-03-31 13:37:15', 1, '2021-03-31 13:37:15');
 
 -- --------------------------------------------------------
 
@@ -286,6 +322,12 @@ ALTER TABLE `tbl_payments`
   ADD PRIMARY KEY (`payment_id`);
 
 --
+-- Indexes for table `tbl_renewal_transactions`
+--
+ALTER TABLE `tbl_renewal_transactions`
+  ADD PRIMARY KEY (`renewal_id`);
+
+--
 -- Indexes for table `tbl_status`
 --
 ALTER TABLE `tbl_status`
@@ -330,7 +372,13 @@ ALTER TABLE `tbl_admins`
 -- AUTO_INCREMENT for table `tbl_payments`
 --
 ALTER TABLE `tbl_payments`
-  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `tbl_renewal_transactions`
+--
+ALTER TABLE `tbl_renewal_transactions`
+  MODIFY `renewal_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tbl_status`

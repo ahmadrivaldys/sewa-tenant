@@ -26,6 +26,37 @@ class Controller_Admin extends CI_Controller
 		// Get usertype session
 		$usertype = $this->session->userdata('usertype');
 
+		// Check if the transaction has ended or not
+		$get_trx_list = $this->model_admin->get_all_transactions();
+		$today_date = date_create('now')->format('d/m/Y');
+		
+		foreach($get_trx_list as $trx_list)
+		{
+			// -- Update end time for transaction
+			$trx_enddate              = date('d/m/Y', strtotime($trx_list->transaction_rent_to));
+			$trx_active_status        = $trx_list->transaction_active_status_id;
+			$trx_no['transaction_no'] = $trx_list->transaction_no;
+
+			$trx['transaction_active_status_id'] = 3;
+
+			if($today_date == $trx_enddate && $trx_active_status != 3)
+			{
+				$this->model_admin->update_transaction($trx, $trx_no);
+			}
+
+			// -- Update tenant availability to 'available' after the transaction is not renewed/extended within 7 days
+			$trx_7days = date('d/m/Y', strtotime('+7 days', strtotime($trx_list->transaction_rent_to)));
+			$tenant_id = $trx_list->transaction_tenant_id;
+
+			if($today_date == $trx_7days && $trx_active_status == 3)
+			{
+				$where_tnt['tenant_id'] = $tenant_id;
+				$tnt['tenant_availability'] = 1;
+
+				$this->model_admin->update_tenant($tnt, $where_tnt);
+			}
+		}
+
 		if($usertype == "Administrator" OR $usertype == "Leasing")
 		{
 			// $data['get_trx_list']  = $this->model_admin->get_transactions_list();
@@ -51,12 +82,14 @@ class Controller_Admin extends CI_Controller
 
 		if($usertype == 'Customer')
 		{
-			$where['transaction_customer_id'] = $user_id;
+			$where['trx.transaction_customer_id']     = $user_id;
+			$where_renewal['ret.renewal_customer_id'] = $user_id;
 		}
 
 		$where[1] = 1;
 
 		$data['get_trx_list']  = $this->model_admin->get_transactions_list($where);
+		$data['get_ret_list']  = $this->model_admin->get_renewals_list($where_renewal);
         $data['page_title']    = 'Kelola Transaksi';
 		$data['page_subtitle'] = 'Di menu ini Anda dapat melihat pengajuan sewa tenant yang telah dibuat.';
 		$data['content_title'] = 'Daftar Transaksi';
@@ -251,6 +284,7 @@ class Controller_Admin extends CI_Controller
 		$where = $transaction_no;
 
 		$data['get_trx_detail'] = $this->model_admin->get_transaction_detail($where);
+		$data['check_renewal']  = $this->model_admin->get_renewal($where);
 		$data['page_title']     = 'Rincian Sewa';
 		$data['page_subtitle']  = 'Di menu ini Anda melihat rincian dari data pengajuan sewa Anda.';
 		$data['content_title']  = 'Rincian Sewa';
@@ -295,6 +329,163 @@ class Controller_Admin extends CI_Controller
 		{
 			echo "Akses langsung tidak diperbolehkan.";
 		}
+	}
+
+	public function view_add_renewal()
+	{
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		// Get transaction no
+		$transaction_no = $this->input->post('transaction_no');
+
+		if(!empty($transaction_no))
+		{
+			if($usertype == "Customer")
+			{
+				$data['get_prev_trx']  = $this->model_admin->get_previous_transaction($transaction_no);
+				$data['get_pay_mtd']   = $this->model_admin->get_payment_method_list();
+				$data['page_title']    = 'Ajukan Perpanjangan Sewa';
+				$data['page_subtitle'] = 'Di menu ini Anda mengajukan perpanjangan masa sewa tenant yang telah berakhir.';
+				$data['content_title'] = 'Ajukan Perpanjangan Sewa';
+
+				$this->template->main('tpl-admin/pages/add-renewal', $data);
+			}
+			else
+			{
+				redirect('dashboard/kelola-transaksi');
+			}
+		}
+		else
+		{
+			echo "Akses langsung tidak diperbolehkan.";
+		}
+	}
+
+	public function save_renewal_process()
+	{
+		// Get user_id session
+		$user_id = $this->session->userdata('user_id');
+
+		// Get transaction no
+		$transaction_no = $this->input->post('transaction_no');
+
+		// Getting all input
+        $renewal_rent_from  = $this->input->post('renewal_rent_from');
+        $renewal_rent_to    = $this->input->post('renewal_rent_to');
+        $renewal_pay_method = $this->input->post('renewal_payment_method');
+        $renewal_note       = $this->input->post('renewal_note');
+
+		// Validation if payment method has not been selected
+		if($renewal_pay_method == 0)
+		{
+			$err_message = 'Harap pilih metode pembayarannya terlebih dulu.';
+
+			$this->session->set_flashdata('payment-not-selected', $err_message);
+
+			// User will be redirected to 'Ajukan Perpanjangan Sewa' page
+			redirect('dashboard/rincian-sewa/' . $transaction_no);
+		}
+		else
+		{
+			// Date of renewal transaction was added
+			$renewal_date = date_create('now')->format('Y-m-d H:i:s');
+
+			// Get previous transaction
+			$get_prev_trx = $this->model_admin->get_previous_transaction($transaction_no);
+
+			// Gathering all data that already available to be stored into the database
+			$data['renewal_tenant_id']         = $get_prev_trx->transaction_tenant_id;
+			$data['renewal_no']                = $transaction_no;
+			$data['renewal_rent_from']         = date_create($renewal_rent_from)->format('Y-m-d H:i:s');
+			$data['renewal_rent_to']           = date_create($renewal_rent_to)->format('Y-m-d H:i:s');
+			$data['renewal_type_of_business']  = $get_prev_trx->transaction_type_of_business;
+			$data['renewal_company_name']      = $get_prev_trx->transaction_company_name;
+			$data['renewal_note']              = $renewal_note;
+			$data['renewal_rent_type_id']      = 2;
+			$data['renewal_active_status_id']  = 1;
+			$data['renewal_contract_verif_id'] = 1;
+			$data['renewal_customer_id']       = $user_id;
+			$data['renewal_date']              = $renewal_date;
+			$data['modified_by']               = $user_id;
+			$data['modified_date']             = $renewal_date;
+
+			// Validation for minimum rental time
+			$rent_date_from   = date_create($renewal_rent_from);
+			$rent_date_to     = date_create($renewal_rent_to);
+			$rent_date_diff   = date_diff($rent_date_from, $rent_date_to);
+
+			$rent_total_month = $rent_date_diff->m;
+			$rent_total_day   = $rent_date_diff->d;
+			$rent_total_time  = '';
+
+			// -- Get tenant minimum rental time
+			$where['tenant_id'] = $get_prev_trx->transaction_tenant_id;
+			$tenant_info        = $this->model_admin->get_tenant($where);
+			$tenant_min_period  = $tenant_info->tenant_min_period;
+
+			// -- If minimum rental time is qualified, store the data into the database. If not, show the error message.
+			if($rent_total_month >= $tenant_min_period)
+			{
+				// Storing the data into the database (create renewal transaction)
+				$save_renewal = $this->model_admin->add_renewal($data);
+
+				// Storing the data into the database (create payment data)
+				$pay['payment_nominal']        = $tenant_info->tenant_price;
+				$pay['payment_method_id']      = $renewal_pay_method;
+				$pay['payment_status_id']      = 1;
+				$pay['payment_verif_id']       = 1;
+				$pay['payment_transaction_no'] = $transaction_no;
+
+				$save_payment = $this->model_admin->add_payment_data($pay);
+
+				// Show the message if the storing process was succeeded or failed
+				if($save_renewal && $save_payment)
+				{
+					$this->session->set_flashdata('add-renewal-succeeded', 'Pengajuan perpanjangan sewa tenant berhasil dibuat.');
+				}
+				else
+				{
+					$this->session->set_flashdata('add-renewal-failed', 'Pengajuan perpanjangan sewa tenant gagal dibuat.');
+				}
+			}
+			else
+			{
+				if($rent_total_day == 0)
+				{
+					$rent_total_time = $rent_total_month . ' bulan.';
+				}
+				else
+				{
+					$rent_total_time = $rent_total_month . ' bulan ' . $rent_total_day . ' hari.';
+				}
+
+				// Get tenant name
+				$tenant_name  = $this->model_admin->get_tenant($where)->tenant_name;
+
+				$flash_msg    = 'Waktu sewa minimal untuk <b>[' . $tenant_name . ']</b> adalah <b>' . $tenant_min_period . ' bulan</b>. Waktu sewa yang Anda ajukan adalah <b>' . $rent_total_time . '</b> Silakan ajukan lagi.';
+
+				$this->session->set_flashdata('min-rent-not-qualified', $flash_msg);
+
+				// User will be redirected to 'Ajukan Perpanjangan Sewa' page
+				redirect('dashboard/rincian-sewa/' . $transaction_no);
+			}
+
+			// After finish, user will be redirected to 'Kelola Transaksi' page
+			redirect('dashboard/kelola-transaksi');
+		}
+	}
+
+	public function view_renewal_detail($renewal_no)
+	{
+		$where = $renewal_no;
+
+		$data['get_ret_detail'] = $this->model_admin->get_renewal_detail($where);
+		$data['page_title']     = 'Rincian Perpanjangan Sewa';
+		$data['page_subtitle']  = 'Di menu ini Anda melihat rincian dari data perpanjangan sewa Anda.';
+		$data['content_title']  = 'Rincian Perpanjangan Sewa';
+
+		$this->template->main('tpl-admin/pages/renewal-detail', $data);
 	}
 
 	public function view_invoice($transaction_no)

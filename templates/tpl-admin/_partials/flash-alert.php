@@ -81,7 +81,7 @@
     </div>
 <?php endif; ?>
 
-<?php if($this->session->flashdata('min-rent-not-qualified') OR $this->session->flashdata('tenant-not-selected')): ?>
+<?php if($this->session->flashdata('min-rent-not-qualified') OR $this->session->flashdata('tenant-not-selected') OR $this->session->flashdata('payment-not-selected')): ?>
     <div class="alert alert-warning alert-dismissible show fade">
         <div class="alert-body">
             <button class="close" data-dismiss="alert">
@@ -95,6 +95,10 @@
                 if($this->session->flashdata('tenant-not-selected'))
                 {
                     echo $this->session->flashdata('tenant-not-selected');
+                }
+                if($this->session->flashdata('payment-not-selected'))
+                {
+                    echo $this->session->flashdata('payment-not-selected');
                 }
             ?>
         </div>

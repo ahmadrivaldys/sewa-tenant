@@ -191,3 +191,9 @@ textarea.custom-textarea
 {
     border-radius: 30px !important;
 }
+
+.input-field
+{
+    display: flex;
+    align-items: center;
+}
