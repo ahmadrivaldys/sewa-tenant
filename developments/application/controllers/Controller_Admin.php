@@ -92,10 +92,14 @@ class Controller_Admin extends CI_Controller
 
 		if($usertype == "Administrator" OR $usertype == "Leasing")
 		{
-			// $data['get_trx_list']  = $this->model_admin->get_transactions_list();
-			$data['page_title']    = 'Dashboard';
-			$data['page_subtitle'] = 'Di menu ini Anda dapat memantau keseluruhan ringkasan data.';
-			$data['content_title'] = 'Ringkasan Data';
+			$data['total_admins']       = $this->model_admin->count_all_admins();
+			$data['total_tenants']      = $this->model_admin->count_all_tenants();
+			$data['total_transactions'] = $this->model_admin->count_all_transaction();
+			$data['total_renewals']     = $this->model_admin->count_all_renewals();
+			$data['total_customers']    = $this->model_admin->count_all_customers();
+			$data['page_title']         = 'Dashboard';
+			$data['page_subtitle']      = 'Di menu ini Anda dapat memantau keseluruhan ringkasan data.';
+			$data['content_title']      = 'Ringkasan Data';
 
 			$this->template->main('tpl-admin/pages/dashboard', $data);
 		}

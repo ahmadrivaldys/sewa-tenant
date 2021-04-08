@@ -3,6 +3,45 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Model_Admin extends CI_Model
 {
+    // Dashboard
+    public function count_all_admins()
+    {
+        $this->db->from('tbl_admins');
+
+        return $this->db->count_all_results();
+    }
+
+    public function count_all_tenants()
+    {
+        $this->db->from('tbl_tenants');
+
+        return $this->db->count_all_results();
+    }
+
+    public function count_all_transaction()
+    {
+        $this->db->from('tbl_transactions');
+        $this->db->where('transaction_active_status_id', 2);
+
+        return $this->db->count_all_results();
+    }
+
+    public function count_all_renewals()
+    {
+        $this->db->from('tbl_renewal_transactions');
+        $this->db->where('renewal_active_status_id', 2);
+
+        return $this->db->count_all_results();
+    }
+
+    public function count_all_customers()
+    {
+        $this->db->from('tbl_users');
+        $this->db->where('active_status', 1);
+
+        return $this->db->count_all_results();
+    }
+
     // Transaction
     public function add_transaction($data)
     {
