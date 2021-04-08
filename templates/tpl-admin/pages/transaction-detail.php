@@ -18,14 +18,16 @@
                             </div>
                         <?php endif; ?>
                         <?php if($get_trx_detail->rent_status_code == 3 && empty($check_renewal)): ?>
-                            <div class="card-header-action">
-                                <div class="section-header-button">
-                                    <?php echo form_open('dashboard/ajukan-perpanjangan-sewa'); ?>
-                                        <input type="hidden" name="transaction_no" value="<?php echo $get_trx_detail->transaction_no; ?>"/>
-                                        <button type="submit" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Ajukan Perpanjangan Sewa</button>
-                                    <?php echo form_close(); ?>
+                            <?php if($get_trx_detail->renewal_capability == 'Yes'): ?>
+                                <div class="card-header-action">
+                                    <div class="section-header-button">
+                                        <?php echo form_open('dashboard/ajukan-perpanjangan-sewa'); ?>
+                                            <input type="hidden" name="transaction_no" value="<?php echo $get_trx_detail->transaction_no; ?>"/>
+                                            <button type="submit" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Ajukan Perpanjangan Sewa</button>
+                                        <?php echo form_close(); ?>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php endif; ?>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>

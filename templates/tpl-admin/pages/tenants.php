@@ -12,7 +12,8 @@
                     <th>Ukuran</th>
                     <th>Lokasi</th>
                     <th>Harga</th>
-                    <th>Waktu Sewa Min. (Bulan)</th>
+                    <th>Waktu Sewa Min.</th>
+                    <th>Ketersediaan</th>
                     <th>Keterangan</th>
                     <th>Aksi</th>
                 </tr>
@@ -30,7 +31,8 @@
                         <td><?php echo $tenant_list->tenant_size; ?></td>
                         <td><?php echo $tenant_list->tenant_location; ?></td>
                         <td><?php echo rupiah($tenant_list->tenant_price); ?></td>
-                        <td><?php echo $tenant_list->tenant_min_period; ?></td>
+                        <td><?php echo $tenant_list->tenant_min_period; ?> bulan</td>
+                        <td><?php echo $tenant_list->status_name; ?></td>
                         <td><?php echo $tenant_list->tenant_info; ?></td>
                         <td>
                             <a href="<?php echo base_url('dashboard/sunting-tenant/'.$tenant_list->tenant_id); ?>" class="btn btn-icon btn-primary">

@@ -111,8 +111,6 @@ class Controller_Auth extends CI_Controller
         $data['user_password']            = md5($user_password);
         $data['user_type_id']             = 5;
         $data['user_registration_date']   = $user_regdate;
-        $data['modified_by']              = $user_fullname;
-        $data['modified_date']            = $user_regdate;
 
         // Storing the data into the database
         $user_registration = $this->model_auth->add_user($data);

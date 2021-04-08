@@ -171,8 +171,8 @@
 <?php endif; ?>
 
 
-<!-- Admin -->
-<?php if($this->session->flashdata('add-admin-succeeded') OR $this->session->flashdata('update-admin-succeeded') OR $this->session->flashdata('delete-admin-succeeded')): ?>
+<!-- Admin and Account -->
+<?php if($this->session->flashdata('add-admin-succeeded') OR $this->session->flashdata('update-admin-succeeded') OR $this->session->flashdata('delete-admin-succeeded') OR $this->session->flashdata('update-account-succeeded')): ?>
     <div class="alert alert-success alert-dismissible show fade">
         <div class="alert-body">
             <button class="close" data-dismiss="alert">
@@ -191,12 +191,16 @@
                 {
                     echo $this->session->flashdata('delete-admin-succeeded');
                 }
+                if($this->session->flashdata('update-account-succeeded'))
+                {
+                    echo $this->session->flashdata('update-account-succeeded');
+                }
             ?>
         </div>
     </div>
 <?php endif; ?>
 
-<?php if($this->session->flashdata('add-admin-failed') OR $this->session->flashdata('update-admin-failed') OR $this->session->flashdata('delete-admin-failed')): ?>
+<?php if($this->session->flashdata('add-admin-failed') OR $this->session->flashdata('update-admin-failed') OR $this->session->flashdata('delete-admin-failed') OR $this->session->flashdata('update-account-failed')): ?>
     <div class="alert alert-danger alert-dismissible show fade">
         <div class="alert-body">
             <button class="close" data-dismiss="alert">
@@ -214,6 +218,10 @@
                 if($this->session->flashdata('delete-admin-failed'))
                 {
                     echo $this->session->flashdata('delete-admin-failed');
+                }
+                if($this->session->flashdata('update-account-failed'))
+                {
+                    echo $this->session->flashdata('update-account-failed');
                 }
             ?>
         </div>

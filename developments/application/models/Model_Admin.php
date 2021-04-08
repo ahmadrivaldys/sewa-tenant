@@ -74,6 +74,7 @@ class Model_Admin extends CI_Model
         $this->db->select('trx.transaction_type_of_business, trx.transaction_company_name, trx.transaction_contract_file');
         $this->db->select('trx.transaction_date, tnt.tenant_id, tnt.tenant_name');
         $this->db->select('trx.transaction_contract_verif_id, trx.transaction_rent_type_id, pay.payment_verif_id');
+        $this->db->select('trx.renewal_capability');
         $this->db->select('ren.status_code as rent_status_code, ren.status_name as rent_status');
         $this->db->select('rty.status_code as renttype_status_code, rty.status_name as renttype_status');
         $this->db->select('pst.status_code as payment_status_code, pst.status_name as payment_status');
@@ -112,6 +113,14 @@ class Model_Admin extends CI_Model
     public function add_renewal($data)
     {
         return $this->db->insert('tbl_renewal_transactions', $data);
+    }
+
+    public function get_all_renewals()
+    {
+        $this->db->select('*');
+        $this->db->from('tbl_renewal_transactions');
+
+        return $this->db->get()->result();
     }
 
     public function get_renewals_list($where)
@@ -214,8 +223,10 @@ class Model_Admin extends CI_Model
 
     public function get_tenants_list($where)
     {
-        $this->db->select('tenant_id, tenant_name, tenant_size, tenant_location, tenant_price, tenant_min_period, tenant_info, tenant_image');
-        $this->db->from('tbl_tenants');
+        $this->db->select('tnt.tenant_id, tnt.tenant_name, tnt.tenant_size, tnt.tenant_location, tnt.tenant_price, tnt.tenant_min_period, tnt.tenant_info, tnt.tenant_image, sts.status_name');
+        $this->db->from('tbl_tenants tnt');
+        $this->db->join('tbl_status sts', 'sts.status_code = tnt.tenant_availability');
+        $this->db->where('sts.status_category_code', 'AVAILABILITY');
         $this->db->where($where);
 
         return $this->db->get()->result();
@@ -223,7 +234,7 @@ class Model_Admin extends CI_Model
 
     public function get_tenant($where)
     {
-        $this->db->select('tenant_id, tenant_name, tenant_size, tenant_location, tenant_price, tenant_min_period, tenant_info, tenant_image');
+        $this->db->select('tenant_id, tenant_name, tenant_size, tenant_location, tenant_price, tenant_min_period, tenant_info, tenant_image, sts.status_name');
         $this->db->from('tbl_tenants');
         $this->db->where($where);
 
@@ -277,6 +288,15 @@ class Model_Admin extends CI_Model
         return $this->db->get()->result();
     }
 
+    public function get_admin_detail($where)
+    {
+        $this->db->select('*');
+        $this->db->from('tbl_admins');
+        $this->db->where('admin_id', $where);
+
+        return $this->db->get()->row();
+    }
+
     public function get_admins_type()
     {
         $this->db->select('account_type_id, account_type');
@@ -321,9 +341,14 @@ class Model_Admin extends CI_Model
     public function get_customer_detail($where)
     {
         $this->db->select('*');
-        $this->db->from('tbl_users usr');
-        $this->db->where('usr.user_id', $where);
+        $this->db->from('tbl_users');
+        $this->db->where('user_id', $where);
 
         return $this->db->get()->row();
+    }
+
+    public function update_customer($data, $where)
+    {
+        return $this->db->update('tbl_users', $data, $where);
     }
 }

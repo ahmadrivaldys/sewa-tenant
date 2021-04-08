@@ -19,43 +19,76 @@ class Controller_Admin extends CI_Controller
         {
             redirect('auth/login');
         }
+
+		// Check if the transaction has ended or not
+		$get_trx_list = $this->model_admin->get_all_transactions();
+		$get_ret_list = $this->model_admin->get_all_renewals();
+		$today_date   = date_create('now')->format('d/m/Y');
+		
+		foreach($get_trx_list as $trx_list)
+		{
+			// -- Update end time for transaction
+			$trx_enddate       = date('d/m/Y', strtotime($trx_list->transaction_rent_to));
+			$trx_active_status = $trx_list->transaction_active_status_id;
+
+			if($today_date >= $trx_enddate && $trx_active_status != 3)
+			{
+				$trx['transaction_active_status_id'] = 3;
+				$trx_no['transaction_no'] = $trx_list->transaction_no;
+
+				$this->model_admin->update_transaction($trx, $trx_no);
+			}
+
+			// -- Update tenant availability to 'available' after the transaction is not renewed/extended within 7 days (data will be updated on day 8)
+			$trx_8days = date('d/m/Y', strtotime('+8 days', strtotime($trx_list->transaction_rent_to)));
+			$tenant_id = $trx_list->transaction_tenant_id;
+
+			if($today_date >= $trx_8days && $trx_active_status == 3)
+			{
+				$where_tnt['tenant_id'] = $tenant_id;
+				$tnt['tenant_availability'] = 1;
+
+				$this->model_admin->update_tenant($tnt, $where_tnt);
+
+				$trx['renewal_capability'] = 'No';
+				$trx_no['transaction_no']  = $trx_list->transaction_no;
+
+				$this->model_admin->update_transaction($trx, $trx_no);
+			}
+		}
+
+		foreach($get_ret_list as $renewal_list)
+		{
+			// -- Update end time for transaction
+			$ret_enddate       = date('d/m/Y', strtotime($renewal_list->renewal_rent_to));
+			$ret_active_status = $renewal_list->renewal_active_status_id;
+
+			if($today_date >= $ret_enddate && $ret_active_status != 3)
+			{
+				$ret['renewal_active_status_id'] = 3;
+				$ret_no['renewal_no'] = $renewal_list->renewal_no;
+
+				$this->model_admin->update_renewal_transaction($ret, $ret_no);
+			}
+
+			// -- Update tenant availability to 'available' after the transaction is not renewed/extended within 7 days (data will be updated on day 8)
+			$ret_8days = date('d/m/Y', strtotime('+8 days', strtotime($renewal_list->renewal_rent_to)));
+			$tenant_id = $renewal_list->renewal_tenant_id;
+
+			if($today_date >= $ret_8days && $ret_active_status == 3)
+			{
+				$tnt['tenant_availability'] = 1;
+				$where_tnt['tenant_id'] = $tenant_id;
+
+				$this->model_admin->update_tenant($tnt, $where_tnt);
+			}
+		}
     }
 
 	public function index()
 	{
 		// Get usertype session
 		$usertype = $this->session->userdata('usertype');
-
-		// Check if the transaction has ended or not
-		$get_trx_list = $this->model_admin->get_all_transactions();
-		$today_date = date_create('now')->format('d/m/Y');
-		
-		foreach($get_trx_list as $trx_list)
-		{
-			// -- Update end time for transaction
-			$trx_enddate              = date('d/m/Y', strtotime($trx_list->transaction_rent_to));
-			$trx_active_status        = $trx_list->transaction_active_status_id;
-			$trx_no['transaction_no'] = $trx_list->transaction_no;
-
-			$trx['transaction_active_status_id'] = 3;
-
-			if($today_date == $trx_enddate && $trx_active_status != 3)
-			{
-				$this->model_admin->update_transaction($trx, $trx_no);
-			}
-
-			// -- Update tenant availability to 'available' after the transaction is not renewed/extended within 7 days
-			$trx_7days = date('d/m/Y', strtotime('+7 days', strtotime($trx_list->transaction_rent_to)));
-			$tenant_id = $trx_list->transaction_tenant_id;
-
-			if($today_date == $trx_7days && $trx_active_status == 3)
-			{
-				$where_tnt['tenant_id'] = $tenant_id;
-				$tnt['tenant_availability'] = 1;
-
-				$this->model_admin->update_tenant($tnt, $where_tnt);
-			}
-		}
 
 		if($usertype == "Administrator" OR $usertype == "Leasing")
 		{
@@ -206,6 +239,7 @@ class Controller_Admin extends CI_Controller
 			$data['transaction_contract_verif_id'] = 1;
 			$data['transaction_customer_id']       = $user_id;
 			$data['transaction_date']              = $transaction_date;
+			$data['renewal_capability']            = 'Yes';
 			$data['modified_by']                   = $user_id;
 			$data['modified_date']                 = $transaction_date;
 
@@ -1392,4 +1426,113 @@ class Controller_Admin extends CI_Controller
 
 		$this->template->main('tpl-admin/pages/customer-detail', $data);
 	}
+
+	public function view_edit_profile()
+	{
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		// Get user_id session
+		$user_id = $this->session->userdata('user_id');
+
+		if($usertype == 'Customer')
+		{
+			$data['get_cus_detail'] = $this->model_admin->get_customer_detail($user_id);
+		}
+		else
+		{
+			$data['get_adm_detail'] = $this->model_admin->get_admin_detail($user_id);
+		}
+		
+		$data['page_title']     = 'Sunting Profil';
+		$data['page_subtitle']  = 'Di menu ini Anda dapat memperbarui data profil.';
+		$data['content_title']  = 'Sunting Profil';
+
+		$this->template->main('tpl-admin/pages/personal-profile', $data);
+	}
+
+	public function save_profile_process()
+    {
+		// Get user_id session
+		$user_id = $this->session->userdata('user_id');
+
+        // Get account type
+        $account_type = $this->input->post('account_type');
+
+		if($account_type == 'customer')
+		{
+			// Getting all input
+			$user_fullname = $this->input->post('user_fullname');
+			$user_nik      = $this->input->post('user_nik');
+			$user_phone    = $this->input->post('user_phone');
+			$user_address  = $this->input->post('user_address');
+			$user_npwp     = $this->input->post('user_npwp');
+			$user_siup     = $this->input->post('user_siup');
+			$user_password = $this->input->post('user_password');
+	
+			// Creating date of user data update
+			$user_date     = date_create('now')->format('Y-m-d H:i:s');
+	
+			// Gathering all data that already available to be stored into the database
+			$data['user_fullname']            = $user_fullname;
+			$data['user_identity_no']         = $user_nik;
+			$data['user_phone_no']            = $user_phone;
+			$data['user_address']             = $user_address;
+			$data['user_taxpayer_id_no']      = $user_npwp;
+			$data['user_business_license_no'] = $user_siup;
+			$data['modified_by']              = $user_id;
+			$data['modified_date']            = $user_date;
+
+			// Set password if only its field is not empty.
+			if(!empty($user_password))
+			{
+				$data['user_password'] = md5($user_password);
+			}
+
+			$where['user_id'] = $user_id;
+
+			// Storing the data into the database
+            $save_account = $this->model_admin->update_customer($data, $where);
+		}
+		else
+		{
+			// Getting all input
+			$admin_fullname = $this->input->post('admin_fullname');
+			$admin_email    = $this->input->post('admin_email');
+			$admin_password = $this->input->post('admin_password');
+
+			// Creating date of user-admin data update
+			$admin_date     = date_create('now')->format('Y-m-d H:i:s');
+
+			// Gathering all data that already available to be stored into the database
+			$data['admin_fullname'] = $admin_fullname;
+			$data['admin_email']    = $admin_email;
+			$data['modified_by']    = $user_id;
+			$data['modified_date']  = $admin_date;
+
+			// Set password if only its field is not empty.
+			if(!empty($admin_password))
+			{
+				$data['admin_password'] = md5($admin_password);
+			}
+
+			$where['admin_id'] = $user_id;
+
+			// Storing the data into the database
+            $save_account = $this->model_admin->update_admin($data, $where);
+		}
+
+		// Show the message if the storing process was succeeded or failed
+		if($save_account)
+		{
+			$this->session->set_flashdata('update-account-succeeded', 'Informasi akunmu berhasil diperbarui.');
+		}
+		else
+		{
+			$this->session->set_flashdata('update-account-failed', 'Informasi akunmu gagal diperbarui.');
+		}
+
+        // After finish, user/admin will be redirected to 'Sunting Profil' page
+        redirect('dashboard/sunting-profil');
+    }
 }

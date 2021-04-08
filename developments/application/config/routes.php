@@ -84,6 +84,8 @@ $route['dashboard/batalkan-transaksi']        = 'Controller_Admin/cancel_transac
 $route['dashboard/unggah-bukti-bayar']        = 'Controller_Admin/upload_paymentslip';
 $route['dashboard/verifikasi-pembayaran']     = 'Controller_Admin/verify_payment';
 $route['dashboard/verifikasi-kontrak']        = 'Controller_Admin/verify_contract';
+$route['dashboard/sunting-profil']            = 'Controller_Admin/view_edit_profile';
+$route['dashboard/sunting-profil/simpan']     = 'Controller_Admin/save_profile_process';
 
 $route['dashboard/pelanggan/(:any)/(:num)/detail'] = 'Controller_Admin/view_customer_detail/$1/$2';
 

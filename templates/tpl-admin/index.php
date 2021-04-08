@@ -15,7 +15,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/style.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/components.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/custom.css'); ?>">
+    <link rel="icon" href="<?php echo base_url('assets/images/admin/logo-round.png'); ?>">
     <script src="<?php echo base_url('assets/plugins/jquery/jquery.min.js'); ?>"></script>
+    <script src="<?php echo base_url('assets/plugins/cleave.js/cleave.min.js'); ?>"></script>
+    <script src="<?php echo base_url('assets/plugins/cleave.js/cleave-phone.id.js'); ?>"></script>
 </head>
 <body>
     <div id="app">
@@ -37,11 +40,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         </a>
                         
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a href="#" class="dropdown-item has-icon">
-                                <i class="far fa-user"></i> Profil Saya
+                            <a href="<?php echo base_url('dashboard/sunting-profil'); ?>" class="dropdown-item has-icon">
+                                <i class="far fa-user"></i> Profil
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="<?php echo base_url('dashboard/logout'); ?>" class="dropdown-item has-icon text-danger">
+                            <a href="#" onclick="modal_trigger('konfirmasi-keluar')" class="dropdown-item has-icon text-danger">
                                 <i class="fas fa-sign-out-alt"></i> Keluar
                             </a>
                         </div>
@@ -92,8 +95,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <?php if($page_title != 'Rincian Data Pelanggan'): ?>
                                     <?php if($page_title != 'Rincian Perpanjangan Sewa'): ?>
                                         <?php if($page_title != 'Tagihan Perpanjangan'): ?>
-                                            <h2 class="section-title"><?php echo $page_title; ?></h2>
-                                            <p class="section-lead"><?php echo $page_subtitle; ?></p>
+                                            <?php if($page_title != 'Sunting Profil'): ?>
+                                                <h2 class="section-title"><?php echo $page_title; ?></h2>
+                                                <p class="section-lead"><?php echo $page_subtitle; ?></p>
+                                            <?php endif; ?>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 <?php endif; ?>
@@ -115,6 +120,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
     </div>
 
+
+    <!-- Modal Logout Confirmation -->
+    <div class="modal-backdrop" id="konfirmasi-keluar" onclick="windowOnClick(this)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Keluar Aplikasi</h5>
+                <span class="close-modal" onclick="modal_trigger('konfirmasi-keluar')">
+                    <svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'>
+                        <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='M368 368L144 144M368 144L144 368'/>
+                    </svg>
+                </span>
+            </div>
+            
+            <div class="modal-body">
+                Apa Anda yakin ingin keluar dari aplikasi?
+            </div>
+
+            <div class="modal-footer bg-whitesmoke br">
+                <button type="button" class="btn btn-secondary" onclick="modal_trigger('konfirmasi-keluar')">Tidak</button>
+                <a href="<?php echo base_url('dashboard/logout'); ?>" class="btn btn-danger">Ya</a>
+            </div>
+        </div>
+    </div>
+
     
     
 
@@ -128,18 +157,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src="<?php echo base_url('assets/plugins/jquery.pwstrength/jquery.pwstrength.min.js'); ?>"></script>
     <script src="<?php echo base_url('assets/plugins/jquery-selectric/jquery.selectric.min.js'); ?>"></script>
     <script src="<?php echo base_url('assets/plugins/bootstrap-daterangepicker/bootstrap-daterangepicker.js'); ?>"></script>
-    <script src="<?php echo base_url('assets/plugins/cleave.js/cleave.min.js'); ?>"></script>
     <script>
         "use strict";
 
         // PW Strength
         $(".pwstrength").pwstrength();
-
-
-        var cleave = new Cleave('.tenant-price', {
-            numeral: true,
-            numeralThousandsGroupStyle: 'thousand'
-        });
 
 
         // Modal

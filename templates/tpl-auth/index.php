@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/style.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/components.css'); ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/css/admin/custom.css'); ?>">
+    <link rel="icon" href="<?php echo base_url('assets/images/admin/logo-round.png'); ?>">
 </head>
 <body>
     <div id="app">

@@ -62,3 +62,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    var cleave = new Cleave('.tenant-price', {
+        numeral: true,
+        numeralThousandsGroupStyle: 'thousand'
+    });
+</script>
