@@ -227,6 +227,7 @@
         <?php echo form_open('dashboard/batalkan-transaksi'); ?>
             <div class="modal-body">
                 <input type="hidden" name="transaction_no" value="<?php echo $get_inv_data->renewal_no; ?>"/>
+                <input type="hidden" name="transaction_type" value="renewal"/>
                 <input type="hidden" name="tenant_id" value="<?php echo $get_inv_data->tenant_id; ?>"/>
 
                 Apa Anda yakin ingin membatalkan transaksi ini?

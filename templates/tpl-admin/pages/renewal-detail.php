@@ -13,9 +13,11 @@
                         if($usertype == 'Customer'):
                     ?>
                         <?php if($get_ret_detail->verifycon_status_code != 3): ?>
-                            <div class="card-header-action">
-                                <a href="#" class="btn btn-icon icon-left btn-info button-radius" onclick="modal_trigger('unggah-perjanjian-perpanjangan')"><i class="fas fa-upload"></i> Unggah Dok. Perjanjian</a>
-                            </div>
+                            <?php if($get_ret_detail->rent_status_code != 3): ?>
+                                <div class="card-header-action">
+                                    <a href="#" class="btn btn-icon icon-left btn-info button-radius" onclick="modal_trigger('unggah-perjanjian-perpanjangan')"><i class="fas fa-upload"></i> Unggah Dok. Perjanjian</a>
+                                </div>
+                            <?php endif; ?>
                         <?php endif; ?>
                     <?php endif; ?>
                 </div>

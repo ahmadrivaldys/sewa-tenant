@@ -283,36 +283,69 @@ class Controller_Admin extends CI_Controller
 
 	public function view_transaction_detail($transaction_no)
 	{
-		$where = $transaction_no;
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
 
-		$data['get_trx_detail'] = $this->model_admin->get_transaction_detail($where);
-		$data['check_renewal']  = $this->model_admin->get_renewal($where);
-		$data['page_title']     = 'Rincian Sewa';
-		$data['page_subtitle']  = 'Di menu ini Anda melihat rincian dari data pengajuan sewa Anda.';
-		$data['content_title']  = 'Rincian Sewa';
+		if($usertype != 'Collection')
+		{
+			$where = $transaction_no;
 
-		$this->template->main('tpl-admin/pages/transaction-detail', $data);
+			$data['get_trx_detail'] = $this->model_admin->get_transaction_detail($where);
+			$data['check_renewal']  = $this->model_admin->get_renewal($where);
+			$data['page_title']     = 'Rincian Sewa';
+			$data['page_subtitle']  = 'Di menu ini Anda melihat rincian dari data pengajuan sewa Anda.';
+			$data['content_title']  = 'Rincian Sewa';
+
+			$this->template->main('tpl-admin/pages/transaction-detail', $data);
+		}
+		else
+		{
+			redirect('dashboard/rincian-perpanjangan/' . $transaction_no);
+		}
 	}
 
 	public function cancel_transaction()
 	{
-		$transaction_no = $this->input->post('transaction_no');
-		$tenant_id      = $this->input->post('tenant_id');
+		$transaction_no   = $this->input->post('transaction_no');
+		$transaction_type = $this->input->post('transaction_type');
+		$tenant_id        = $this->input->post('tenant_id');
 
 		if(!empty($transaction_no))
-		{
-			$pay['payment_status_id']             = 3;
-			$data['transaction_active_status_id'] = 3;
-			$tnt['tenant_availability']           = 1;
+		{	
+			// Set condition for transaction cancelling
+			if($transaction_type == 'renewal')
+			{
+				$data['renewal_active_status_id'] = 3;
+				$where['renewal_no']              = $transaction_no;
 
+				$cancel_transaction = $this->model_admin->update_renewal_transaction($data, $where);
+
+				$pay_where['payment_type'] = 'renewal';
+			}
+			else
+			{
+				$data['transaction_active_status_id'] = 3;
+				$where['transaction_no']              = $transaction_no;
+
+				$cancel_transaction = $this->model_admin->update_transaction($data, $where);
+
+				$pay_where['payment_type'] = 'new';
+			}
+
+			// -- Update for Payment after transaction cancelling
+			$pay['payment_status_id']            = 3;
 			$pay_where['payment_transaction_no'] = $transaction_no;
-			$where['transaction_no']             = $transaction_no;
-			$tnt_where['tenant_id']              = $tenant_id;
 
-			// Storing the data into the database
-			$cancel_payment     = $this->model_admin->update_payment($pay, $pay_where);
-			$cancel_transaction = $this->model_admin->update_transaction($data, $where);
-			$cancel_tenant      = $this->model_admin->update_tenant($tnt, $tnt_where);
+			// Storing the data into the database (Payment)
+			$cancel_payment = $this->model_admin->update_payment($pay, $pay_where);
+
+			// -- Update for Tenant after transaction cancelling
+			$tnt['tenant_availability'] = 1;
+			$tnt_where['tenant_id']     = $tenant_id;
+			
+			// Storing the data into the database (Tenant)
+			$cancel_tenant  = $this->model_admin->update_tenant($tnt, $tnt_where);
+
 
 			// Show the message if the storing process was succeeded or failed
 			if($cancel_payment && $cancel_transaction && $cancel_tenant)
@@ -324,8 +357,16 @@ class Controller_Admin extends CI_Controller
 				$this->session->set_flashdata('cancel-transaction-failed', 'Pembatalkan transaksi gagal.');
 			}
 
-			// After finish, user will be redirected to 'Tagihan' page
-			redirect('dashboard/tagihan/' . $transaction_no);
+			if($transaction_type == 'renewal')
+			{
+				// After finish, user will be redirected to 'Tagihan Perpanjangan' page
+				redirect('dashboard/tagihan-perpanjangan/' . $transaction_no);
+			}
+			else
+			{
+				// After finish, user will be redirected to 'Tagihan' page
+				redirect('dashboard/tagihan/' . $transaction_no);
+			}
 		}
 		else
 		{
@@ -335,14 +376,24 @@ class Controller_Admin extends CI_Controller
 
 	public function view_invoice($transaction_no)
 	{
-		$where = $transaction_no;
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
 
-		$data['get_inv_data']  = $this->model_admin->get_transaction_detail($where);
-		$data['page_title']    = 'Tagihan';
-		$data['page_subtitle'] = 'Di menu ini Anda melihat rincian tagihan pembayaran.';
-		$data['content_title'] = 'Tagihan';
+		if($usertype != 'Collection')
+		{
+			$where = $transaction_no;
 
-		$this->template->main('tpl-admin/pages/invoice', $data);
+			$data['get_inv_data']  = $this->model_admin->get_transaction_detail($where);
+			$data['page_title']    = 'Tagihan';
+			$data['page_subtitle'] = 'Di menu ini Anda melihat rincian tagihan pembayaran.';
+			$data['content_title'] = 'Tagihan';
+
+			$this->template->main('tpl-admin/pages/invoice', $data);
+		}
+		else
+		{
+			redirect('dashboard/tagihan-perpanjangan/' . $transaction_no);
+		}
 	}
 
 	public function view_add_renewal()
@@ -398,7 +449,7 @@ class Controller_Admin extends CI_Controller
 			$this->session->set_flashdata('payment-not-selected', $err_message);
 
 			// User will be redirected to 'Ajukan Perpanjangan Sewa' page
-			redirect('dashboard/rincian-sewa/' . $transaction_no);
+			redirect('dashboard/rincian-perpanjangan/' . $transaction_no);
 		}
 		else
 		{
@@ -483,7 +534,7 @@ class Controller_Admin extends CI_Controller
 				$this->session->set_flashdata('min-rent-not-qualified', $flash_msg);
 
 				// User will be redirected to 'Ajukan Perpanjangan Sewa' page
-				redirect('dashboard/rincian-sewa/' . $transaction_no);
+				redirect('dashboard/rincian-perpanjangan/' . $transaction_no);
 			}
 
 			// After finish, user will be redirected to 'Kelola Transaksi' page
@@ -493,26 +544,46 @@ class Controller_Admin extends CI_Controller
 
 	public function view_renewal_detail($renewal_no)
 	{
-		$where = $renewal_no;
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+		
+		if($usertype == 'Administrator' OR $usertype == 'Collection' OR $usertype == 'Customer')
+		{
+			$where = $renewal_no;
 
-		$data['get_ret_detail'] = $this->model_admin->get_renewal_detail($where);
-		$data['page_title']     = 'Rincian Perpanjangan Sewa';
-		$data['page_subtitle']  = 'Di menu ini Anda melihat rincian dari data perpanjangan sewa Anda.';
-		$data['content_title']  = 'Rincian Perpanjangan Sewa';
+			$data['get_ret_detail'] = $this->model_admin->get_renewal_detail($where);
+			$data['page_title']     = 'Rincian Perpanjangan Sewa';
+			$data['page_subtitle']  = 'Di menu ini Anda melihat rincian dari data perpanjangan sewa Anda.';
+			$data['content_title']  = 'Rincian Perpanjangan Sewa';
 
-		$this->template->main('tpl-admin/pages/renewal-detail', $data);
+			$this->template->main('tpl-admin/pages/renewal-detail', $data);
+		}
+		else
+		{
+			redirect('dashboard/rincian-sewa/' . $renewal_no);
+		}
 	}
 
 	public function view_renewal_invoice($renewal_no)
 	{
-		$where = $renewal_no;
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+		
+		if($usertype == 'Administrator' OR $usertype == 'Collection' OR $usertype == 'Customer')
+		{
+			$where = $renewal_no;
 
-		$data['get_inv_data']  = $this->model_admin->get_renewal_detail($where);
-		$data['page_title']    = 'Tagihan Perpanjangan';
-		$data['page_subtitle'] = 'Di menu ini Anda melihat rincian tagihan pembayaran.';
-		$data['content_title'] = 'Tagihan Perpanjangan';
+			$data['get_inv_data']  = $this->model_admin->get_renewal_detail($where);
+			$data['page_title']    = 'Tagihan Perpanjangan';
+			$data['page_subtitle'] = 'Di menu ini Anda melihat rincian tagihan pembayaran.';
+			$data['content_title'] = 'Tagihan Perpanjangan';
 
-		$this->template->main('tpl-admin/pages/renewal-invoice', $data);
+			$this->template->main('tpl-admin/pages/renewal-invoice', $data);
+		}
+		else
+		{
+			redirect('dashboard/tagihan/' . $renewal_no);
+		}
 	}
 
 	public function download_contract($transaction_no)
@@ -1207,6 +1278,7 @@ class Controller_Admin extends CI_Controller
             else
             {
                 $data['admin_employee_no'] = $admin_employee_no;
+				$data['active_status']     = 1;
                 $data['created_by']        = $admin_creator;
                 $data['created_date']      = $admin_date;
 

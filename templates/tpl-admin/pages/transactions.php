@@ -1,105 +1,9 @@
 <?php $usertype = $this->session->userdata('usertype'); ?>
 
-<div class="card">
-    <div class="card-header">
-        <h4><?php echo $content_title; ?></h4>
-    </div>
-    
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-striped table-md">
-                <tr>
-                    <th class="text-center">#</th>
-                    <th class="text-center">No. Transaksi</th>
-                    <th class="text-center">Tenant</th>
-                    <th class="text-center">Periode Sewa</th>
-                    <th class="text-center">Status Sewa</th>
-                    <?php if($usertype == 'Customer'): ?>
-                        <th class="text-center">Template Kontrak</th>
-                    <?php endif; ?>
-                    <?php if($usertype == 'Administrator' OR $usertype == 'Leasing'): ?>
-                        <th class="text-center">Dokumen Kontrak</th>
-                    <?php endif; ?>
-                    <?php if($usertype == 'Administrator' OR $usertype == 'Billing'): ?>
-                        <th class="text-center">Bukti Pembayaran</th>
-                    <?php endif; ?>
-                    <th class="text-center">Aksi</th>
-                </tr>
-
-                <?php if(empty($get_trx_list)): ?>
-                    <tr>
-                        <td colspan="6" class="text-center">Data tidak tersedia.</td>
-                    </tr>
-                <?php endif; ?>
-                
-                <?php $no = 1; foreach($get_trx_list as $transaction_list): ?>
-                    <tr>
-                        <td class="text-center"><?php echo $no; ?></td>
-                        <td class="text-center">
-                            <a href="<?php echo base_url('dashboard/tagihan/'.$transaction_list->transaction_no); ?>" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lihat Tagihan">
-                                <?php echo $transaction_list->transaction_no; ?>
-                            </a>
-                        </td>
-                        <td><?php echo $transaction_list->tenant_name; ?></td>
-                        <td class="text-center">
-                            <?php echo date('d/m/Y', strtotime($transaction_list->transaction_rent_from)) . ' - ' . date('d/m/Y', strtotime($transaction_list->transaction_rent_to)); ?>
-                        </td>
-                        <td class="text-center">
-                            <?php if($transaction_list->status_code == 1): ?>
-                                <span class="badge badge-light activestatus-label"><?php echo $transaction_list->status_name; ?></span>
-                            <?php endif; ?>
-
-                            <?php if($transaction_list->status_code == 2): ?>
-                                <span class="badge badge-success activestatus-label"><?php echo $transaction_list->status_name; ?></span>
-                            <?php endif; ?>
-
-                            <?php if($transaction_list->status_code == 3): ?>
-                                <span class="badge badge-danger activestatus-label"><?php echo $transaction_list->status_name; ?></span>
-                            <?php endif; ?>
-                        </td>
-                        <?php if($usertype == 'Customer'): ?>
-                            <td class="text-center">
-                                <a href="<?php echo base_url('dashboard/surat-perjanjian/'.$transaction_list->transaction_no); ?>">Unduh</a>
-                            </td>
-                        <?php endif; ?>
-                        <?php if($usertype == 'Administrator' OR $usertype == 'Leasing'): ?>
-                            <td class="text-center">
-                                <?php if(!empty($transaction_list->transaction_contract_file)): ?>
-                                    <a href="#" onclick="modal_trigger('tampilkan-surat-perjanjian')">Lihat</a>
-                                <?php else: ?>
-                                    -
-                                <?php endif; ?>
-                            </td>
-                        <?php endif; ?>
-                        <?php if($usertype == 'Administrator' OR $usertype == 'Billing'): ?>
-                            <td class="text-center">
-                                <?php if(!empty($transaction_list->payment_paymentslip_file)): ?>
-                                    <a href="#" onclick="modal_trigger('bukti-pembayaran')">Lihat</a>
-                                <?php else: ?>
-                                    -
-                                <?php endif; ?>
-                            </td>
-                        <?php endif; ?>
-                        <td class="text-center">
-                            <a href="<?php echo base_url('dashboard/rincian-sewa/'.$transaction_list->transaction_no); ?>" class="btn btn-primary">Detail</a>
-                        </td>
-                    </tr>
-                <?php $no++; endforeach; ?>
-            </table>
-        </div>
-    </div>
-
-    <div class="card-footer bg-whitesmoke">
-        &nbsp;
-    </div>
-</div>
-
-
-<!-- Renewal Transaction -->
-<?php if(!empty($get_ret_list)): ?>
+<?php if($usertype != 'Collection'): ?>
     <div class="card">
         <div class="card-header">
-            <h4>Daftar Transaksi Perpanjangan</h4>
+            <h4><?php echo $content_title; ?></h4>
         </div>
         
         <div class="card-body p-0">
@@ -122,41 +26,47 @@
                         <?php endif; ?>
                         <th class="text-center">Aksi</th>
                     </tr>
+
+                    <?php if(empty($get_trx_list)): ?>
+                        <tr>
+                            <td colspan="6" class="text-center">Data tidak tersedia.</td>
+                        </tr>
+                    <?php endif; ?>
                     
-                    <?php $no = 1; foreach($get_ret_list as $renewal_list): ?>
+                    <?php $no = 1; foreach($get_trx_list as $transaction_list): ?>
                         <tr>
                             <td class="text-center"><?php echo $no; ?></td>
                             <td class="text-center">
-                                <a href="<?php echo base_url('dashboard/tagihan-perpanjangan/'.$renewal_list->renewal_no); ?>" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lihat Tagihan">
-                                    <?php echo $renewal_list->renewal_no; ?>
+                                <a href="<?php echo base_url('dashboard/tagihan/'.$transaction_list->transaction_no); ?>" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lihat Tagihan">
+                                    <?php echo $transaction_list->transaction_no; ?>
                                 </a>
                             </td>
-                            <td><?php echo $renewal_list->tenant_name; ?></td>
+                            <td><?php echo $transaction_list->tenant_name; ?></td>
                             <td class="text-center">
-                                <?php echo date('d/m/Y', strtotime($renewal_list->renewal_rent_from)) . ' - ' . date('d/m/Y', strtotime($renewal_list->renewal_rent_to)); ?>
+                                <?php echo date('d/m/Y', strtotime($transaction_list->transaction_rent_from)) . ' - ' . date('d/m/Y', strtotime($transaction_list->transaction_rent_to)); ?>
                             </td>
                             <td class="text-center">
-                                <?php if($renewal_list->status_code == 1): ?>
-                                    <span class="badge badge-light activestatus-label"><?php echo $renewal_list->status_name; ?></span>
+                                <?php if($transaction_list->status_code == 1): ?>
+                                    <span class="badge badge-light activestatus-label"><?php echo $transaction_list->status_name; ?></span>
                                 <?php endif; ?>
 
-                                <?php if($renewal_list->status_code == 2): ?>
-                                    <span class="badge badge-success activestatus-label"><?php echo $renewal_list->status_name; ?></span>
+                                <?php if($transaction_list->status_code == 2): ?>
+                                    <span class="badge badge-success activestatus-label"><?php echo $transaction_list->status_name; ?></span>
                                 <?php endif; ?>
 
-                                <?php if($renewal_list->status_code == 3): ?>
-                                    <span class="badge badge-danger activestatus-label"><?php echo $renewal_list->status_name; ?></span>
+                                <?php if($transaction_list->status_code == 3): ?>
+                                    <span class="badge badge-danger activestatus-label"><?php echo $transaction_list->status_name; ?></span>
                                 <?php endif; ?>
                             </td>
                             <?php if($usertype == 'Customer'): ?>
                                 <td class="text-center">
-                                    <a href="<?php echo base_url('dashboard/surat-perjanjian/'.$renewal_list->renewal_no); ?>">Unduh</a>
+                                    <a href="<?php echo base_url('dashboard/surat-perjanjian/'.$transaction_list->transaction_no); ?>">Unduh</a>
                                 </td>
                             <?php endif; ?>
                             <?php if($usertype == 'Administrator' OR $usertype == 'Leasing'): ?>
                                 <td class="text-center">
-                                    <?php if(!empty($renewal_list->renewal_contract_file)): ?>
-                                        <a href="#" onclick="modal_trigger('tampilkan-surat-perjanjian-perpanjangan')">Lihat</a>
+                                    <?php if(!empty($transaction_list->transaction_contract_file)): ?>
+                                        <a href="#" onclick="modal_trigger('tampilkan-surat-perjanjian')">Lihat</a>
                                     <?php else: ?>
                                         -
                                     <?php endif; ?>
@@ -164,15 +74,15 @@
                             <?php endif; ?>
                             <?php if($usertype == 'Administrator' OR $usertype == 'Billing'): ?>
                                 <td class="text-center">
-                                    <?php if(!empty($renewal_list->payment_paymentslip_file)): ?>
-                                        <a href="#" onclick="modal_trigger('bukti-pembayaran-perpanjangan')">Lihat</a>
+                                    <?php if(!empty($transaction_list->payment_paymentslip_file)): ?>
+                                        <a href="#" onclick="modal_trigger('bukti-pembayaran')">Lihat</a>
                                     <?php else: ?>
                                         -
                                     <?php endif; ?>
                                 </td>
                             <?php endif; ?>
                             <td class="text-center">
-                                <a href="<?php echo base_url('dashboard/rincian-perpanjangan/'.$renewal_list->renewal_no); ?>" class="btn btn-primary">Detail</a>
+                                <a href="<?php echo base_url('dashboard/rincian-sewa/'.$transaction_list->transaction_no); ?>" class="btn btn-primary">Detail</a>
                             </td>
                         </tr>
                     <?php $no++; endforeach; ?>
@@ -184,6 +94,100 @@
             &nbsp;
         </div>
     </div>
+<?php endif; ?>
+
+
+<!-- Renewal Transaction -->
+<?php if(!empty($get_ret_list)): ?>
+    <?php if($usertype == 'Administrator' OR $usertype == 'Collection' OR $usertype == 'Customer'): ?>
+        <div class="card">
+            <div class="card-header">
+                <h4>Daftar Transaksi Perpanjangan</h4>
+            </div>
+            
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-striped table-md">
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th class="text-center">No. Transaksi</th>
+                            <th class="text-center">Tenant</th>
+                            <th class="text-center">Periode Sewa</th>
+                            <th class="text-center">Status Sewa</th>
+                            <?php if($usertype == 'Customer'): ?>
+                                <th class="text-center">Template Kontrak</th>
+                            <?php endif; ?>
+                            <?php if($usertype == 'Administrator' OR $usertype == 'Collection'): ?>
+                                <th class="text-center">Dokumen Kontrak</th>
+                            <?php endif; ?>
+                            <?php if($usertype == 'Administrator' OR $usertype == 'Collection'): ?>
+                                <th class="text-center">Bukti Pembayaran</th>
+                            <?php endif; ?>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                        
+                        <?php $no = 1; foreach($get_ret_list as $renewal_list): ?>
+                            <tr>
+                                <td class="text-center"><?php echo $no; ?></td>
+                                <td class="text-center">
+                                    <a href="<?php echo base_url('dashboard/tagihan-perpanjangan/'.$renewal_list->renewal_no); ?>" data-toggle="tooltip" data-placement="right" title="" data-original-title="Lihat Tagihan">
+                                        <?php echo $renewal_list->renewal_no; ?>
+                                    </a>
+                                </td>
+                                <td><?php echo $renewal_list->tenant_name; ?></td>
+                                <td class="text-center">
+                                    <?php echo date('d/m/Y', strtotime($renewal_list->renewal_rent_from)) . ' - ' . date('d/m/Y', strtotime($renewal_list->renewal_rent_to)); ?>
+                                </td>
+                                <td class="text-center">
+                                    <?php if($renewal_list->status_code == 1): ?>
+                                        <span class="badge badge-light activestatus-label"><?php echo $renewal_list->status_name; ?></span>
+                                    <?php endif; ?>
+
+                                    <?php if($renewal_list->status_code == 2): ?>
+                                        <span class="badge badge-success activestatus-label"><?php echo $renewal_list->status_name; ?></span>
+                                    <?php endif; ?>
+
+                                    <?php if($renewal_list->status_code == 3): ?>
+                                        <span class="badge badge-danger activestatus-label"><?php echo $renewal_list->status_name; ?></span>
+                                    <?php endif; ?>
+                                </td>
+                                <?php if($usertype == 'Customer'): ?>
+                                    <td class="text-center">
+                                        <a href="<?php echo base_url('dashboard/surat-perjanjian/'.$renewal_list->renewal_no); ?>">Unduh</a>
+                                    </td>
+                                <?php endif; ?>
+                                <?php if($usertype == 'Administrator' OR $usertype == 'Collection'): ?>
+                                    <td class="text-center">
+                                        <?php if(!empty($renewal_list->renewal_contract_file)): ?>
+                                            <a href="#" onclick="modal_trigger('tampilkan-surat-perjanjian-perpanjangan')">Lihat</a>
+                                        <?php else: ?>
+                                            -
+                                        <?php endif; ?>
+                                    </td>
+                                <?php endif; ?>
+                                <?php if($usertype == 'Administrator' OR $usertype == 'Collection'): ?>
+                                    <td class="text-center">
+                                        <?php if(!empty($renewal_list->payment_paymentslip_file)): ?>
+                                            <a href="#" onclick="modal_trigger('bukti-pembayaran-perpanjangan')">Lihat</a>
+                                        <?php else: ?>
+                                            -
+                                        <?php endif; ?>
+                                    </td>
+                                <?php endif; ?>
+                                <td class="text-center">
+                                    <a href="<?php echo base_url('dashboard/rincian-perpanjangan/'.$renewal_list->renewal_no); ?>" class="btn btn-primary">Detail</a>
+                                </td>
+                            </tr>
+                        <?php $no++; endforeach; ?>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card-footer bg-whitesmoke">
+                &nbsp;
+            </div>
+        </div>
+    <?php endif; ?>
 <?php endif; ?>
 
 
