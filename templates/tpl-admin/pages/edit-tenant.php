@@ -56,7 +56,7 @@
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">&nbsp;</label>
                             <div class="col-sm-12 col-md-7">
-                                <img class="w-50" src="<?php echo base_url('assets/images/'.$get_tenant->tenant_image); ?>" alt="<?php echo $get_tenant->tenant_image; ?>">
+                                <img class="w-50" src="<?php echo base_url('assets/images/admin/tenant/'.$get_tenant->tenant_image); ?>" alt="<?php echo $get_tenant->tenant_image; ?>">
                             </div>
                         </div>
                     <?php endif; ?>

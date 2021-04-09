@@ -1096,6 +1096,9 @@ class Controller_Admin extends CI_Controller
 
 	public function save_tenant_process()
 	{
+		// Get submit type
+		$submit_type = $this->input->post('submit_type');
+
 		$submit_type != 'new' ? $tenant_id = $this->input->post('tenant_id') : '';
 
 		// Get the input from 'tenant_image' field
@@ -1105,7 +1108,7 @@ class Controller_Admin extends CI_Controller
         if(!empty($tenant_image_name))
         {
             // Setting up the configuration for upload
-            $config['upload_path']   = './assets/images/admin/tenant';
+            $config['upload_path']   = './assets/images/admin/tenant/';
             $config['allowed_types'] = 'gif|jpg|png|jpeg|bmp';
             $config['file_name']     = str_replace(" ", "-", strtolower($tenant_image_name));
 
@@ -1118,13 +1121,13 @@ class Controller_Admin extends CI_Controller
 
                 // Compress image
                 $config['image_library']  = 'gd2';
-                $config['source_image']   = './assets/images/'.$thumbnail['file_name'];
+                $config['source_image']   = './assets/images/admin/tenant/'.$thumbnail['file_name'];
                 $config['create_thumb']   = FALSE;
                 $config['maintain_ratio'] = TRUE;
                 $config['quality']        = '90%';
                 $config['width']          = 0;
                 $config['height']         = 720;
-                $config['new_image']      = './assets/images/'.$thumbnail['file_name'];
+                $config['new_image']      = './assets/images/admin/tenant/'.$thumbnail['file_name'];
 
                 $this->load->library('image_lib', $config);
                 $this->image_lib->resize();
@@ -1147,7 +1150,6 @@ class Controller_Admin extends CI_Controller
 		$user_id = $this->session->userdata('user_id');
 
 		// Getting all input
-		$submit_type       = $this->input->post('submit_type');
         $tenant_name       = $this->input->post('tenant_name');
         $tenant_size       = $this->input->post('tenant_size');
         $tenant_location   = $this->input->post('tenant_location');
@@ -1162,7 +1164,7 @@ class Controller_Admin extends CI_Controller
         $data['tenant_name']       = $tenant_name;
         $data['tenant_size']       = $tenant_size;
         $data['tenant_location']   = $tenant_location;
-        $data['tenant_price']      = $tenant_price;
+        $data['tenant_price']      = str_replace(',', '', $tenant_price);
         $data['tenant_min_period'] = $tenant_min_period;
         $data['tenant_info']       = $tenant_info;
         $data['modified_by']       = $user_id;
@@ -1171,8 +1173,9 @@ class Controller_Admin extends CI_Controller
 		// Before storing the data, check the submit type first, is this new data or update
         if($submit_type == 'new')
         {
-            $data['created_by']      = $user_id;
-			$data['created_date']    = $tenant_date;
+			$data['tenant_availability'] = 1;
+            $data['created_by']          = $user_id;
+			$data['created_date']        = $tenant_date;
 
             // Storing the data into the database
 			$save_tenant = $this->model_admin->add_tenant($data);

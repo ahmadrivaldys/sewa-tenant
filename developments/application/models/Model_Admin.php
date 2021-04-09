@@ -273,7 +273,7 @@ class Model_Admin extends CI_Model
 
     public function get_tenant($where)
     {
-        $this->db->select('tenant_id, tenant_name, tenant_size, tenant_location, tenant_price, tenant_min_period, tenant_info, tenant_image, sts.status_name');
+        $this->db->select('tenant_id, tenant_name, tenant_size, tenant_location, tenant_price, tenant_min_period, tenant_info, tenant_image');
         $this->db->from('tbl_tenants');
         $this->db->where($where);
 
