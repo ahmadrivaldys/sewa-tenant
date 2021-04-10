@@ -197,3 +197,24 @@ textarea.custom-textarea
     display: flex;
     align-items: center;
 }
+
+.hover-img
+{
+    cursor: pointer;
+}
+
+.preview-img
+{
+    height: 100%;
+    text-align: center;
+    box-sizing: border-box;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-right: 25px;
+}
+
+.preview-img img
+{
+    height: 100%;
+    border-radius: 10px;
+}

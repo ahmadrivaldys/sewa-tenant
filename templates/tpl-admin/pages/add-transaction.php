@@ -30,7 +30,7 @@
                                 <li class="list-group-item tenant-info-list" id="tenant_price"></li>
                                 <li class="list-group-item tenant-info-list" id="tenant_min_period"></li>
                                 <li class="list-group-item tenant-info-list" id="tenant_info"></li>
-                                <li class="list-group-item tenant-info-list" id="tenant_image"></li>
+                                <li class="list-group-item tenant-info-list" id="tenant_image" data-toggle="sidebar"></li>
                             </ul>
                         </div>
                     </div>
@@ -90,6 +90,13 @@
     </div>
 </div>
 
+
+<!-- Modal Image Preview -->
+<div class="modal-backdrop" id="pratinjau-gambar" onclick="windowOnClick(this)" data-toggle="sidebar">
+    <div class="preview-img" id="preview-img" onclick="modal_trigger('pratinjau-gambar')"></div>
+</div>
+
+
 <script>
     $(document).ready(function()
     {
@@ -109,18 +116,20 @@
                 dataType : 'json',
                 success: function(data)
                 {
-                    var image_url    = "<?php echo base_url('assets/images/'); ?>" + data.tenant_image;
-                    var tenant_image = "<img src=" + image_url + " alt ='Tenant Image' class='w-50'>";
+                    var image_url    = "<?php echo base_url('assets/images/admin/tenant/'); ?>" + data.tenant_image;
+                    var tenant_image = "<img src=" + image_url + " alt='Tenant Image' class='w-50 hover-img' onclick=modal_trigger('pratinjau-gambar')>";
+                    var tenant_image_preview = "<span class='close-modal'><svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'><path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='M368 368L144 144M368 144L144 368'/></svg></span><img src=" + image_url + " alt='Tenant Image'>";
 
                     $('#tenant_size').html('<div class="tenant-info">Ukuran</div>' + data.tenant_size);
                     $('#tenant_location').html('<div class="tenant-info">Lokasi</div>' + data.tenant_location);
-                    $('#tenant_price').html('<div class="tenant-info">Harga</div>' + data.tenant_price);
+                    $('#tenant_price').html('<div class="tenant-info">Harga Sewa per Bulan</div>' + data.tenant_price);
                     $('#tenant_min_period').html('<div class="tenant-info">Waktu Sewa Min.</div>' + data.tenant_min_period + ' bulan');
                     $('#tenant_info').html('<div class="tenant-info">Keterangan</div>' + data.tenant_info);
 
                     if(data.tenant_image)
                     {
                         $('#tenant_image').html('<div class="tenant-info">Foto Tampilan</div>' + tenant_image);
+                        $('#preview-img').html(tenant_image_preview);
                     }
                     else
                     {

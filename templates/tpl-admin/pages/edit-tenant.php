@@ -56,7 +56,7 @@
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">&nbsp;</label>
                             <div class="col-sm-12 col-md-7">
-                                <img class="w-50" src="<?php echo base_url('assets/images/admin/tenant/'.$get_tenant->tenant_image); ?>" alt="<?php echo $get_tenant->tenant_image; ?>">
+                                <img class="w-50 hover-img" data-toggle="sidebar" onclick="modal_trigger('pratinjau-gambar')" src="<?php echo base_url('assets/images/admin/tenant/'.$get_tenant->tenant_image); ?>" alt="<?php echo $get_tenant->tenant_image; ?>">
                             </div>
                         </div>
                     <?php endif; ?>
@@ -71,6 +71,20 @@
         </div>
     </div>
 </div>
+
+
+<!-- Modal Image Preview -->
+<div class="modal-backdrop" id="pratinjau-gambar" onclick="windowOnClick(this)" data-toggle="sidebar">
+    <div class="preview-img" onclick="modal_trigger('pratinjau-gambar')">
+        <span class="close-modal">
+            <svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'>
+                <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='M368 368L144 144M368 144L144 368'/>
+            </svg>
+        </span>
+        <img class="w-50" src="<?php echo base_url('assets/images/admin/tenant/'.$get_tenant->tenant_image); ?>" alt="<?php echo $get_tenant->tenant_image; ?>">
+    </div>
+</div>
+
 
 <script>
     var cleave = new Cleave('.tenant-price', {
