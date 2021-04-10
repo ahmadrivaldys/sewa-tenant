@@ -1,15 +1,15 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 5.0.3
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 09, 2021 at 06:22 AM
--- Server version: 10.4.16-MariaDB
--- PHP Version: 7.4.12
+-- Generation Time: Apr 10, 2021 at 01:11 PM
+-- Server version: 10.4.14-MariaDB
+-- PHP Version: 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+07:00";
+SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -56,7 +56,7 @@ CREATE TABLE `tbl_admins` (
   `admin_fullname` varchar(50) NOT NULL,
   `admin_email` varchar(50) NOT NULL,
   `admin_password` varchar(75) NOT NULL,
-  `admin_photo` varchar(50) NOT NULL,
+  `admin_photo` varchar(255) NOT NULL,
   `admin_type_id` int(2) NOT NULL,
   `active_status` int(2) NOT NULL,
   `created_by` int(3) NOT NULL,
@@ -70,11 +70,11 @@ CREATE TABLE `tbl_admins` (
 --
 
 INSERT INTO `tbl_admins` (`admin_id`, `admin_employee_no`, `admin_fullname`, `admin_email`, `admin_password`, `admin_photo`, `admin_type_id`, `active_status`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
-(1, '1', 'Administrator', 'admin@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 1, 1, 1, current_time, 1, current_time),
-(2, 'CL-20210323', 'Minami Hamabe', 'minami@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 4, 1, 1, current_time, 1, current_time),
-(3, 'LS-20210324', 'Cindy Yuvia', 'cindy@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 2, 1, 1, current_time, 1, current_time),
-(4, 'BI-20210405', 'Rudy Susilo', 'rudy@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 3, 1, 1, current_time, 1, current_time),
-(5, 'BI-20210408', 'Ferdiansyah', 'ferdi@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 3, 1, 1, current_time, 1, current_time);
+(1, '1', 'Administrator', 'admin@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 1, 1, 1, '2021-04-10 16:44:31', 1, '2021-04-10 16:44:31'),
+(2, 'CL-20210323', 'Minami Hamabe', 'minami@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 4, 1, 1, '2021-04-10 16:44:31', 1, '2021-04-10 16:44:31'),
+(3, 'LS-20210324', 'Cindy Yuvia', 'cindy@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 2, 1, 1, '2021-04-10 16:44:31', 1, '2021-04-10 16:44:31'),
+(4, 'BI-20210405', 'Rudy Susilo', 'rudy@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 3, 1, 1, '2021-04-10 16:44:31', 1, '2021-04-10 16:44:31'),
+(5, 'BI-20210408', 'Ferdiansyah', 'ferdi@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 3, 1, 1, '2021-04-10 16:44:31', 1, '2021-04-10 16:44:31');
 
 -- --------------------------------------------------------
 
@@ -195,7 +195,7 @@ CREATE TABLE `tbl_tenants` (
   `tenant_code` varchar(15) NOT NULL,
   `tenant_name` varchar(25) NOT NULL,
   `tenant_size` varchar(25) NOT NULL,
-  `tenant_image` varchar(50) NOT NULL,
+  `tenant_image` varchar(255) NOT NULL,
   `tenant_location` varchar(25) NOT NULL,
   `tenant_price` int(11) NOT NULL,
   `tenant_min_period` int(2) NOT NULL,
@@ -206,6 +206,13 @@ CREATE TABLE `tbl_tenants` (
   `modified_by` int(3) NOT NULL,
   `modified_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_tenants`
+--
+
+INSERT INTO `tbl_tenants` (`tenant_id`, `tenant_code`, `tenant_name`, `tenant_size`, `tenant_image`, `tenant_location`, `tenant_price`, `tenant_min_period`, `tenant_info`, `tenant_availability`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
+(1, '', 'Tenant Utama', '15 x 20 m', 'xps-7zwvnvsaafy-unsplash.jpg', 'Lantai 2', 25000000, 3, 'Tidak termasuk biaya listrik dan air', 1, 1, '2021-04-10 16:52:52', 1, '2021-04-10 16:52:52');
 
 -- --------------------------------------------------------
 
@@ -250,7 +257,7 @@ CREATE TABLE `tbl_users` (
   `user_phone_no` varchar(15) NOT NULL,
   `user_password` varchar(75) NOT NULL,
   `user_address` varchar(100) NOT NULL,
-  `user_photo` varchar(50) NOT NULL,
+  `user_photo` varchar(255) NOT NULL,
   `user_type_id` int(2) NOT NULL,
   `user_registration_date` datetime NOT NULL,
   `active_status` int(2) NOT NULL,
@@ -263,7 +270,7 @@ CREATE TABLE `tbl_users` (
 --
 
 INSERT INTO `tbl_users` (`user_id`, `user_identity_no`, `user_taxpayer_id_no`, `user_business_license_no`, `user_fullname`, `user_email`, `user_phone_no`, `user_password`, `user_address`, `user_photo`, `user_type_id`, `user_registration_date`, `active_status`, `modified_by`, `modified_date`) VALUES
-(1, '03021999', '03021987', '53267463247', 'Kanna Hashimoto', 'kanna@customer.dev', '0812 1278 5798', 'ae671ecd4ebee177c57dfbfbbf28cd83', 'Jl. Maju Pantang Mundur No. 125, Kel. Maju, Kec. Pantang Mundur', '', 5, current_time, 1, 1, current_time);
+(1, '03021999', '03021987', '53267463247', 'Kanna Hashimoto', 'kanna@customer.dev', '0812 1278 5798', 'ae671ecd4ebee177c57dfbfbbf28cd83', 'Jl. Maju Pantang Mundur No. 125, Kel. Maju, Kec. Pantang Mundur', '', 5, '2021-04-10 16:44:32', 1, 1, '2021-04-10 16:44:32');
 
 --
 -- Indexes for dumped tables
@@ -357,7 +364,7 @@ ALTER TABLE `tbl_status`
 -- AUTO_INCREMENT for table `tbl_tenants`
 --
 ALTER TABLE `tbl_tenants`
-  MODIFY `tenant_id` int(3) NOT NULL AUTO_INCREMENT;
+  MODIFY `tenant_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tbl_transactions`
