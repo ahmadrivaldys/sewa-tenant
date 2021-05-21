@@ -125,15 +125,17 @@
                         <tr>
                             <th data-width="40">#</th>
                             <th>Item</th>
-                            <th class="text-center">Harga Sewa</th>
+                            <th class="text-center">Harga</th>
                             <th class="text-center">Periode Sewa</th>
-                            <th class="text-right">Jumlah</th>
+                            <th class="text-center">Total Masa Sewa</th>
+                            <th class="text-right">Jumlah Harga</th>
                         </tr>
                         <tr>
                             <td>1</td>
                             <td><?php echo $get_inv_data->tenant_name; ?></td>
-                            <td class="text-center"><?php echo rupiah($get_inv_data->payment_nominal); ?></td>
+                            <td class="text-center"><?php echo rupiah($get_inv_data->tenant_price); ?> / bulan</td>
                             <td class="text-center"><?php echo date('d/m/Y', strtotime($get_inv_data->renewal_rent_from)) . ' - ' . date('d/m/Y', strtotime($get_inv_data->renewal_rent_to)); ?></td>
+                            <td class="text-center"><?php echo $get_inv_data->renewal_rent_total_month; ?> bulan</td>
                             <td class="text-right"><?php echo rupiah($get_inv_data->payment_nominal); ?></td>
                         </tr>
                     </table>
@@ -162,7 +164,8 @@
 
             if($usertype == 'Customer'):
         ?>
-            <?php if($get_inv_data->payment_status_code == 1 AND $get_inv_data->payment_verif_code == 1 OR $get_inv_data->payment_status_code == 2 AND $get_inv_data->payment_verif_code == 2): ?>      
+            <?php if($get_inv_data->payment_status_code == 1 AND $get_inv_data->payment_verif_code == 1 
+                OR $get_inv_data->payment_status_code == 2 AND $get_inv_data->payment_verif_code == 2): ?>      
                 <button class="btn btn-primary btn-icon icon-left" onclick="modal_trigger('unggah-bukti-bayar')"><i class="fas fa-credit-card"></i> Unggah Bukti Pembayaran</button>
             <?php endif; ?>
         <?php endif; ?>

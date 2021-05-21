@@ -100,6 +100,7 @@ class Model_Admin extends CI_Model
     {
         $this->db->select('trx.transaction_no, trx.transaction_tenant_id, tnt.tenant_name');
         $this->db->select('trx.transaction_type_of_business, trx.transaction_company_name, trx.transaction_note');
+        $this->db->select('trx.transaction_customer_id');
         $this->db->from('tbl_transactions trx');
         $this->db->join('tbl_tenants tnt', 'tnt.tenant_id = trx.transaction_tenant_id');
         $this->db->where('trx.transaction_no', $where);
@@ -113,7 +114,7 @@ class Model_Admin extends CI_Model
         $this->db->select('trx.transaction_type_of_business, trx.transaction_company_name, trx.transaction_contract_file');
         $this->db->select('trx.transaction_date, tnt.tenant_id, tnt.tenant_name');
         $this->db->select('trx.transaction_contract_verif_id, trx.transaction_rent_type_id, pay.payment_verif_id');
-        $this->db->select('trx.renewal_capability');
+        $this->db->select('trx.renewal_capability, trx.transaction_rent_total_month, tnt.tenant_price');
         $this->db->select('ren.status_code as rent_status_code, ren.status_name as rent_status');
         $this->db->select('rty.status_code as renttype_status_code, rty.status_name as renttype_status');
         $this->db->select('pst.status_code as payment_status_code, pst.status_name as payment_status');
@@ -200,6 +201,7 @@ class Model_Admin extends CI_Model
         $this->db->select('ret.renewal_type_of_business, ret.renewal_company_name, ret.renewal_contract_file');
         $this->db->select('ret.renewal_date, tnt.tenant_id, tnt.tenant_name');
         $this->db->select('ret.renewal_contract_verif_id, ret.renewal_rent_type_id, pay.payment_verif_id');
+        $this->db->select('ret.renewal_rent_total_month, tnt.tenant_price');
         $this->db->select('ren.status_code as rent_status_code, ren.status_name as rent_status');
         $this->db->select('rty.status_code as renttype_status_code, rty.status_name as renttype_status');
         $this->db->select('pst.status_code as payment_status_code, pst.status_name as payment_status');

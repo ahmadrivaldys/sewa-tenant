@@ -1,19 +1,25 @@
+<?php
+    // Get usertype session
+    $usertype = $this->session->userdata('usertype');
+?>
 <div class="row">
-    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-        <div class="card card-statistic-1">
-        <div class="card-icon bg-primary">
-            <i class="far fa-user"></i>
-        </div>
-        <div class="card-wrap">
-            <div class="card-header">
-                <h4>Total Admin</h4>
+    <?php if($usertype == "Administrator"): ?>
+        <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+            <div class="card card-statistic-1">
+                <div class="card-icon bg-primary">
+                    <i class="far fa-user"></i>
+                </div>
+                <div class="card-wrap">
+                    <div class="card-header">
+                        <h4>Total Admin</h4>
+                    </div>
+                    <div class="card-body">
+                        <?php echo $total_admins; ?>
+                    </div>
+                </div>
             </div>
-            <div class="card-body">
-                <?php echo $total_admins; ?>
-            </div>
         </div>
-        </div>
-    </div>
+    <?php endif; ?>
     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="card card-statistic-1">
             <div class="card-icon bg-danger">
@@ -36,7 +42,7 @@
             </div>
             <div class="card-wrap">
                 <div class="card-header">
-                    <h4>Penyewaan Aktif</h4>
+                    <h4>Penyewaan/Perpanjangan Aktif</h4>
                 </div>
                 <div class="card-body">
                     <?php echo $total_transactions + $total_renewals; ?>

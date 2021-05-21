@@ -230,29 +230,14 @@ class Controller_Admin extends CI_Controller
 				$transaction_no  = 'TRX-' . $this_trx_date . '.' . $this_trx_id;
 			}
 
-			// Gathering all data that already available to be stored into the database
-			$data['transaction_tenant_id']         = $transaction_tenant_id;
-			$data['transaction_no']                = $transaction_no;
-			$data['transaction_rent_from']         = date_create($transaction_rent_from)->format('Y-m-d H:i:s');
-			$data['transaction_rent_to']           = date_create($transaction_rent_to)->format('Y-m-d H:i:s');
-			$data['transaction_type_of_business']  = $transaction_tob;
-			$data['transaction_company_name']      = $transaction_comp_name;
-			$data['transaction_note']              = $transaction_note;
-			$data['transaction_rent_type_id']      = 1;
-			$data['transaction_active_status_id']  = 1;
-			$data['transaction_contract_verif_id'] = 1;
-			$data['transaction_customer_id']       = $user_id;
-			$data['transaction_date']              = $transaction_date;
-			$data['renewal_capability']            = 'Yes';
-			$data['modified_by']                   = $user_id;
-			$data['modified_date']                 = $transaction_date;
-
 			// Validation for minimum rental time
 			$rent_date_from   = date_create($transaction_rent_from);
 			$rent_date_to     = date_create($transaction_rent_to);
 			$rent_date_diff   = date_diff($rent_date_from, $rent_date_to);
 
+			$rent_total_year  = $rent_date_diff->y;
 			$rent_total_month = $rent_date_diff->m;
+			$rent_total_month = ($rent_total_year * 12) + $rent_total_month;
 			$rent_total_day   = $rent_date_diff->d;
 			$rent_total_time  = '';
 
@@ -264,17 +249,36 @@ class Controller_Admin extends CI_Controller
 			// -- If minimum rental time is qualified, store the data into the database. If not, show the error message.
 			if($rent_total_month >= $tenant_min_period)
 			{
+				// Gathering all data that already available to be stored into the database (transaction data)
+				$data['transaction_tenant_id']         = $transaction_tenant_id;
+				$data['transaction_no']                = $transaction_no;
+				$data['transaction_rent_from']         = date_create($transaction_rent_from)->format('Y-m-d H:i:s');
+				$data['transaction_rent_to']           = date_create($transaction_rent_to)->format('Y-m-d H:i:s');
+				$data['transaction_rent_total_month']  = $rent_total_month;
+				$data['transaction_type_of_business']  = $transaction_tob;
+				$data['transaction_company_name']      = $transaction_comp_name;
+				$data['transaction_note']              = $transaction_note;
+				$data['transaction_rent_type_id']      = 1;
+				$data['transaction_active_status_id']  = 1;
+				$data['transaction_contract_verif_id'] = 1;
+				$data['transaction_customer_id']       = $user_id;
+				$data['transaction_date']              = $transaction_date;
+				$data['renewal_capability']            = 'Yes';
+				$data['modified_by']                   = $user_id;
+				$data['modified_date']                 = $transaction_date;
+
 				// Storing the data into the database (create transaction)
 				$save_transaction = $this->model_admin->add_transaction($data);
 
-				// Storing the data into the database (create payment data)
-				$pay['payment_nominal']        = $tenant_info->tenant_price;
+				// Gathering all data that already available to be stored into the database (payment data)
+				$pay['payment_nominal']        = $rent_total_month * $tenant_info->tenant_price;
 				$pay['payment_method_id']      = $transaction_pay_method;
 				$pay['payment_status_id']      = 1;
 				$pay['payment_verif_id']       = 1;
 				$pay['payment_type']           = 'new';
 				$pay['payment_transaction_no'] = $transaction_no;
 
+				// Storing the data into the database (create payment data)
 				$save_payment = $this->model_admin->add_payment_data($pay);
 
 				// Storing the data into the database (update tenant availability)
@@ -434,7 +438,7 @@ class Controller_Admin extends CI_Controller
 		}
 	}
 
-	public function view_add_renewal()
+	public function view_add_renewal($trx_no = null)
 	{
 		// Get usertype session
 		$usertype = $this->session->userdata('usertype');
@@ -442,11 +446,28 @@ class Controller_Admin extends CI_Controller
 		// Get transaction no
 		$transaction_no = $this->input->post('transaction_no');
 
-		if(!empty($transaction_no))
+		if(!empty($transaction_no) || !empty($trx_no))
 		{
 			if($usertype == "Customer")
 			{
-				$data['get_prev_trx']  = $this->model_admin->get_previous_transaction($transaction_no);
+				if(!empty($transaction_no))
+				{
+					$data['get_prev_trx']  = $this->model_admin->get_previous_transaction($transaction_no);
+				}
+
+				if(!empty($trx_no))
+				{
+					// Get user_id session
+					$user_id = $this->session->userdata('user_id');
+
+					$data['get_prev_trx'] = $this->model_admin->get_previous_transaction($trx_no);
+
+					if($data['get_prev_trx']->transaction_customer_id != $user_id)
+					{
+						redirect('dashboard/kelola-transaksi');
+					}
+				}
+				
 				$data['get_pay_mtd']   = $this->model_admin->get_payment_method_list();
 				$data['page_title']    = 'Ajukan Perpanjangan Sewa';
 				$data['page_subtitle'] = 'Di menu ini Anda mengajukan perpanjangan masa sewa tenant yang telah berakhir.';
@@ -487,7 +508,7 @@ class Controller_Admin extends CI_Controller
 			$this->session->set_flashdata('payment-not-selected', $err_message);
 
 			// User will be redirected to 'Ajukan Perpanjangan Sewa' page
-			redirect('dashboard/rincian-perpanjangan/' . $transaction_no);
+			redirect('dashboard/ajukan-perpanjangan-sewa/' . $transaction_no);
 		}
 		else
 		{
@@ -497,28 +518,14 @@ class Controller_Admin extends CI_Controller
 			// Get previous transaction
 			$get_prev_trx = $this->model_admin->get_previous_transaction($transaction_no);
 
-			// Gathering all data that already available to be stored into the database
-			$data['renewal_tenant_id']         = $get_prev_trx->transaction_tenant_id;
-			$data['renewal_no']                = $transaction_no;
-			$data['renewal_rent_from']         = date_create($renewal_rent_from)->format('Y-m-d H:i:s');
-			$data['renewal_rent_to']           = date_create($renewal_rent_to)->format('Y-m-d H:i:s');
-			$data['renewal_type_of_business']  = $get_prev_trx->transaction_type_of_business;
-			$data['renewal_company_name']      = $get_prev_trx->transaction_company_name;
-			$data['renewal_note']              = $renewal_note;
-			$data['renewal_rent_type_id']      = 2;
-			$data['renewal_active_status_id']  = 1;
-			$data['renewal_contract_verif_id'] = 1;
-			$data['renewal_customer_id']       = $user_id;
-			$data['renewal_date']              = $renewal_date;
-			$data['modified_by']               = $user_id;
-			$data['modified_date']             = $renewal_date;
-
 			// Validation for minimum rental time
 			$rent_date_from   = date_create($renewal_rent_from);
 			$rent_date_to     = date_create($renewal_rent_to);
 			$rent_date_diff   = date_diff($rent_date_from, $rent_date_to);
 
+			$rent_total_year  = $rent_date_diff->y;
 			$rent_total_month = $rent_date_diff->m;
+			$rent_total_month = ($rent_total_year * 12) + $rent_total_month;
 			$rent_total_day   = $rent_date_diff->d;
 			$rent_total_time  = '';
 
@@ -530,11 +537,28 @@ class Controller_Admin extends CI_Controller
 			// -- If minimum rental time is qualified, store the data into the database. If not, show the error message.
 			if($rent_total_month >= $tenant_min_period)
 			{
+				// Gathering all data that already available to be stored into the database
+				$data['renewal_tenant_id']         = $get_prev_trx->transaction_tenant_id;
+				$data['renewal_no']                = $transaction_no;
+				$data['renewal_rent_from']         = date_create($renewal_rent_from)->format('Y-m-d H:i:s');
+				$data['renewal_rent_to']           = date_create($renewal_rent_to)->format('Y-m-d H:i:s');
+				$data['renewal_rent_total_month']  = $rent_total_month;
+				$data['renewal_type_of_business']  = $get_prev_trx->transaction_type_of_business;
+				$data['renewal_company_name']      = $get_prev_trx->transaction_company_name;
+				$data['renewal_note']              = $renewal_note;
+				$data['renewal_rent_type_id']      = 2;
+				$data['renewal_active_status_id']  = 1;
+				$data['renewal_contract_verif_id'] = 1;
+				$data['renewal_customer_id']       = $user_id;
+				$data['renewal_date']              = $renewal_date;
+				$data['modified_by']               = $user_id;
+				$data['modified_date']             = $renewal_date;
+
 				// Storing the data into the database (create renewal transaction)
 				$save_renewal = $this->model_admin->add_renewal($data);
 
 				// Storing the data into the database (create payment data)
-				$pay['payment_nominal']        = $tenant_info->tenant_price;
+				$pay['payment_nominal']        = $rent_total_month * $tenant_info->tenant_price;
 				$pay['payment_method_id']      = $renewal_pay_method;
 				$pay['payment_status_id']      = 1;
 				$pay['payment_verif_id']       = 1;
@@ -572,7 +596,7 @@ class Controller_Admin extends CI_Controller
 				$this->session->set_flashdata('min-rent-not-qualified', $flash_msg);
 
 				// User will be redirected to 'Ajukan Perpanjangan Sewa' page
-				redirect('dashboard/rincian-perpanjangan/' . $transaction_no);
+				redirect('dashboard/ajukan-perpanjangan-sewa/' . $transaction_no);
 			}
 
 			// After finish, user will be redirected to 'Kelola Transaksi' page

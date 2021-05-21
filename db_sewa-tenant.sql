@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.3
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 10, 2021 at 01:11 PM
--- Server version: 10.4.14-MariaDB
--- PHP Version: 7.4.11
+-- Generation Time: May 21, 2021 at 12:39 PM
+-- Server version: 10.4.16-MariaDB
+-- PHP Version: 7.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -95,6 +95,14 @@ CREATE TABLE `tbl_payments` (
   `payment_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `tbl_payments`
+--
+
+INSERT INTO `tbl_payments` (`payment_id`, `payment_nominal`, `payment_method_id`, `payment_status_id`, `payment_transaction_no`, `payment_paymentslip_file`, `payment_verif_id`, `payment_verif_by`, `payment_type`, `payment_date`) VALUES
+(3, 400000000, 2, 2, 'TRX-210521.001', 'Unggahan_Bukti-Pembayaran_TRX-210521-001.png', 3, 4, 'new', '2021-05-21 15:35:31'),
+(4, 100000000, 6, 2, 'TRX-210521.001', 'Unggahan_Bukti-Pembayaran_TRX-210521-001_Perpanjangan.png', 3, 2, 'renewal', '2021-05-21 17:24:51');
+
 -- --------------------------------------------------------
 
 --
@@ -132,6 +140,7 @@ CREATE TABLE `tbl_renewal_transactions` (
   `renewal_tenant_id` int(3) NOT NULL,
   `renewal_rent_from` datetime NOT NULL,
   `renewal_rent_to` datetime NOT NULL,
+  `renewal_rent_total_month` int(5) NOT NULL,
   `renewal_type_of_business` varchar(50) NOT NULL,
   `renewal_company_name` varchar(50) NOT NULL,
   `renewal_note` varchar(250) NOT NULL,
@@ -145,6 +154,13 @@ CREATE TABLE `tbl_renewal_transactions` (
   `modified_by` int(5) NOT NULL,
   `modified_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_renewal_transactions`
+--
+
+INSERT INTO `tbl_renewal_transactions` (`renewal_id`, `renewal_no`, `renewal_tenant_id`, `renewal_rent_from`, `renewal_rent_to`, `renewal_rent_total_month`, `renewal_type_of_business`, `renewal_company_name`, `renewal_note`, `renewal_rent_type_id`, `renewal_active_status_id`, `renewal_contract_file`, `renewal_contract_verif_id`, `renewal_contract_verif_by`, `renewal_customer_id`, `renewal_date`, `modified_by`, `modified_date`) VALUES
+(1, 'TRX-210521.001', 1, '2021-05-21 00:00:00', '2021-09-30 00:00:00', 4, 'Makanan', 'PT Sehat Sejahtera', '', 2, 2, 'Unggahan_Surat-Perjanjian_TRX-210521-001_Perpanjangan.rtf', 3, 2, 1, '2021-05-21 17:14:43', 1, '2021-05-21 17:14:43');
 
 -- --------------------------------------------------------
 
@@ -212,7 +228,7 @@ CREATE TABLE `tbl_tenants` (
 --
 
 INSERT INTO `tbl_tenants` (`tenant_id`, `tenant_code`, `tenant_name`, `tenant_size`, `tenant_image`, `tenant_location`, `tenant_price`, `tenant_min_period`, `tenant_info`, `tenant_availability`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
-(1, '', 'Tenant Utama', '15 x 20 m', 'xps-7zwvnvsaafy-unsplash.jpg', 'Lantai 2', 25000000, 3, 'Tidak termasuk biaya listrik dan air', 1, 1, '2021-04-10 16:52:52', 1, '2021-04-10 16:52:52');
+(1, '', 'Tenant Utama', '15 x 20 m', 'xps-7zwvnvsaafy-unsplash.jpg', 'Lantai 2', 25000000, 3, 'Tidak termasuk biaya listrik dan air', 2, 1, '2021-04-10 16:52:52', 1, '2021-04-10 16:52:52');
 
 -- --------------------------------------------------------
 
@@ -226,6 +242,7 @@ CREATE TABLE `tbl_transactions` (
   `transaction_tenant_id` int(3) NOT NULL,
   `transaction_rent_from` datetime NOT NULL,
   `transaction_rent_to` datetime NOT NULL,
+  `transaction_rent_total_month` int(5) NOT NULL,
   `transaction_type_of_business` varchar(50) NOT NULL,
   `transaction_company_name` varchar(50) NOT NULL,
   `transaction_note` varchar(250) NOT NULL,
@@ -240,6 +257,13 @@ CREATE TABLE `tbl_transactions` (
   `modified_by` int(5) NOT NULL,
   `modified_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_transactions`
+--
+
+INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_no`, `transaction_tenant_id`, `transaction_rent_from`, `transaction_rent_to`, `transaction_rent_total_month`, `transaction_type_of_business`, `transaction_company_name`, `transaction_note`, `transaction_rent_type_id`, `transaction_active_status_id`, `transaction_contract_file`, `transaction_contract_verif_id`, `transaction_contract_verif_by`, `transaction_customer_id`, `transaction_date`, `renewal_capability`, `modified_by`, `modified_date`) VALUES
+(3, 'TRX-210521.001', 1, '2021-05-21 00:00:00', '2021-05-21 00:00:00', 16, 'Makanan', 'PT Sehat Sejahtera', '', 1, 3, 'Unggahan_Surat-Perjanjian_TRX-210521-001.rtf', 3, 3, 1, '2021-05-21 15:31:25', 'Yes', 1, '2021-05-21 15:31:25');
 
 -- --------------------------------------------------------
 
@@ -346,13 +370,13 @@ ALTER TABLE `tbl_admins`
 -- AUTO_INCREMENT for table `tbl_payments`
 --
 ALTER TABLE `tbl_payments`
-  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tbl_renewal_transactions`
 --
 ALTER TABLE `tbl_renewal_transactions`
-  MODIFY `renewal_id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `renewal_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `tbl_status`
@@ -370,7 +394,7 @@ ALTER TABLE `tbl_tenants`
 -- AUTO_INCREMENT for table `tbl_transactions`
 --
 ALTER TABLE `tbl_transactions`
-  MODIFY `transaction_id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `transaction_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`

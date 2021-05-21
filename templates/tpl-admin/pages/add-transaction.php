@@ -122,7 +122,7 @@
 
                     $('#tenant_size').html('<div class="tenant-info">Ukuran</div>' + data.tenant_size);
                     $('#tenant_location').html('<div class="tenant-info">Lokasi</div>' + data.tenant_location);
-                    $('#tenant_price').html('<div class="tenant-info">Harga Sewa per Bulan</div>' + data.tenant_price);
+                    $('#tenant_price').html('<div class="tenant-info">Harga Sewa</div>' + data.tenant_price + ' / bulan');
                     $('#tenant_min_period').html('<div class="tenant-info">Waktu Sewa Min.</div>' + data.tenant_min_period + ' bulan');
                     $('#tenant_info').html('<div class="tenant-info">Keterangan</div>' + data.tenant_info);
 
