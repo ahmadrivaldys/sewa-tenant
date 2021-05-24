@@ -299,6 +299,32 @@ class Model_Admin extends CI_Model
     }
 
 
+    // Payment Method
+    public function add_paymentmethod($data)
+    {
+        return $this->db->insert('tbl_tenants', $data);
+    }
+
+    public function get_paymentmethods_list($where)
+    {
+        $this->db->select('pym.method_id, pym.method_bank_name, pym.method_bank_account, pym.method_type');
+        $this->db->from('tbl_payment_methods pym');
+        $this->db->where($where);
+
+        return $this->db->get()->result();
+    }
+
+    public function update_paymentmethod($data, $where)
+    {
+        return $this->db->update('tbl_payment_methods', $data, $where);
+    }
+
+    public function delete_paymentmethod($where)
+    {
+        return $this->db->delete('tbl_payment_methods', $where);
+    }
+
+
     // Admin
     public function total_admin_account($where)
     {

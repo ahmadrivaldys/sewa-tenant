@@ -23,12 +23,12 @@ class Controller_Admin extends CI_Controller
 		// Check if the transaction has ended or not
 		$get_trx_list = $this->model_admin->get_all_transactions();
 		$get_ret_list = $this->model_admin->get_all_renewals();
-		$today_date   = date_create('now')->format('d/m/Y');
+		$today_date   = new DateTime();
 		
 		foreach($get_trx_list as $trx_list)
 		{
 			// -- Update end time for transaction
-			$trx_enddate       = date('d/m/Y', strtotime($trx_list->transaction_rent_to));
+			$trx_enddate       = new DateTime($trx_list->transaction_rent_to);
 			$trx_active_status = $trx_list->transaction_active_status_id;
 
 			if($today_date >= $trx_enddate && $trx_active_status != 3)
@@ -40,7 +40,8 @@ class Controller_Admin extends CI_Controller
 			}
 
 			// -- Update tenant availability to 'available' after the transaction is not renewed/extended within 7 days (data will be updated on day 8)
-			$trx_8days = date('d/m/Y', strtotime('+8 days', strtotime($trx_list->transaction_rent_to)));
+			$trx_8days = new DateTime($trx_list->transaction_rent_to);
+			$trx_8days = $trx_8days->modify('+8days');
 			$tenant_id = $trx_list->transaction_tenant_id;
 
 			if($today_date >= $trx_8days && $trx_active_status == 3)
@@ -60,8 +61,9 @@ class Controller_Admin extends CI_Controller
 		foreach($get_ret_list as $renewal_list)
 		{
 			// -- Update end time for transaction
-			$ret_enddate       = date('d/m/Y', strtotime($renewal_list->renewal_rent_to));
+			$ret_enddate       = new DateTime($renewal_list->renewal_rent_to);
 			$ret_active_status = $renewal_list->renewal_active_status_id;
+			$tenant_id         = $renewal_list->renewal_tenant_id;
 
 			if($today_date >= $ret_enddate && $ret_active_status != 3)
 			{
@@ -69,14 +71,8 @@ class Controller_Admin extends CI_Controller
 				$ret_no['renewal_no'] = $renewal_list->renewal_no;
 
 				$this->model_admin->update_renewal_transaction($ret, $ret_no);
-			}
 
-			// -- Update tenant availability to 'available' after the transaction is not renewed/extended within 7 days (data will be updated on day 8)
-			$ret_8days = date('d/m/Y', strtotime('+8 days', strtotime($renewal_list->renewal_rent_to)));
-			$tenant_id = $renewal_list->renewal_tenant_id;
-
-			if($today_date >= $ret_8days && $ret_active_status == 3)
-			{
+				// -- Update tenant availability to 'available'
 				$tnt['tenant_availability'] = 1;
 				$where_tnt['tenant_id'] = $tenant_id;
 
@@ -1275,6 +1271,28 @@ class Controller_Admin extends CI_Controller
 			redirect('dashboard/kelola-transaksi');
 		}
     }
+
+	public function get_paymentmethods_list()
+	{
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		if($usertype == "Administrator")
+		{
+			$where[1] = 1;
+
+			$data['get_mtd_list']  = $this->model_admin->get_paymentmethods_list($where);
+			$data['page_title']    = 'Kelola Metode Pembayaran';
+			$data['page_subtitle'] = 'Di menu ini Anda dapat mengelola metode pembayaran yang dapat dipilih oleh pelanggan.';
+			$data['content_title'] = 'Daftar Metode Pembayaran';
+
+			$this->template->main('tpl-admin/pages/payment-methods', $data);
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
+	}
 
 	public function get_admins_list()
 	{

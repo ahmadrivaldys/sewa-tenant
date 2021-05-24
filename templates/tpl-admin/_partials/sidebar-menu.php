@@ -3,11 +3,12 @@
     $usertype = $this->session->userdata('usertype');
 
     // Defines the URL for each menu
-    $url_dashboard   = base_url('dashboard');
-    $url_transaction = base_url('dashboard/kelola-transaksi');
-    $url_tenant      = base_url('dashboard/kelola-tenant');
-    $url_admin       = base_url('dashboard/kelola-admin');
-    $url_customer    = base_url('dashboard/kelola-pelanggan');
+    $url_dashboard     = base_url('dashboard');
+    $url_transaction   = base_url('dashboard/kelola-transaksi');
+    $url_tenant        = base_url('dashboard/kelola-tenant');
+    $url_admin         = base_url('dashboard/kelola-admin');
+    $url_customer      = base_url('dashboard/kelola-pelanggan');
+    $url_paymentmethod = base_url('dashboard/kelola-metode-pembayaran');
 ?>
 
 
@@ -39,4 +40,10 @@
             <a href="<?php echo $url_customer; ?>" class="nav-link"><i class="far fa-user"></i> <span>Pelanggan</span></a>
         <?php endif; ?>
     </li>
+<?php endif; ?>
+
+
+<?php if($usertype == "Administrator"): ?>
+    <!-- Menu: Metode Pembayaran -->
+    <li <?php if($page_title == 'Kelola Metode Pembayaran') echo "class='active'"; ?>><a href="<?php echo $url_paymentmethod; ?>" class="nav-link"><i class="fas fa-fire"></i> <span>Metode Pembayaran</span></a></li>
 <?php endif; ?>

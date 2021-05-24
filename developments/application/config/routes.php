@@ -60,6 +60,7 @@ $route['dashboard/kelola-transaksi'] = 'Controller_Admin/get_transactions_list';
 $route['dashboard/kelola-tenant']    = 'Controller_Admin/get_tenants_list';
 $route['dashboard/kelola-admin']     = 'Controller_Admin/get_admins_list';
 $route['dashboard/kelola-pelanggan'] = 'Controller_Admin/get_customers_list';
+$route['dashboard/kelola-metode-pembayaran'] = 'Controller_Admin/get_paymentmethods_list';
 
 $route['dashboard/tambah-tenant']             = 'Controller_Admin/view_add_tenant';
 $route['dashboard/tambah-tenant/process']     = 'Controller_Admin/save_tenant_process';
