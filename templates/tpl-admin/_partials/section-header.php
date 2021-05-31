@@ -20,13 +20,15 @@
 
     <h1>Sewa Tenant</h1>
 
-    <?php if($page_title == 'Kelola Tenant' OR $page_title == 'Kelola Akun Admin'): ?>
+    <?php if($page_title == 'Kelola Tenant' OR $page_title == 'Kelola Akun Admin' OR $page_title == 'Kelola Metode Pembayaran'): ?>
 
         <div class="section-header-button">
             <?php if($page_title == 'Kelola Tenant'): ?>
                 <a href="<?php echo base_url('dashboard/tambah-tenant'); ?>" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Tambah</a>
-            <?php else: ?>
+            <?php elseif($page_title == 'Kelola Akun Admin'): ?>
                 <a href="#" class="btn btn-primary" onclick="modal_trigger('tambah-admin')"><i class="fas fa-plus-circle"></i> Tambah</a>
+            <?php elseif($page_title == 'Kelola Metode Pembayaran'): ?>
+                <a href="#" class="btn btn-primary" onclick="modal_trigger('tambah-metode-pembayaran')"><i class="fas fa-plus-circle"></i> Tambah</a>
             <?php endif; ?>
         </div>
 

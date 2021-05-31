@@ -131,13 +131,22 @@
     </div>
 <?php endif; ?>
 
-<?php if($this->session->flashdata('admin-already-exist')): ?>
+<?php if($this->session->flashdata('admin-already-exist') OR $this->session->flashdata('paymentmethod-already-exist')): ?>
     <div class="alert alert-warning alert-dismissible show fade">
         <div class="alert-body">
             <button class="close" data-dismiss="alert">
                 <span>×</span>
             </button>
-            <?php echo $this->session->flashdata('admin-already-exist'); ?>
+            <?php
+                if($this->session->flashdata('admin-already-exist'))
+                {
+                    echo $this->session->flashdata('admin-already-exist');
+                }
+                if($this->session->flashdata('paymentmethod-already-exist'))
+                {
+                    echo $this->session->flashdata('paymentmethod-already-exist');
+                }
+            ?>
         </div>
     </div>
 <?php endif; ?>
@@ -171,8 +180,14 @@
 <?php endif; ?>
 
 
-<!-- Admin and Account -->
-<?php if($this->session->flashdata('add-admin-succeeded') OR $this->session->flashdata('update-admin-succeeded') OR $this->session->flashdata('delete-admin-succeeded') OR $this->session->flashdata('update-account-succeeded')): ?>
+<!-- Admin, Account, and Payment Method -->
+<?php if($this->session->flashdata('add-admin-succeeded')
+      OR $this->session->flashdata('update-admin-succeeded')
+      OR $this->session->flashdata('delete-admin-succeeded')
+      OR $this->session->flashdata('update-account-succeeded')
+      OR $this->session->flashdata('add-paymentmethod-succeeded')
+      OR $this->session->flashdata('update-paymentmethod-succeeded')
+      OR $this->session->flashdata('delete-paymentmethod-succeeded')): ?>
     <div class="alert alert-success alert-dismissible show fade">
         <div class="alert-body">
             <button class="close" data-dismiss="alert">
@@ -194,6 +209,18 @@
                 if($this->session->flashdata('update-account-succeeded'))
                 {
                     echo $this->session->flashdata('update-account-succeeded');
+                }
+                if($this->session->flashdata('add-paymentmethod-succeeded'))
+                {
+                    echo $this->session->flashdata('add-paymentmethod-succeeded');
+                }
+                if($this->session->flashdata('update-paymentmethod-succeeded'))
+                {
+                    echo $this->session->flashdata('update-paymentmethod-succeeded');
+                }
+                if($this->session->flashdata('delete-paymentmethod-succeeded'))
+                {
+                    echo $this->session->flashdata('delete-paymentmethod-succeeded');
                 }
             ?>
         </div>

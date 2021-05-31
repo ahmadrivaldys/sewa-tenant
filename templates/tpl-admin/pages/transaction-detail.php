@@ -169,6 +169,7 @@
                             </div>
                         </div>
                         <input type="file" class="form-control" placeholder="Unggah" name="transaction_contract" required>
+                        <label class="col-form-label col-12"><b>Jenis Dokumen yang Diperbolehkan:</b> .doc, .docx, .rtf</label>
                     </div>
                 </div>
             </div>

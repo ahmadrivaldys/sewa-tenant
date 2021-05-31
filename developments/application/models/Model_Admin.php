@@ -300,9 +300,19 @@ class Model_Admin extends CI_Model
 
 
     // Payment Method
+    public function total_paymentmethod_account($bank_name, $bank_account)
+    {
+        $this->db->select('method_bank_name, method_bank_account');
+        $this->db->from('tbl_payment_methods');
+        $this->db->where('method_bank_name', $bank_name);
+        $this->db->where('method_bank_account', $bank_account);
+
+        return $this->db->get()->num_rows();
+    }
+
     public function add_paymentmethod($data)
     {
-        return $this->db->insert('tbl_tenants', $data);
+        return $this->db->insert('tbl_payment_methods', $data);
     }
 
     public function get_paymentmethods_list($where)

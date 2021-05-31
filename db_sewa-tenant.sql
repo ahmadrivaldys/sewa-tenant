@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 21, 2021 at 12:39 PM
+-- Generation Time: May 31, 2021 at 12:13 PM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -160,7 +160,7 @@ CREATE TABLE `tbl_renewal_transactions` (
 --
 
 INSERT INTO `tbl_renewal_transactions` (`renewal_id`, `renewal_no`, `renewal_tenant_id`, `renewal_rent_from`, `renewal_rent_to`, `renewal_rent_total_month`, `renewal_type_of_business`, `renewal_company_name`, `renewal_note`, `renewal_rent_type_id`, `renewal_active_status_id`, `renewal_contract_file`, `renewal_contract_verif_id`, `renewal_contract_verif_by`, `renewal_customer_id`, `renewal_date`, `modified_by`, `modified_date`) VALUES
-(1, 'TRX-210521.001', 1, '2021-05-21 00:00:00', '2021-09-30 00:00:00', 4, 'Makanan', 'PT Sehat Sejahtera', '', 2, 2, 'Unggahan_Surat-Perjanjian_TRX-210521-001_Perpanjangan.rtf', 3, 2, 1, '2021-05-21 17:14:43', 1, '2021-05-21 17:14:43');
+(1, 'TRX-210521.001', 1, '2021-05-21 00:00:00', '2021-05-16 12:33:18', 4, 'Makanan', 'PT Sehat Sejahtera', '', 2, 3, 'Unggahan_Surat-Perjanjian_TRX-210521-001_Perpanjangan.rtf', 3, 2, 1, '2021-05-21 17:14:43', 1, '2021-05-21 17:14:43');
 
 -- --------------------------------------------------------
 
@@ -228,7 +228,7 @@ CREATE TABLE `tbl_tenants` (
 --
 
 INSERT INTO `tbl_tenants` (`tenant_id`, `tenant_code`, `tenant_name`, `tenant_size`, `tenant_image`, `tenant_location`, `tenant_price`, `tenant_min_period`, `tenant_info`, `tenant_availability`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
-(1, '', 'Tenant Utama', '15 x 20 m', 'xps-7zwvnvsaafy-unsplash.jpg', 'Lantai 2', 25000000, 3, 'Tidak termasuk biaya listrik dan air', 2, 1, '2021-04-10 16:52:52', 1, '2021-04-10 16:52:52');
+(1, '', 'Tenant Utama', '15 x 20 m', 'xps-7zwvnvsaafy-unsplash.jpg', 'Lantai 2', 25000000, 3, 'Tidak termasuk biaya listrik dan air', 1, 1, '2021-04-10 16:52:52', 1, '2021-04-10 16:52:52');
 
 -- --------------------------------------------------------
 
@@ -263,7 +263,7 @@ CREATE TABLE `tbl_transactions` (
 --
 
 INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_no`, `transaction_tenant_id`, `transaction_rent_from`, `transaction_rent_to`, `transaction_rent_total_month`, `transaction_type_of_business`, `transaction_company_name`, `transaction_note`, `transaction_rent_type_id`, `transaction_active_status_id`, `transaction_contract_file`, `transaction_contract_verif_id`, `transaction_contract_verif_by`, `transaction_customer_id`, `transaction_date`, `renewal_capability`, `modified_by`, `modified_date`) VALUES
-(3, 'TRX-210521.001', 1, '2021-05-21 00:00:00', '2021-05-21 00:00:00', 16, 'Makanan', 'PT Sehat Sejahtera', '', 1, 3, 'Unggahan_Surat-Perjanjian_TRX-210521-001.rtf', 3, 3, 1, '2021-05-21 15:31:25', 'Yes', 1, '2021-05-21 15:31:25');
+(3, 'TRX-210521.001', 1, '2021-05-21 00:00:00', '2021-05-21 00:00:00', 16, 'Makanan', 'PT Sehat Sejahtera', '', 1, 3, 'Unggahan_Surat-Perjanjian_TRX-210521-001.rtf', 3, 3, 1, '2021-05-21 15:31:25', 'No', 1, '2021-05-21 15:31:25');
 
 -- --------------------------------------------------------
 
@@ -320,6 +320,12 @@ ALTER TABLE `tbl_payments`
   ADD PRIMARY KEY (`payment_id`);
 
 --
+-- Indexes for table `tbl_payment_methods`
+--
+ALTER TABLE `tbl_payment_methods`
+  ADD PRIMARY KEY (`method_id`);
+
+--
 -- Indexes for table `tbl_renewal_transactions`
 --
 ALTER TABLE `tbl_renewal_transactions`
@@ -371,6 +377,12 @@ ALTER TABLE `tbl_admins`
 --
 ALTER TABLE `tbl_payments`
   MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `tbl_payment_methods`
+--
+ALTER TABLE `tbl_payment_methods`
+  MODIFY `method_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `tbl_renewal_transactions`

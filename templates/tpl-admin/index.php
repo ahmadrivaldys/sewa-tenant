@@ -72,8 +72,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
                     <div class="p-3 mt-4 mb-4 hide-sidebar-mini">
                     
-                    <a href="#" class="btn btn-primary btn-lg btn-icon-split btn-block">
-                        <i class="far fa-question-circle"></i> <div>Panduan</div>
+                    <a href="#" onclick="modal_trigger('keterangan-sewa')" class="btn btn-primary btn-lg btn-icon-split btn-block">
+                        <i class="far fa-question-circle"></i> <div>Keterangan</div>
                     </a>
                     </div>
                 </aside>
@@ -140,6 +140,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="modal-footer bg-whitesmoke br">
                 <button type="button" class="btn btn-secondary" onclick="modal_trigger('konfirmasi-keluar')">Tidak</button>
                 <a href="<?php echo base_url('dashboard/logout'); ?>" class="btn btn-danger">Ya</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Information -->
+    <div class="modal-backdrop" id="keterangan-sewa" onclick="windowOnClick(this)">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Keterangan</h5>
+                <span class="close-modal" onclick="modal_trigger('keterangan-sewa')">
+                    <svg xmlns='http://www.w3.org/2000/svg' class='ionicon' viewBox='0 0 512 512'>
+                        <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='M368 368L144 144M368 144L144 368'/>
+                    </svg>
+                </span>
+            </div>
+            
+            <div class="modal-body">
+                Perpanjangan sewa dapat diajukan maksimal 7 hari setelah masa sewa berakhir.
+            </div>
+
+            <div class="modal-footer bg-whitesmoke br">
+                <button type="button" class="btn btn-secondary" onclick="modal_trigger('keterangan-sewa')">Oke</button>
             </div>
         </div>
     </div>

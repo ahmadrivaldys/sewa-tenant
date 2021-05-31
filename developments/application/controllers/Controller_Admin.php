@@ -1294,6 +1294,110 @@ class Controller_Admin extends CI_Controller
 		}
 	}
 
+	public function save_paymentmethod_process()
+    {
+        // Getting all input
+        $submit_type         = $this->input->post('submit_type');
+        $method_bank_name    = $this->input->post('method_bank_name');
+        $method_bank_account = $this->input->post('method_bank_account');
+        $method_type         = $this->input->post('method_type');
+
+        // Gathering all data that already available to be stored into the database
+        $data['method_bank_name']    = $method_bank_name;
+        $data['method_bank_account'] = $method_bank_account;
+        $data['method_type']         = $method_type;
+
+        // Before storing the data, check the user status type first, is this new user or update
+        if($submit_type == 'new')
+        {
+            $total_account = $this->model_admin->total_paymentmethod_account($method_bank_name, $method_bank_account);
+
+            // Check if account already exist or not
+            if($total_account > 0)
+            {
+				$this->session->set_flashdata('paymentmethod-already-exist', 'Metode pembayaran dengan nomor rekening tersebut <b>sudah ada</b>. Silakan coba dengan nomor rekening lain.');
+			}
+            else
+            {
+                // Storing the data into the database
+                $save_paymentmethod = $this->model_admin->add_paymentmethod($data);
+
+                // Show the message if the storing process was succeeded or failed
+                if($save_paymentmethod)
+                {
+					$this->session->set_flashdata('add-paymentmethod-succeeded', 'Metode pembayaran <b>' . $method_bank_name .'</b> [' . $method_bank_account . ' - ' . $method_type . '] berhasil dibuat.');
+                }
+                else
+                {
+                    $this->session->set_flashdata('add-paymentmethod-failed', 'Metode pembayaran <b>' . $method_bank_name .'</b> [' . $method_bank_account . ' - ' . $method_type . '] gagal dibuat.');
+                }
+            }
+        }
+        else
+        {
+            $where['method_id'] = $this->input->post('method_id');
+
+            // Storing the data into the database
+            $save_paymentmethod = $this->model_admin->update_paymentmethod($data, $where);
+
+            // Show the message if the storing process was succeeded or failed
+            if($save_paymentmethod)
+            {
+				$this->session->set_flashdata('update-paymentmethod-succeeded', 'Metode pembayaran <b>' . $method_bank_name .'</b> [' . $method_bank_account . ' - ' . $method_type . '] berhasil diperbarui.');
+            }
+            else
+            {
+				$this->session->set_flashdata('update-paymentmethod-failed', 'Metode pembayaran <b>' . $method_bank_name .'</b> [' . $method_bank_account . ' - ' . $method_type . '] gagal diperbarui.');
+            }
+        }
+
+        // After finish, user (admin) will be redirected to 'Kelola Metode Pembayaran' page
+        redirect('dashboard/kelola-metode-pembayaran');
+    }
+
+	public function delete_paymentmethod_process()
+    {
+        // Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		if($usertype == "Administrator")
+		{			
+			$method_id           = $this->input->post('method_id');
+			$method_bank_name    = $this->input->post('method_bank_name');
+			$method_bank_account = $this->input->post('method_bank_account');
+			$method_type         = $this->input->post('method_type');
+			
+			$where['method_id'] = $method_id;
+
+			if(!empty($method_id))
+			{
+				// Deleting the data from the database
+				$delete_paymentmethod = $this->model_admin->delete_paymentmethod($where);
+
+				// Show the message if the deleting process was succeeded or failed
+				if($delete_paymentmethod)
+				{
+					$this->session->set_flashdata('delete-paymentmethod-succeeded', 'Metode pembayaran <b>' . $method_bank_name .'</b> [' . $method_bank_account . ' - ' . $method_type . '] berhasil <b>dihapus</b>.');
+				}
+				else
+				{
+					$this->session->set_flashdata('delete-paymentmethod-failed', 'Metode pembayaran <b>' . $method_bank_name .'</b> [' . $method_bank_account . ' - ' . $method_type . '] gagal dihapus.');
+				}
+
+				// After finish, user (admin) will be redirected to 'Kelola Metode Pembayaran' page
+				redirect('dashboard/kelola-metode-pembayaran');
+			}
+			else
+			{
+				echo "Akses langsung tidak diperbolehkan.";
+			}
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
+    }
+
 	public function get_admins_list()
 	{
 		// Get usertype session

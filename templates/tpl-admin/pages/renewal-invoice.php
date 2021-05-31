@@ -202,6 +202,7 @@
                             </div>
                         </div>
                         <input type="file" class="form-control" placeholder="Unggah" name="transaction_paymentslip" required>
+                        <label class="col-form-label col-12"><b>Jenis Gambar yang Diperbolehkan:</b> .gif, .jpg, .jpeg, .png, .bmp</label>
                     </div>
                 </div>
             </div>

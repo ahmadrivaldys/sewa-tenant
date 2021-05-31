@@ -45,5 +45,5 @@
 
 <?php if($usertype == "Administrator"): ?>
     <!-- Menu: Metode Pembayaran -->
-    <li <?php if($page_title == 'Kelola Metode Pembayaran') echo "class='active'"; ?>><a href="<?php echo $url_paymentmethod; ?>" class="nav-link"><i class="fas fa-fire"></i> <span>Metode Pembayaran</span></a></li>
+    <li <?php if($page_title == 'Kelola Metode Pembayaran') echo "class='active'"; ?>><a href="<?php echo $url_paymentmethod; ?>" class="nav-link"><i class="fas fa-credit-card"></i> <span>Metode Pembayaran</span></a></li>
 <?php endif; ?>

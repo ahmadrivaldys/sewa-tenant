@@ -52,6 +52,12 @@
                             <input type="file" class="form-control" name="tenant_image"/>
                         </div>
                     </div>
+                    <div class="form-group row mb-4">
+                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+                        <div class="col-sm-12 col-md-7">
+                            <label class="col-form-label col-12"><b>Jenis Gambar yang Diperbolehkan:</b> .gif, .jpg, .jpeg, .png, .bmp</label>
+                        </div>
+                    </div>
                     <?php if(!empty($get_tenant->tenant_image)): ?>
                         <div class="form-group row mb-4">
                             <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">&nbsp;</label>
