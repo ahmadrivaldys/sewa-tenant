@@ -399,7 +399,7 @@ class Model_Admin extends CI_Model
     // Customer
     public function get_customers_list()
     {
-        $this->db->select('user_id, user_identity_no, user_taxpayer_id_no, user_fullname, user_email, user_photo');
+        $this->db->select('user_id, user_identity_no, user_taxpayer_id_no, user_business_license_no, user_fullname, user_phone_no, user_email, user_address, user_photo');
         $this->db->from('tbl_users');
 
         return $this->db->get()->result();
