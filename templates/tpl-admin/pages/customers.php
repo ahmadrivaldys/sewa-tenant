@@ -66,9 +66,8 @@
             
             <?php echo form_open('dashboard/sunting-pelanggan/process'); ?>
                 <div class="modal-body modal-form-body">
-                    <input type="hidden" name="submit_type" value="update"/>
                     <input type="hidden" name="user_id" value="<?php echo $customer_list->user_id; ?>"/>
-                    <input type="hidden" name="user_nik" value="<?php echo $customer_list->user_identity_no; ?>"/>
+                    <input type="hidden" name="user_nik_hidden" value="<?php echo $customer_list->user_identity_no; ?>"/>
 
                     <div class="form-group">
                         <div class="input-group">
@@ -132,7 +131,7 @@
                                     <i class="far fa-id-card"></i>
                                 </div>
                             </div>
-                            <input type="email" class="form-control" placeholder="No. NPWP" name="user_npwp" value="<?php echo $customer_list->user_taxpayer_id_no; ?>" required>
+                            <input type="text" class="form-control" placeholder="No. NPWP" name="user_npwp" value="<?php echo $customer_list->user_taxpayer_id_no; ?>" required>
                         </div>
                     </div>
 
@@ -143,7 +142,7 @@
                                     <i class="far fa-list-alt"></i>
                                 </div>
                             </div>
-                            <input type="email" class="form-control" placeholder="No. SIUP" name="user_siup" value="<?php echo $customer_list->user_business_license_no; ?>" required>
+                            <input type="text" class="form-control" placeholder="No. SIUP" name="user_siup" value="<?php echo $customer_list->user_business_license_no; ?>" required>
                         </div>
                     </div>
                 </div>

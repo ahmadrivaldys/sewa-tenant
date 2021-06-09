@@ -428,4 +428,9 @@ class Model_Admin extends CI_Model
     {
         return $this->db->update('tbl_users', $data, $where);
     }
+
+    public function delete_customer($where)
+    {
+        return $this->db->delete('tbl_users', $where);
+    }
 }

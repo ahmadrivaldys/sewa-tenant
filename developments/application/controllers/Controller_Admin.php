@@ -1568,6 +1568,112 @@ class Controller_Admin extends CI_Controller
 		}
 	}
 
+	public function save_customer_process()
+    {
+		// Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		if($usertype == "Administrator")
+		{
+			// Getting all input
+			$user_id       = $this->input->post('user_id');
+			$user_fullname = $this->input->post('user_fullname');
+			$user_phone    = $this->input->post('user_phone');
+			$user_address  = $this->input->post('user_address');
+			$user_npwp     = $this->input->post('user_npwp');
+			$user_siup     = $this->input->post('user_siup');
+			$user_email    = $this->input->post('user_email');
+
+			// Getting user creator
+			$user_creator  = $this->session->userdata('user_id');
+
+			// Creating date of user adding
+			$user_date     = date_create('now')->format('Y-m-d H:i:s');
+
+			// Gathering all data that already available to be stored into the database
+			$data['user_fullname']            = $user_fullname;
+			$data['user_phone_no']            = $user_phone;
+			$data['user_address']             = $user_address;
+			$data['user_taxpayer_id_no']      = $user_npwp;
+			$data['user_business_license_no'] = $user_siup;
+			$data['user_email']               = $user_email;
+			$data['modified_by']              = $user_creator;
+			$data['modified_date']            = $user_date;
+
+			$user_nik_hidden  = $this->input->post('user_nik_hidden');
+			$where['user_id'] = $user_id;
+
+			if(!empty($user_id))
+			{
+				// Storing the data into the database
+				$save_user = $this->model_admin->update_customer($data, $where);
+
+				// Show the message if the storing process was succeeded or failed
+				if($save_user)
+				{
+					$this->session->set_flashdata('update-customer-succeeded', 'Akun pelanggan <b>' . $user_fullname .'</b> [' . $user_nik_hidden . '] berhasil diperbarui.');
+				}
+				else
+				{
+					$this->session->set_flashdata('update-customer-failed', 'Akun pelanggan <b>' . $user_fullname .'</b> [' . $user_nik_hidden . '] gagal diperbarui.');
+				}
+
+				// After finish, user (admin) will be redirected to 'Kelola Pelanggan' page
+				redirect('dashboard/kelola-pelanggan');
+			}
+			else
+			{
+				echo "Akses langsung tidak diperbolehkan.";
+			}
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
+    }
+
+	public function delete_customer_process()
+    {
+        // Get usertype session
+		$usertype = $this->session->userdata('usertype');
+
+		if($usertype == "Administrator")
+		{
+			$user_id       = $this->input->post('user_id');
+			$user_fullname = $this->input->post('user_fullname');
+			$user_nik      = $this->input->post('user_nik');
+			
+			$where['user_id'] = $user_id;
+
+			if(!empty($user_id))
+			{
+				// Deleting the data from the database
+				$delete_user = $this->model_admin->delete_customer($where);
+
+				// Show the message if the deleting process was succeeded or failed
+				if($delete_user)
+				{
+					$this->session->set_flashdata('delete-customer-succeeded', 'Akun pelanggan <b>' . $user_fullname .'</b> [' . $user_nik . '] berhasil <b>dihapus</b>.');
+				}
+				else
+				{
+					$this->session->set_flashdata('delete-customer-failed', 'Akun pelanggan <b>' . $user_fullname .'</b> [' . $user_nik . '] gagal dihapus.');
+				}
+
+				// After finish, user (admin) will be redirected to 'Kelola Pelanggan' page
+				redirect('dashboard/kelola-pelanggan');
+			}
+			else
+			{
+				echo "Akses langsung tidak diperbolehkan.";
+			}
+		}
+		else
+		{
+			redirect('dashboard/kelola-transaksi');
+		}
+    }
+
 	public function view_customer_detail($customer_name, $customer_id)
 	{
 		$where = $customer_id;

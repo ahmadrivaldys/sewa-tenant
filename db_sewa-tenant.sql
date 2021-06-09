@@ -3,13 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 31, 2021 at 12:13 PM
+-- Generation Time: Jun 09, 2021 at 05:38 AM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
-SET time_zone = "+00:00";
+SET time_zone = "+07:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -382,7 +382,7 @@ ALTER TABLE `tbl_payments`
 -- AUTO_INCREMENT for table `tbl_payment_methods`
 --
 ALTER TABLE `tbl_payment_methods`
-  MODIFY `method_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `method_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `tbl_renewal_transactions`
