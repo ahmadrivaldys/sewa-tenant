@@ -7,6 +7,7 @@ class Model_Admin extends CI_Model
     public function count_all_admins()
     {
         $this->db->from('tbl_admins');
+        $this->db->where('admin_id !=', 1);
 
         return $this->db->count_all_results();
     }

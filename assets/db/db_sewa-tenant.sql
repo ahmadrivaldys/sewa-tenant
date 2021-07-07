@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 09, 2021 at 05:38 AM
+-- Generation Time: Jul 07, 2021 at 06:33 AM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -70,11 +70,10 @@ CREATE TABLE `tbl_admins` (
 --
 
 INSERT INTO `tbl_admins` (`admin_id`, `admin_employee_no`, `admin_fullname`, `admin_email`, `admin_password`, `admin_photo`, `admin_type_id`, `active_status`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
-(1, '1', 'Administrator', 'admin@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 1, 1, 1, '2021-04-10 16:44:31', 1, '2021-04-10 16:44:31'),
-(2, 'CL-20210323', 'Minami Hamabe', 'minami@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 4, 1, 1, '2021-04-10 16:44:31', 1, '2021-04-10 16:44:31'),
-(3, 'LS-20210324', 'Cindy Yuvia', 'cindy@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 2, 1, 1, '2021-04-10 16:44:31', 1, '2021-04-10 16:44:31'),
-(4, 'BI-20210405', 'Rudy Susilo', 'rudy@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 3, 1, 1, '2021-04-10 16:44:31', 1, '2021-04-10 16:44:31'),
-(5, 'BI-20210408', 'Ferdiansyah', 'ferdi@admin.dev', '215e95f88936b204603dfcff01e9f614', '', 3, 1, 1, '2021-04-10 16:44:31', 1, '2021-04-10 16:44:31');
+(1, '1', 'Administrator', 'admin@email.com', '215e95f88936b204603dfcff01e9f614', '', 1, 1, 1, current_time, 1, current_time),
+(2, 'CL-20210323', 'Minami Hamabe', 'minami@email.com', '215e95f88936b204603dfcff01e9f614', '', 4, 1, 1, current_time, 1, current_time),
+(3, 'LS-20210324', 'Maaya Uchida', 'maaya@email.com', '215e95f88936b204603dfcff01e9f614', '', 2, 1, 1, current_time, 1, current_time),
+(4, 'BI-20210405', 'Ai Kayano', 'ai@email.com', '215e95f88936b204603dfcff01e9f614', '', 3, 1, 1, current_time, 1, current_time);
 
 -- --------------------------------------------------------
 
@@ -94,14 +93,6 @@ CREATE TABLE `tbl_payments` (
   `payment_type` varchar(10) NOT NULL,
   `payment_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbl_payments`
---
-
-INSERT INTO `tbl_payments` (`payment_id`, `payment_nominal`, `payment_method_id`, `payment_status_id`, `payment_transaction_no`, `payment_paymentslip_file`, `payment_verif_id`, `payment_verif_by`, `payment_type`, `payment_date`) VALUES
-(3, 400000000, 2, 2, 'TRX-210521.001', 'Unggahan_Bukti-Pembayaran_TRX-210521-001.png', 3, 4, 'new', '2021-05-21 15:35:31'),
-(4, 100000000, 6, 2, 'TRX-210521.001', 'Unggahan_Bukti-Pembayaran_TRX-210521-001_Perpanjangan.png', 3, 2, 'renewal', '2021-05-21 17:24:51');
 
 -- --------------------------------------------------------
 
@@ -154,13 +145,6 @@ CREATE TABLE `tbl_renewal_transactions` (
   `modified_by` int(5) NOT NULL,
   `modified_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbl_renewal_transactions`
---
-
-INSERT INTO `tbl_renewal_transactions` (`renewal_id`, `renewal_no`, `renewal_tenant_id`, `renewal_rent_from`, `renewal_rent_to`, `renewal_rent_total_month`, `renewal_type_of_business`, `renewal_company_name`, `renewal_note`, `renewal_rent_type_id`, `renewal_active_status_id`, `renewal_contract_file`, `renewal_contract_verif_id`, `renewal_contract_verif_by`, `renewal_customer_id`, `renewal_date`, `modified_by`, `modified_date`) VALUES
-(1, 'TRX-210521.001', 1, '2021-05-21 00:00:00', '2021-05-16 12:33:18', 4, 'Makanan', 'PT Sehat Sejahtera', '', 2, 3, 'Unggahan_Surat-Perjanjian_TRX-210521-001_Perpanjangan.rtf', 3, 2, 1, '2021-05-21 17:14:43', 1, '2021-05-21 17:14:43');
 
 -- --------------------------------------------------------
 
@@ -228,7 +212,7 @@ CREATE TABLE `tbl_tenants` (
 --
 
 INSERT INTO `tbl_tenants` (`tenant_id`, `tenant_code`, `tenant_name`, `tenant_size`, `tenant_image`, `tenant_location`, `tenant_price`, `tenant_min_period`, `tenant_info`, `tenant_availability`, `created_by`, `created_date`, `modified_by`, `modified_date`) VALUES
-(1, '', 'Tenant Utama', '15 x 20 m', 'xps-7zwvnvsaafy-unsplash.jpg', 'Lantai 2', 25000000, 3, 'Tidak termasuk biaya listrik dan air', 1, 1, '2021-04-10 16:52:52', 1, '2021-04-10 16:52:52');
+(1, '', 'Tenant Utama', '15 x 20 m', 'xps-7zwvnvsaafy-unsplash.jpg', 'Lantai 2', 25000000, 3, 'Tidak termasuk biaya listrik dan air', 1, 1, current_time, 1, current_time);
 
 -- --------------------------------------------------------
 
@@ -257,13 +241,6 @@ CREATE TABLE `tbl_transactions` (
   `modified_by` int(5) NOT NULL,
   `modified_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbl_transactions`
---
-
-INSERT INTO `tbl_transactions` (`transaction_id`, `transaction_no`, `transaction_tenant_id`, `transaction_rent_from`, `transaction_rent_to`, `transaction_rent_total_month`, `transaction_type_of_business`, `transaction_company_name`, `transaction_note`, `transaction_rent_type_id`, `transaction_active_status_id`, `transaction_contract_file`, `transaction_contract_verif_id`, `transaction_contract_verif_by`, `transaction_customer_id`, `transaction_date`, `renewal_capability`, `modified_by`, `modified_date`) VALUES
-(3, 'TRX-210521.001', 1, '2021-05-21 00:00:00', '2021-05-21 00:00:00', 16, 'Makanan', 'PT Sehat Sejahtera', '', 1, 3, 'Unggahan_Surat-Perjanjian_TRX-210521-001.rtf', 3, 3, 1, '2021-05-21 15:31:25', 'No', 1, '2021-05-21 15:31:25');
 
 -- --------------------------------------------------------
 
@@ -294,7 +271,7 @@ CREATE TABLE `tbl_users` (
 --
 
 INSERT INTO `tbl_users` (`user_id`, `user_identity_no`, `user_taxpayer_id_no`, `user_business_license_no`, `user_fullname`, `user_email`, `user_phone_no`, `user_password`, `user_address`, `user_photo`, `user_type_id`, `user_registration_date`, `active_status`, `modified_by`, `modified_date`) VALUES
-(1, '03021999', '03021987', '53267463247', 'Kanna Hashimoto', 'kanna@customer.dev', '0812 1278 5798', 'ae671ecd4ebee177c57dfbfbbf28cd83', 'Jl. Maju Pantang Mundur No. 125, Kel. Maju, Kec. Pantang Mundur', '', 5, '2021-04-10 16:44:32', 1, 1, '2021-04-10 16:44:32');
+(1, '03021999', '03021987', '53267463247', 'Kanna Hashimoto', 'kanna@email.com', '0811 1111 1111', 'ae671ecd4ebee177c57dfbfbbf28cd83', 'Jl. Maju Pantang Mundur No. 125, Kel. Maju, Kec. Pantang Mundur', '', 5, current_time, 1, 1, current_time);
 
 --
 -- Indexes for dumped tables
@@ -370,25 +347,25 @@ ALTER TABLE `tbl_account_types`
 -- AUTO_INCREMENT for table `tbl_admins`
 --
 ALTER TABLE `tbl_admins`
-  MODIFY `admin_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `admin_id` int(3) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `tbl_payments`
 --
 ALTER TABLE `tbl_payments`
-  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `payment_id` int(5) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_payment_methods`
 --
 ALTER TABLE `tbl_payment_methods`
-  MODIFY `method_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `method_id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `tbl_renewal_transactions`
 --
 ALTER TABLE `tbl_renewal_transactions`
-  MODIFY `renewal_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `renewal_id` int(5) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_status`
@@ -406,7 +383,7 @@ ALTER TABLE `tbl_tenants`
 -- AUTO_INCREMENT for table `tbl_transactions`
 --
 ALTER TABLE `tbl_transactions`
-  MODIFY `transaction_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `transaction_id` int(5) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `tbl_users`
